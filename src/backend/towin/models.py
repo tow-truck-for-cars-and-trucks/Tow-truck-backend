@@ -1,3 +1,158 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
+from core.choices import TariffChoices, VenchiceTypeChoices
+from django.contrib.auth import get_user_model
 
-# Create your models here.
+User = get_user_model()
+
+
+class TowTruck(models.Model):
+    """
+    Модель эвакуатора.
+    """
+    is_active = models.BooleanField(
+        verbose_name='Статус эвакуатора.',
+    )
+    driver = models.CharField(
+        verbose_name='Водитель',
+        help_text='Укажите водителя',
+        max_length=255,
+    )
+
+    class Meta:
+        verbose_name = 'Эвакуатор'
+        verbose_name_plural = 'Эвакуаторы'
+
+    def __str__(self) -> str:
+        return self.driver
+
+
+class Tariff(models.Model):
+    """
+    Модель тарифа.
+    """
+    name = models.CharField(
+        verbose_name='Название тарифа',
+        max_length=50
+    )
+    description = models.CharField(
+        verbose_name='Описание тарифа',
+        max_length=255
+    )
+    price = models.IntegerField(
+        verbose_name='Цена тарифа',
+        validators=[MinValueValidator(1)]
+    )
+
+    class Meta:
+        verbose_name = 'Тариф'
+        verbose_name_plural = 'Тарифы'
+
+    def __str__(self) -> str:
+        return self.name
+
+
+class Price(models.Model):
+    """
+    Модель цены.
+    """
+    tariff = models.CharField(
+        verbose_name='Тариф',
+        max_length=30,
+        choices=TariffChoices.choices
+    )
+    car_type = models.CharField(
+        verbose_name='Тип машины',
+        max_length=30,
+        choices=VenchiceTypeChoices.choices
+    )
+    wheel_lock = models.IntegerField(
+        verbose_name='Заблокированные колеса',
+        validators=[MinValueValidator(0), MaxValueValidator(8)],
+        default=0
+    )
+    towin = models.BooleanField(
+        verbose_name='Буксир'
+    )
+
+    class Meta:
+        verbose_name = 'Цена'
+        verbose_name_plural = 'Цены'
+
+    def __str__(self) -> str:
+        return self.tariff
+
+
+class Order(models.Model):
+    """
+    Модель заказа.
+    """
+    client = models.ForeignKey(
+        User,
+        verbose_name='Пользователь',
+        on_delete=models.CASCADE
+    )
+    address_from = models.CharField(
+        verbose_name='Адрес подачи',
+        max_length=200
+    )
+    address_to = models.CharField(
+        verbose_name='Адрес прибытия',
+        max_length=200
+    )
+    price = models.ForeignKey(
+        Price,
+        on_delete=models.CASCADE,
+        verbose_name='Цена',
+        related_name='orders'
+    )
+    addition = models.CharField(
+        verbose_name='Комментарий',
+        max_length=300
+    )
+    delay = models.BooleanField(
+        verbose_name='Задержка'
+    )
+    tow_truck = models.ForeignKey(
+        TowTruck,
+        on_delete=models.CASCADE,
+        verbose_name='Эвакуатор'
+    )
+    created = models.DateTimeField(
+        'Дата заказа',
+        auto_now_add=True
+    )
+
+    class Meta:
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'
+
+    def __str__(self) -> str:
+        return f'{self.client} + {self.created}'
+
+
+class Feedback(models.Model):
+    """
+    Модель оценки заказа.
+    """
+    score = models.IntegerField(
+        verbose_name='Оценка',
+        validators=[MinValueValidator(0), MaxValueValidator(10)]
+    )
+    comment = models.CharField(
+        verbose_name='Комментарий',
+        max_length=400
+    )
+    order = models.ForeignKey(
+        Order,
+        on_delete=models.CASCADE,
+        verbose_name='Заказ',
+        related_name='score'
+    )
+
+    class Meta:
+        verbose_name = 'Отзыв'
+        verbose_name_plural = 'Отзывы'
+
+    def __str__(self) -> str:
+        return self.order

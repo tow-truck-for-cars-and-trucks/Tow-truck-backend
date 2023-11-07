@@ -1,14 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
-
-class Roles(models.TextChoices):
-    """
-    Типы возможных ролей для пользователей.
-    """
-
-    USER = 'User', 'Пользователь'
-    ADMIN = 'Admin', 'Администратор'
+from core.choices import Roles
 
 
 class User(AbstractUser):
@@ -20,6 +12,12 @@ class User(AbstractUser):
         verbose_name='Имя пользователя',
         max_length=150,
         unique=True,
+    )
+    tel = models.CharField(
+        verbose_name='Номер телефона',
+        unique=True,
+        max_length=254,
+        db_index=True
     )
     email = models.EmailField(
         verbose_name='Электронная почта',

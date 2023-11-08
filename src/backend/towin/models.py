@@ -115,11 +115,11 @@ class PriceOrder(models.Model):
     )
     wheel_lock = models.IntegerField(
         verbose_name='Заблокированные колеса',
-        validators=[MinValueValidator(0), MaxValueValidator(8)],
+        validators=[MinValueValidator(0), MaxValueValidator(4)],
         default=0
     )
     towin = models.BooleanField(
-        verbose_name='Буксир'
+        verbose_name='Кюветные работы'
     )
     order = models.ForeignKey(
         Order,
@@ -149,7 +149,7 @@ class Feedback(models.Model):
     """
     score = models.IntegerField(
         verbose_name='Оценка',
-        validators=[MinValueValidator(0), MaxValueValidator(10)]
+        validators=[MinValueValidator(0), MaxValueValidator(5)]
     )
     comment = models.CharField(
         verbose_name='Комментарий',

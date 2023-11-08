@@ -135,7 +135,7 @@ class PriceOrder(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=['order'],
-                name='uniqe order'
+                name='unique_order'
             )
         ]
 

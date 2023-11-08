@@ -29,9 +29,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY", default=get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG')
+DEBUG = os.getenv("DEBUG", default=True)
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', default='localhost').split(' ')
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", default="127.0.0.1").split(" ")
 
 
 # Application definition
@@ -46,6 +46,11 @@ INSTALLED_APPS = [
     "api.apps.ApiConfig",
     "towin.apps.TowinConfig",
     "user.apps.UserConfig",
+    "rest_framework",  # isort:ignore
+    "rest_framework.authtoken",  # isort:ignore
+    "djoser",  # isort:ignore
+    "django_filters",  # isort:ignore
+    "drf_yasg",  # isort:ignore
 ]
 
 MIDDLEWARE = [
@@ -139,6 +144,36 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# Using custom user model
+REST_FRAMEWORK = {
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+        "rest_framework.renderers.BrowsableAPIRenderer",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+    ],
+    "DEFAULT_FILTER_BACKENDS": (
+        "django_filters.rest_framework.DjangoFilterBackend",
+    ),
+}
 
+DJOSER = {
+    "LOGIN_FIELD": "email",
+    # "SEND_ACTIVATION_EMAIL": False,
+    # "HIDE_USERS": False,
+    # "PERMISSIONS": {
+    #     "user": ["djoser.permissions.CurrentUserOrAdminOrReadOnly"],
+    #     "user_list": ["rest_framework.permissions.AllowAny"],
+    # },
+    "SERIALIZERS": {
+        "user": "api.serializers.UserSerializer",
+        "current_user": "api.serializers.UserSerializer",
+        "user_create": "djoser.serializers.UserCreateSerializer",
+    },
+}
+
+# Using custom user model
 AUTH_USER_MODEL = "user.User"

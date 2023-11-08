@@ -14,20 +14,20 @@ class TariffChoices(models.TextChoices):
     """
     Класс выбора тарифа.
     """
-    ECONOM = 'Econom', 'Эконом'
-    EXPRESS = 'Express', 'Экспресс'
-    MANIPULATOR = 'Manipulator', 'Манипулятор'
+    ECONOM = 'Эконом', 'Эконом'
+    EXPRESS = 'Экспресс', 'Экспресс'
+    MANIPULATOR = 'Манипулятор', 'Манипулятор'
 
 
 class VenchiceTypeChoices(models.TextChoices):
     """
     Класс выбора типа транспорта.
     """
-    SEDAN = 'Sedan', 'Седан'
-    HATCHBACK = 'Hatchback', 'Хетчбек'
-    MINIVAN = 'Minivan', 'Минивен'
-    CABRIOLET = 'Cabriolet', 'Кабриолет'
-    SPORTCAR = 'Sportcar', 'Спорткар'
-    PICKUP = 'Pickup', 'Пикап'
-    WD = 'WD', 'Внедорожник'
-    MOTO = 'Moto', 'Мотоцикл'
+    SEDAN = 'Седан', 'Седан'
+    HATCHBACK = 'Хетчбек', 'Хетчбек'
+    MINIVAN = 'Минивен', 'Минивен'
+    CABRIOLET = 'Кабриолет', 'Кабриолет'
+    SPORTCAR = 'Спорткар', 'Спорткар'
+    PICKUP = 'Пикап', 'Пикап'
+    WD = 'Внедорожник', 'Внедорожник'
+    MOTO = 'Мотоцикл', 'Мотоцикл'

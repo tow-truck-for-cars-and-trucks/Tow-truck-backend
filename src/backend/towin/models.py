@@ -33,7 +33,8 @@ class Tariff(models.Model):
     """
     name = models.CharField(
         verbose_name='Название тарифа',
-        max_length=50
+        max_length=50,
+        choices=TariffChoices.choices
     )
     description = models.CharField(
         verbose_name='Описание тарифа',
@@ -52,37 +53,6 @@ class Tariff(models.Model):
         return self.name
 
 
-class Price(models.Model):
-    """
-    Модель цены.
-    """
-    tariff = models.CharField(
-        verbose_name='Тариф',
-        max_length=30,
-        choices=TariffChoices.choices
-    )
-    car_type = models.CharField(
-        verbose_name='Тип машины',
-        max_length=30,
-        choices=VenchiceTypeChoices.choices
-    )
-    wheel_lock = models.IntegerField(
-        verbose_name='Заблокированные колеса',
-        validators=[MinValueValidator(0), MaxValueValidator(8)],
-        default=0
-    )
-    towin = models.BooleanField(
-        verbose_name='Буксир'
-    )
-
-    class Meta:
-        verbose_name = 'Цена'
-        verbose_name_plural = 'Цены'
-
-    def __str__(self) -> str:
-        return self.tariff
-
-
 class Order(models.Model):
     """
     Модель заказа.
@@ -99,12 +69,6 @@ class Order(models.Model):
     address_to = models.CharField(
         verbose_name='Адрес прибытия',
         max_length=200
-    )
-    price = models.ForeignKey(
-        Price,
-        on_delete=models.CASCADE,
-        verbose_name='Цена',
-        related_name='orders'
     )
     addition = models.CharField(
         verbose_name='Комментарий',
@@ -128,7 +92,55 @@ class Order(models.Model):
         verbose_name_plural = 'Заказы'
 
     def __str__(self) -> str:
-        return f'{self.client} + {self.created}'
+        return str(self.pk)
+
+
+class PriceOrder(models.Model):
+    """
+    Модель Заказов и Цены. По логике должен
+    связывать модель юзера и заказа.
+    В итоге можно будет запрашивать
+    все заказы пользователя.
+    """
+    tariff = models.ForeignKey(
+        Tariff,
+        on_delete=models.CASCADE,
+        verbose_name='Тариф',
+        max_length=30,
+    )
+    car_type = models.CharField(
+        verbose_name='Тип машины',
+        max_length=30,
+        choices=VenchiceTypeChoices.choices
+    )
+    wheel_lock = models.IntegerField(
+        verbose_name='Заблокированные колеса',
+        validators=[MinValueValidator(0), MaxValueValidator(8)],
+        default=0
+    )
+    towin = models.BooleanField(
+        verbose_name='Буксир'
+    )
+    order = models.ForeignKey(
+        Order,
+        on_delete=models.CASCADE,
+        verbose_name='Заказ',
+    )
+
+    class Meta:
+        ordering = ('order',)
+        verbose_name = 'Заказы и Цены'
+        verbose_name_plural = 'Заказы и цены'
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=['order'],
+                name='uniqe order'
+            )
+        ]
+
+    def __str__(self) -> str:
+        return self.order
 
 
 class Feedback(models.Model):

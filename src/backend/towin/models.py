@@ -96,12 +96,13 @@ class Order(models.Model):
         null=True,
         blank=True,
     )
-    delay = models.BooleanField(verbose_name="Задержка")
+    delay = models.BooleanField(
+        verbose_name="Задержка",
+    )
     tow_truck = models.ForeignKey(
         TowTruck, on_delete=models.CASCADE, verbose_name="Эвакуатор"
     )
     created = models.DateTimeField("Дата заказа", auto_now_add=True)
-    
 
     class Meta:
         verbose_name = "Заказ"
@@ -140,14 +141,18 @@ class PriceOrder(models.Model):
     towin = models.BooleanField(
         verbose_name="Кюветные работы"
     )
-    total = models.CharField(
+    order = models.ForeignKey(
+        Order,
+        on_delete=models.CASCADE,
+        verbose_name="Заказ",
+    )
+    total = models.PositiveSmallIntegerField(
         verbose_name='Итоговая цена',
-        null=True,
-        blank=True,
+        default=0
     )
 
     class Meta:
-        ordering = ("order",)
+        ordering = ("pk",)
         verbose_name = "Заказы и Цены"
         verbose_name_plural = "Заказы и цены"
 

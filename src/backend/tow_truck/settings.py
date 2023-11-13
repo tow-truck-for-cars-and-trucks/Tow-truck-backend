@@ -177,3 +177,9 @@ DJOSER = {
 
 # Using custom user model
 AUTH_USER_MODEL = "user.User"
+
+
+# Custom variables
+
+TOWIN_PRICE = 1500
+WHEEL_LOCK_PRICE = 200

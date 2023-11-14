@@ -20,8 +20,9 @@ class OdrderAdmin(EmptyFieldModel):
         "addition",
         "delay",
         "tow_truck",
-        "total_price"
+        "total_price",
     )
+    search_fields = ('address_from', 'address_to',)
     readonly_fields = ('total_price',)
     inlines = [OrderriceTabularInline]
 
@@ -32,11 +33,11 @@ class OdrderAdmin(EmptyFieldModel):
 
 
 class FeedbackAdmin(EmptyFieldModel):
-    list_display = ("score", "comment", "order")
+    list_display = ("order", "score", "comment")
 
 
 class TowTruckAdmin(EmptyFieldModel):
-    list_display = ("is_active", "driver")
+    list_display = ("id", "is_active", "driver")
 
 
 class TariffAdmin(EmptyFieldModel):
@@ -44,7 +45,7 @@ class TariffAdmin(EmptyFieldModel):
 
 
 class CarTypeAdmin(EmptyFieldModel):
-    list_display = ("car_type", "car_type_price")
+    list_display = ("car_type", "price")
 
 
 admin.site.register(Order, OdrderAdmin)

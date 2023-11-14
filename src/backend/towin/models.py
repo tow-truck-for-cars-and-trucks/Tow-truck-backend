@@ -24,6 +24,12 @@ class TowTruck(models.Model):
     class Meta:
         verbose_name = "Эвакуатор"
         verbose_name_plural = "Эвакуаторы"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["driver"],
+                name="unique_driver"
+            )
+        ]
 
     def __str__(self) -> str:
         return self.driver
@@ -49,6 +55,12 @@ class Tariff(models.Model):
     class Meta:
         verbose_name = "Тариф"
         verbose_name_plural = "Тарифы"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["name"],
+                name="unique_tariff_name"
+            )
+        ]
 
     def __str__(self) -> str:
         return self.name
@@ -62,15 +74,22 @@ class CarType(models.Model):
     car_type = models.CharField(
         "Тип машины", choices=VenchiceTypeChoices.choices
     )
-    car_type_price = models.PositiveSmallIntegerField(
+    price = models.PositiveSmallIntegerField(
         verbose_name="Цена за тип авто",
-        validators=[MinValueValidator(1)],
+        validators=[MinValueValidator(0)],
+        default=0,
     )
 
     class Meta:
         verbose_name = "Тип авто"
         verbose_name_plural = "Типы авто"
         default_related_name = "car_type"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["car_type"],
+                name="unique_car_type"
+            )
+        ]
 
     def __str__(self):
         return self.car_type
@@ -157,7 +176,10 @@ class PriceOrder(models.Model):
         verbose_name_plural = "Заказы и цены"
 
         constraints = [
-            models.UniqueConstraint(fields=["order"], name="unique_order")
+            models.UniqueConstraint(
+                fields=["order"],
+                name="unique_order"
+            )
         ]
 
     def __str__(self) -> str:
@@ -169,7 +191,7 @@ class PriceOrder(models.Model):
         """
 
         tariff_price = self.tariff.price
-        car_type_price = self.car_type.car_type_price
+        car_type_price = self.car_type.price
         wheel_lock_price = self.wheel_lock * settings.WHEEL_LOCK_PRICE
         if self.towin:
             towin_price = settings.TOWIN_PRICE
@@ -219,6 +241,13 @@ class Feedback(models.Model):
     class Meta:
         verbose_name = "Отзыв"
         verbose_name_plural = "Отзывы"
+        ordering = ('order',)
+        constraints = [
+            models.UniqueConstraint(
+                fields=["order"],
+                name="unique_order_feedback"
+            )
+        ]
 
     def __str__(self) -> str:
         return self.order

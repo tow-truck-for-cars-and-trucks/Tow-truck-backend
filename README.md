@@ -1,4 +1,7 @@
-![TTExpress](https://github.com/tow-truck-for-cars-and-trucks/Tow-truck-backend/actions/workflows/main.yml/badge.svg)
+![TTExpress](https://github.com/tow-truck-for-cars-and-trucks/Tow-truck-backend/actions/workflows/main.yml/badge.svg) 
+![Contributors](https://img.shields.io/github/contributors/tow-truck-for-cars-and-trucks/Tow-truck-backend)
+![Python Version](https://img.shields.io/pypi/pyversions/django)
+
 
 # Проект TTExpress - эвакуатор для легковых и грузовых авто
 

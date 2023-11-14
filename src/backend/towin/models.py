@@ -25,10 +25,7 @@ class TowTruck(models.Model):
         verbose_name = "Эвакуатор"
         verbose_name_plural = "Эвакуаторы"
         constraints = [
-            models.UniqueConstraint(
-                fields=["driver"],
-                name="unique_driver"
-            )
+            models.UniqueConstraint(fields=["driver"], name="unique_driver")
         ]
 
     def __str__(self) -> str:
@@ -56,10 +53,7 @@ class Tariff(models.Model):
         verbose_name = "Тариф"
         verbose_name_plural = "Тарифы"
         constraints = [
-            models.UniqueConstraint(
-                fields=["name"],
-                name="unique_tariff_name"
-            )
+            models.UniqueConstraint(fields=["name"], name="unique_tariff_name")
         ]
 
     def __str__(self) -> str:
@@ -76,8 +70,7 @@ class CarType(models.Model):
     )
     price = models.PositiveSmallIntegerField(
         verbose_name="Цена за тип авто",
-        validators=[MinValueValidator(0)],
-        default=0,
+        validators=[MinValueValidator(1)],
     )
 
     class Meta:
@@ -86,8 +79,7 @@ class CarType(models.Model):
         default_related_name = "car_type"
         constraints = [
             models.UniqueConstraint(
-                fields=["car_type"],
-                name="unique_car_type"
+                fields=["car_type"], name="unique_car_type"
             )
         ]
 
@@ -157,17 +149,15 @@ class PriceOrder(models.Model):
         validators=[MaxValueValidator(4)],
         default=0,
     )
-    towin = models.BooleanField(
-        verbose_name="Кюветные работы"
-    )
+    towin = models.BooleanField(verbose_name="Кюветные работы")
     order = models.ForeignKey(
         Order,
         on_delete=models.CASCADE,
         verbose_name="Заказ",
     )
     total = models.PositiveSmallIntegerField(
-        verbose_name='Итоговая цена',
-        default=0
+        verbose_name="Итоговая цена",
+        default=0,
     )
 
     class Meta:
@@ -176,10 +166,7 @@ class PriceOrder(models.Model):
         verbose_name_plural = "Заказы и цены"
 
         constraints = [
-            models.UniqueConstraint(
-                fields=["order"],
-                name="unique_order"
-            )
+            models.UniqueConstraint(fields=["order"], name="unique_order")
         ]
 
     def __str__(self) -> str:
@@ -202,7 +189,7 @@ class PriceOrder(models.Model):
 
         return total
 
-    calculate_total.short_description = 'Стоимость'
+    calculate_total.short_description = "Стоимость"
 
     def save(self, *args, **kwargs):
         """
@@ -241,11 +228,10 @@ class Feedback(models.Model):
     class Meta:
         verbose_name = "Отзыв"
         verbose_name_plural = "Отзывы"
-        ordering = ('order',)
+        ordering = ("order",)
         constraints = [
             models.UniqueConstraint(
-                fields=["order"],
-                name="unique_order_feedback"
+                fields=["order"], name="unique_order_feedback"
             )
         ]
 

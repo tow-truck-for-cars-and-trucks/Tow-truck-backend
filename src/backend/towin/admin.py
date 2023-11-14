@@ -12,6 +12,7 @@ class OrderriceTabularInline(admin.TabularInline, MinValidatedInlineMixIn):
 
 class OdrderAdmin(EmptyFieldModel):
     list_display = (
+        "id",
         "client",
         "address_from",
         "address_to",
@@ -19,8 +20,15 @@ class OdrderAdmin(EmptyFieldModel):
         "addition",
         "delay",
         "tow_truck",
+        "total_price"
     )
+    readonly_fields = ('total_price',)
     inlines = [OrderriceTabularInline]
+
+    def total_price(self, instance):
+        return PriceOrder.objects.get(order=instance).total
+
+    total_price.short_description = 'Итоговая стоимость'
 
 
 class FeedbackAdmin(EmptyFieldModel):

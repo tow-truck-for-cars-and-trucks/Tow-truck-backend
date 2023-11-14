@@ -6,7 +6,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
 
 from user.models import User
-from towin.models import TowTruck, Tariff, Order, PriceInOrder, Feedback
+from towin.models import TowTruck, Tariff, Order, PriceOrder, Feedback
 from api.serializers import (
     TowTruckSerializer,
     TariffSerializer,
@@ -42,7 +42,7 @@ class OrderViewset(viewsets.ModelViewSet):
 
 
 class PriceOrderViewset(viewsets.ModelViewSet):
-    queryset = PriceInOrder.objects.all()
+    queryset = PriceOrder.objects.all()
     serializer_class = PriceOrderSerializer
     permission_classes = (AllowAny,)
 

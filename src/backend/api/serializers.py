@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 
 from user.models import User
-from towin.models import TowTruck, Tariff, Order, PriceInOrder, Feedback
+from towin.models import TowTruck, Tariff, Order, PriceOrder, Feedback
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -33,7 +33,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
 class PriceOrderSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PriceInOrder
+        model = PriceOrder
         fields = "__all__"
 
 

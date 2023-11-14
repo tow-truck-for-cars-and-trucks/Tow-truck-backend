@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from core.choices import TariffChoices, VenchiceTypeChoices
 from django.contrib.auth import get_user_model
+from django.conf import settings
 
 User = get_user_model()
 
@@ -54,6 +55,10 @@ class Tariff(models.Model):
 
 
 class CarType(models.Model):
+    """
+    Модель типа автомобиля.
+    """
+
     car_type = models.CharField(
         "Тип машины", choices=VenchiceTypeChoices.choices
     )
@@ -85,8 +90,15 @@ class Order(models.Model):
     address_to = models.CharField(
         verbose_name="Адрес прибытия", max_length=200
     )
-    addition = models.CharField(verbose_name="Комментарий", max_length=300)
-    delay = models.BooleanField(verbose_name="Задержка")
+    addition = models.CharField(
+        verbose_name="Комментарий",
+        max_length=300,
+        null=True,
+        blank=True,
+    )
+    delay = models.BooleanField(
+        verbose_name="Задержка",
+    )
     tow_truck = models.ForeignKey(
         TowTruck, on_delete=models.CASCADE, verbose_name="Эвакуатор"
     )
@@ -106,6 +118,7 @@ class PriceOrder(models.Model):
     связывать модель юзера и заказа.
     В итоге можно будет запрашивать
     все заказы пользователя.
+    По своей сути является составом заказа.
     """
 
     tariff = models.ForeignKey(
@@ -122,18 +135,24 @@ class PriceOrder(models.Model):
     )
     wheel_lock = models.PositiveSmallIntegerField(
         verbose_name="Заблокированные колеса",
-        validators=[MinValueValidator(0), MaxValueValidator(4)],
+        validators=[MaxValueValidator(4)],
         default=0,
     )
-    towin = models.BooleanField(verbose_name="Кюветные работы")
+    towin = models.BooleanField(
+        verbose_name="Кюветные работы"
+    )
     order = models.ForeignKey(
         Order,
         on_delete=models.CASCADE,
         verbose_name="Заказ",
     )
+    total = models.PositiveSmallIntegerField(
+        verbose_name='Итоговая цена',
+        default=0
+    )
 
     class Meta:
-        ordering = ("order",)
+        ordering = ("pk",)
         verbose_name = "Заказы и Цены"
         verbose_name_plural = "Заказы и цены"
 
@@ -142,7 +161,37 @@ class PriceOrder(models.Model):
         ]
 
     def __str__(self) -> str:
-        return self.order
+        return str(self.order)
+
+    def calculate_total(self):
+        """
+        Функция подсчета итоговой стоимости заказа.
+        """
+
+        tariff_price = self.tariff.price
+        car_type_price = self.car_type.car_type_price
+        wheel_lock_price = self.wheel_lock * settings.WHEEL_LOCK_PRICE
+        if self.towin:
+            towin_price = settings.TOWIN_PRICE
+        else:
+            towin_price = 0
+
+        total = tariff_price + car_type_price + wheel_lock_price + towin_price
+
+        return total
+
+    calculate_total.short_description = 'Стоимость'
+
+    def save(self, *args, **kwargs):
+        """
+        Переопределение метода необходимо
+        для того, чтобы строка total
+        принимало значение из функции
+        калькуляции стоимости заказа.
+        """
+
+        self.total = self.calculate_total()
+        super(PriceOrder, self).save(*args, **kwargs)
 
 
 class Feedback(models.Model):
@@ -152,9 +201,14 @@ class Feedback(models.Model):
 
     score = models.PositiveSmallIntegerField(
         verbose_name="Оценка",
-        validators=[MinValueValidator(0), MaxValueValidator(5)],
+        validators=[MaxValueValidator(5)],
     )
-    comment = models.CharField(verbose_name="Комментарий", max_length=400)
+    comment = models.CharField(
+        verbose_name="Комментарий",
+        max_length=400,
+        null=True,
+        blank=True,
+    )
     order = models.ForeignKey(
         Order,
         on_delete=models.CASCADE,

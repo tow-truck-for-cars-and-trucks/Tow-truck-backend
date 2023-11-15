@@ -5,15 +5,17 @@ from rest_framework import viewsets, permissions
 # from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 
+
 from user.models import User
 from towin.models import TowTruck, Tariff, Order, PriceOrder, Feedback
 from api.serializers import (
     TowTruckSerializer,
     TariffSerializer,
-    OrderSerializer,
     PriceOrderSerializer,
     FeedbackSerializer,
     CustomUserSerializer,
+    ReadOrderSerializer,
+    CreateOrderSerializer,
 )
 
 
@@ -37,8 +39,11 @@ class TariffViewset(viewsets.ModelViewSet):
 
 class OrderViewset(viewsets.ModelViewSet):
     queryset = Order.objects.all()
-    serializer_class = OrderSerializer
-    permission_classes = (AllowAny,)
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return ReadOrderSerializer
+        return CreateOrderSerializer
 
 
 class PriceOrderViewset(viewsets.ModelViewSet):

@@ -1,15 +1,37 @@
 from rest_framework import serializers
+from djoser.serializers import UserCreateSerializer, UserSerializer
 
 from towin.models import TowTruck, Tariff, Order, PriceOrder, Feedback, CarType
 from user.models import User
 
 
-class UserSerializer(serializers.ModelSerializer):
+class CustomUserSerializer(UserSerializer):
     """Сериализатор модели пользователя как <Наниматель>."""
 
     class Meta:
         model = User
-        fields = "__all__"
+        fields = (
+            "email",
+            "tel",
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+        )
+
+
+class CustomUserCreateSerializer(UserCreateSerializer):
+    class Meta:
+        model = User
+        fields = (
+            "username",
+            "id",
+            "password",
+            "email",
+            "tel",
+            "first_name",
+            "last_name",
+        )
 
 
 class TowTruckSerializer(serializers.ModelSerializer):

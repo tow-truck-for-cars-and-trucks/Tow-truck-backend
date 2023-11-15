@@ -1,6 +1,7 @@
 # from django.shortcuts import render
-from djoser.views import UserViewSet as DjoserUserViewSet
-from rest_framework import viewsets
+from djoser.views import UserViewSet
+from rest_framework import viewsets, permissions
+
 # from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 
@@ -12,16 +13,16 @@ from api.serializers import (
     TariffSerializer,
     PriceOrderSerializer,
     FeedbackSerializer,
-    UserSerializer,
+    CustomUserSerializer,
     ReadOrderSerializer,
     CreateOrderSerializer,
 )
 
 
-class UserViewset(DjoserUserViewSet):
+class CustomUserViewset(UserViewSet):
     queryset = User.objects.all().order_by("id")
-    serializer_class = UserSerializer
-    # pagination_class = LimitPageNumberPagination
+    serializer_class = CustomUserSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 
 class TowTruckViewset(viewsets.ModelViewSet):

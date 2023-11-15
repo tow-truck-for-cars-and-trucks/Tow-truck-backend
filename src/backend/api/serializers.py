@@ -43,7 +43,7 @@ class CarTypeSerializer(serializers.ModelSerializer):
 
 
 class ReadOrderSerializer(serializers.ModelSerializer):
-    car_tape = CarTypeSerializer(read_only=True)
+    car_type = CarTypeSerializer(read_only=True)
     client = UserSerializer(read_only=True)
     price = PriceOrderSerializer(read_only=True)
     wheel_lock = serializers.IntegerField(

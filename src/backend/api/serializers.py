@@ -94,7 +94,7 @@ class ReadOrderSerializer(serializers.ModelSerializer):
 
 
 class CreateOrderSerializer(serializers.ModelSerializer):
-    car_tape = serializers.PrimaryKeyRelatedField(
+    car_type = serializers.PrimaryKeyRelatedField(
         many=True,
         queryset=CarType.objects.all()
     )

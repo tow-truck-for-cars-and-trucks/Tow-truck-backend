@@ -13,11 +13,13 @@ class User(AbstractUser):
         max_length=150,
         unique=True,
     )
-    tel = models.CharField(
+    phone = models.CharField(
         verbose_name='Номер телефона',
-        unique=True,
-        max_length=254,
-        db_index=True
+        blank=True
+    )
+    is_verified = models.BooleanField(
+        "Подтверждение",
+        default=False
     )
     email = models.EmailField(
         verbose_name='Электронная почта',
@@ -43,6 +45,7 @@ class User(AbstractUser):
 
     class Meta:
         ordering = ('username',)
+        unique_together = ('username', "email", "phone")
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
 

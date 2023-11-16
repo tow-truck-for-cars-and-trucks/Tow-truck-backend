@@ -13,7 +13,7 @@ class User(AbstractUser):
         max_length=150,
         unique=True,
     )
-    tel = models.CharField(
+    phone = models.CharField(
         verbose_name='Номер телефона',
         unique=True,
         max_length=254,

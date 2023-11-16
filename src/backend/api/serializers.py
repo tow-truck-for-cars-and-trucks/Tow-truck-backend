@@ -1,7 +1,14 @@
 from rest_framework import serializers
 
-from towin.models import TowTruck, Tariff, Order, PriceOrder, Feedback, CarType
-from user.models import User
+from towin.models import (
+    TowTruck,
+    Tariff,
+    Order,
+    PriceOrder,
+    Feedback,
+    CarType,
+    User # лучше импортировать из towin.models потому что там один раз вызываеться метод который обращается к "AUTH_USER_MODEL" комент можно удалить )
+)
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -9,7 +16,14 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = "__all__"
+        fields = (
+            "id",
+            "username",
+            "tel",
+            "email",
+            "first_name",
+            "last_name"
+        )
 
 
 class TowTruckSerializer(serializers.ModelSerializer):
@@ -39,13 +53,15 @@ class FeedbackSerializer(serializers.ModelSerializer):
 class CarTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = CarType
-        fields = "__all__"
+        fields = ('car_type', 'price')
 
 
 class ReadOrderSerializer(serializers.ModelSerializer):
-    car_tape = CarTypeSerializer(read_only=True)
     client = UserSerializer(read_only=True)
-    price = PriceOrderSerializer(read_only=True)
+    car_type = serializers.StringRelatedField(
+        read_only=True,
+        source='price.car_type'
+    )
     wheel_lock = serializers.IntegerField(
         source='price.wheel_lock',
         read_only=True
@@ -54,7 +70,10 @@ class ReadOrderSerializer(serializers.ModelSerializer):
         source='price.towin',
         read_only=True,
     )
-    tariff = TariffSerializer(read_only=True)
+    tariff = serializers.StringRelatedField(
+        source='price.tariff',
+        read_only=True
+    )
 
     class Meta:
         model = Order
@@ -70,16 +89,21 @@ class ReadOrderSerializer(serializers.ModelSerializer):
             'price',
         )
 
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['price'] = instance.price.total
+        return representation
+
 
 class CreateOrderSerializer(serializers.ModelSerializer):
-    car_tape = serializers.PrimaryKeyRelatedField(
+    client = UserSerializer(read_only=True, required=False)
+    price = PriceOrderSerializer()
+    car_type = serializers.PrimaryKeyRelatedField(
         many=True,
         queryset=CarType.objects.all()
     )
-    client = UserSerializer(read_only=True, required=False)
-    price = PriceOrderSerializer(read_only=True)
-    wheel_lock = serializers.IntegerField(source='price.wheel_lock')
-    towin = serializers.BooleanField(source='price.towin')
+    # wheel_lock = serializers.IntegerField(source='price.wheel_lock')
+    # towin = serializers.BooleanField(source='price.towin')
     tariff = serializers.PrimaryKeyRelatedField(
         many=True,
         queryset=Tariff.objects.all()
@@ -92,10 +116,29 @@ class CreateOrderSerializer(serializers.ModelSerializer):
             'address_from',
             'address_to',
             'car_type',
-            'wheel_lock',
-            'towin',
+            # 'wheel_lock',
+            # 'towin',
             'tariff',
             'delay',
             'addition',
             'price',
         )
+
+    def create(self, validated_data):
+        price_data = validated_data.pop('price')
+        car_type_data = validated_data.pop('car_type')
+        tariff_data = validated_data.pop('tariff')
+        order = Order.objects.create(**validated_data)
+        order_price_data = price_data.pop('order')
+        price_order = PriceOrder.objects.create(**order_price_data)
+
+        order.price = price_order
+        order.save()
+
+        for car_type in car_type_data:
+            order.car_type.add(car_type)
+
+        for tariff in tariff_data:
+            order.tariff.add(tariff)
+
+        return order

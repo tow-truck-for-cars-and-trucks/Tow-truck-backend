@@ -112,8 +112,16 @@ class Order(models.Model):
     delay = models.BooleanField(
         verbose_name="Задержка",
     )
+    price = models.ForeignKey(
+        "PriceOrder",
+        on_delete=models.CASCADE,
+        verbose_name='Цена',
+        related_name='order_price',
+        null=True
+    )
     tow_truck = models.ForeignKey(
-        TowTruck, on_delete=models.CASCADE, verbose_name="Эвакуатор"
+        TowTruck, on_delete=models.CASCADE, verbose_name="Эвакуатор",
+        null=True
     )
     created = models.DateTimeField("Дата заказа", auto_now_add=True)
 
@@ -156,6 +164,7 @@ class PriceOrder(models.Model):
         Order,
         on_delete=models.CASCADE,
         verbose_name="Заказ",
+        related_name="price_orders"
     )
     total = models.PositiveSmallIntegerField(
         verbose_name="Итоговая цена",
@@ -238,4 +247,4 @@ class Feedback(models.Model):
         ]
 
     def __str__(self) -> str:
-        return self.order
+        return str(self.order)

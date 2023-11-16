@@ -1,8 +1,10 @@
-from django.db import models
-from django.core.validators import MinValueValidator, MaxValueValidator
-from core.choices import TariffChoices, VenchiceTypeChoices
 from django.contrib.auth import get_user_model
 from django.conf import settings
+from django.core.validators import MinValueValidator, MaxValueValidator
+from django.db import models
+
+from core.choices import TariffChoices, VenchiceTypeChoices
+
 
 User = get_user_model()
 
@@ -236,4 +238,4 @@ class Feedback(models.Model):
         ]
 
     def __str__(self) -> str:
-        return self.order
+        return str(self.pk)

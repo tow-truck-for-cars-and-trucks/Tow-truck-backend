@@ -1,26 +1,28 @@
 # from django.shortcuts import render
-from djoser.views import UserViewSet as DjoserUserViewSet
-from rest_framework import viewsets
+from djoser.views import UserViewSet
+from rest_framework import viewsets, permissions
 
 # from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
+
 
 from user.models import User
 from towin.models import TowTruck, Tariff, Order, PriceOrder, Feedback
 from api.serializers import (
     TowTruckSerializer,
     TariffSerializer,
-    OrderSerializer,
     PriceOrderSerializer,
     FeedbackSerializer,
-    UserSerializer,
+    CustomUserSerializer,
+    ReadOrderSerializer,
+    CreateOrderSerializer,
 )
 
 
-class UserViewset(DjoserUserViewSet):
+class CustomUserViewset(UserViewSet):
     queryset = User.objects.all().order_by("id")
-    serializer_class = UserSerializer
-    # pagination_class = LimitPageNumberPagination
+    serializer_class = CustomUserSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 
 class TowTruckViewset(viewsets.ModelViewSet):
@@ -37,8 +39,11 @@ class TariffViewset(viewsets.ModelViewSet):
 
 class OrderViewset(viewsets.ModelViewSet):
     queryset = Order.objects.all()
-    serializer_class = OrderSerializer
-    permission_classes = (AllowAny,)
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return ReadOrderSerializer
+        return CreateOrderSerializer
 
 
 class PriceOrderViewset(viewsets.ModelViewSet):

@@ -247,4 +247,4 @@ class Feedback(models.Model):
         ]
 
     def __str__(self) -> str:
-        return str(self.order)
+        return str(self.pk)

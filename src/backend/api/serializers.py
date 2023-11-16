@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from djoser.serializers import UserCreateSerializer, UserSerializer
 
 from towin.models import (
     TowTruck,
@@ -11,18 +12,32 @@ from towin.models import (
 )
 
 
-class UserSerializer(serializers.ModelSerializer):
+class CustomUserSerializer(UserSerializer):
     """Сериализатор модели пользователя как <Наниматель>."""
 
     class Meta:
         model = User
         fields = (
+            "email",
+            "phone",
             "id",
             "username",
-            "tel",
-            "email",
             "first_name",
-            "last_name"
+            "last_name",
+        )
+
+
+class CustomUserCreateSerializer(UserCreateSerializer):
+    class Meta:
+        model = User
+        fields = (
+            "username",
+            "id",
+            "password",
+            "email",
+            "phone",
+            "first_name",
+            "last_name",
         )
 
 
@@ -96,8 +111,9 @@ class ReadOrderSerializer(serializers.ModelSerializer):
 
 
 class CreateOrderSerializer(serializers.ModelSerializer):
-    client = UserSerializer(read_only=True, required=False)
+    client = CustomUserSerializer(read_only=True, required=False)
     price = PriceOrderSerializer()
+
     car_type = serializers.PrimaryKeyRelatedField(
         many=True,
         queryset=CarType.objects.all()

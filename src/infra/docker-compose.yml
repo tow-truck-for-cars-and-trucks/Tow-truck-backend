@@ -28,5 +28,4 @@ services:
       - "80:80"
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - ../docs/:/usr/share/nginx/html/api/docs/
       - static:/staticfiles/

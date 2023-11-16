@@ -113,7 +113,6 @@ class ReadOrderSerializer(serializers.ModelSerializer):
 class CreateOrderSerializer(serializers.ModelSerializer):
     client = CustomUserSerializer(read_only=True, required=False)
     price = PriceOrderSerializer()
-
     car_type = serializers.PrimaryKeyRelatedField(
         many=True,
         queryset=CarType.objects.all()

@@ -1,6 +1,8 @@
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from rest_framework import serializers
 
+from core.functions import avg_towtruck_score
+from user.models import User
 from towin.models import (
     TowTruck,
     Tariff,
@@ -42,9 +44,20 @@ class CustomUserCreateSerializer(UserCreateSerializer):
 
 
 class TowTruckSerializer(serializers.ModelSerializer):
+    avarage_score = serializers.SerializerMethodField()
+
     class Meta:
         model = TowTruck
-        fields = "__all__"
+        fields = (
+            "is_active",
+            "driver",
+            "model_car",
+            "license_plates",
+            "avarage_score",
+        )
+
+    def get_avarage_score(self, obj):
+        return avg_towtruck_score(obj)
 
 
 class TariffSerializer(serializers.ModelSerializer):

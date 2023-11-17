@@ -2,7 +2,7 @@ from django.contrib import admin
 from core.models import MinValidatedInlineMixIn
 from core.models import EmptyFieldModel
 from .models import Order, Feedback, TowTruck, Tariff, PriceOrder, CarType
-from django.db.models import Avg
+from core.functions import avg_towtruck_score
 
 
 class OrderriceTabularInline(admin.TabularInline, MinValidatedInlineMixIn):
@@ -48,15 +48,7 @@ class TowTruckAdmin(EmptyFieldModel):
     )
 
     def avg_score(self, instance):
-        """
-        Рассчет средней оценки эвакуатора.
-        """
-
-        scores = Feedback.objects.filter(order__tow_truck=instance)
-        if not scores:
-            return None
-
-        return scores.aggregate(Avg('score'))['score__avg']
+        return avg_towtruck_score(instance)
 
     avg_score.short_description = 'Средняя оценка'
 

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from djoser.serializers import UserCreateSerializer, UserSerializer
-from django.db.models import Avg
 
+from core.functions import avg_towtruck_score
 from towin.models import TowTruck, Tariff, Order, PriceOrder, Feedback, CarType
 from user.models import User
 
@@ -49,15 +49,7 @@ class TowTruckSerializer(serializers.ModelSerializer):
         )
 
     def get_avarage_score(self, obj):
-        """
-        Рассчет средней оценки эвакуатора.
-        """
-
-        scores = Feedback.objects.filter(order__tow_truck=obj)
-        if not scores:
-            return None
-
-        return scores.aggregate(Avg('score'))['score__avg']
+        return avg_towtruck_score(obj)
 
 
 class TariffSerializer(serializers.ModelSerializer):

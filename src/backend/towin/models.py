@@ -120,7 +120,8 @@ class Order(models.Model):
         null=True
     )
     tow_truck = models.ForeignKey(
-        TowTruck, on_delete=models.CASCADE, verbose_name="Эвакуатор",
+        TowTruck, on_delete=models.CASCADE,
+        verbose_name="Эвакуатор",
         null=True
     )
     created = models.DateTimeField("Дата заказа", auto_now_add=True)
@@ -164,7 +165,8 @@ class PriceOrder(models.Model):
         Order,
         on_delete=models.CASCADE,
         verbose_name="Заказ",
-        related_name="price_orders"
+        related_name="price_orders",
+        null=True
     )
     total = models.PositiveSmallIntegerField(
         verbose_name="Итоговая цена",

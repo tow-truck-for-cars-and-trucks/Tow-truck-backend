@@ -1,5 +1,5 @@
-from rest_framework import serializers
 from djoser.serializers import UserCreateSerializer, UserSerializer
+from rest_framework import serializers
 
 from towin.models import (
     TowTruck,
@@ -8,7 +8,7 @@ from towin.models import (
     PriceOrder,
     Feedback,
     CarType,
-    User # лучше импортировать из towin.models потому что там один раз вызываеться метод который обращается к "AUTH_USER_MODEL" комент можно удалить )
+    User
 )
 
 
@@ -72,7 +72,8 @@ class CarTypeSerializer(serializers.ModelSerializer):
 
 
 class ReadOrderSerializer(serializers.ModelSerializer):
-    client = UserSerializer(read_only=True)
+    client = CustomUserSerializer(read_only=True)
+    price = PriceOrderSerializer()
     car_type = serializers.StringRelatedField(
         read_only=True,
         source='price.car_type'
@@ -115,13 +116,13 @@ class CreateOrderSerializer(serializers.ModelSerializer):
     price = PriceOrderSerializer()
     car_type = serializers.PrimaryKeyRelatedField(
         many=True,
-        queryset=CarType.objects.all()
+        queryset=CarType.objects.all(),
+        source='price.car_type'
     )
-    # wheel_lock = serializers.IntegerField(source='price.wheel_lock')
-    # towin = serializers.BooleanField(source='price.towin')
     tariff = serializers.PrimaryKeyRelatedField(
         many=True,
-        queryset=Tariff.objects.all()
+        queryset=Tariff.objects.all(),
+        source='price.tariff'
     )
 
     class Meta:
@@ -131,29 +132,24 @@ class CreateOrderSerializer(serializers.ModelSerializer):
             'address_from',
             'address_to',
             'car_type',
-            # 'wheel_lock',
-            # 'towin',
             'tariff',
             'delay',
             'addition',
             'price',
         )
 
+    def to_representation(self, instance):
+        return ReadOrderSerializer(instance, context={
+            'request': self.context.get('request')
+        }).data
+
     def create(self, validated_data):
         price_data = validated_data.pop('price')
-        car_type_data = validated_data.pop('car_type')
-        tariff_data = validated_data.pop('tariff')
-        order = Order.objects.create(**validated_data)
-        order_price_data = price_data.pop('order')
-        price_order = PriceOrder.objects.create(**order_price_data)
+        order_instance = Order.objects.create(**validated_data)
 
-        order.price = price_order
-        order.save()
-
-        for car_type in car_type_data:
-            order.car_type.add(car_type)
-
-        for tariff in tariff_data:
-            order.tariff.add(tariff)
-
-        return order
+        if price_data:
+            price_order_instance = PriceOrder.objects.create(
+                order=order_instance, **price_data)
+            order_instance.price = price_order_instance
+            order_instance.save()
+        return order_instance

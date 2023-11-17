@@ -9,7 +9,5 @@ def avg_towtruck_score(instance):
     """
 
     scores = Feedback.objects.filter(order__tow_truck=instance)
-    if not scores:
-        return None
-
-    return scores.aggregate(Avg('score'))['score__avg']
+    if scores:
+        return scores.aggregate(Avg('score'))['score__avg']

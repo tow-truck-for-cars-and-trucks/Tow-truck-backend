@@ -71,7 +71,9 @@ class Command(BaseCommand):
             )
             data = [TowTruck(
                 is_active=row[0],
-                driver=row[1]
+                driver=row[1],
+                model_car=row[2],
+                license_plates=row[3]
             ) for row in rows]
             TowTruck.objects.bulk_create(data)
 

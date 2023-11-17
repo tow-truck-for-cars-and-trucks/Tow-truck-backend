@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
-
+from core.validators import plate_validator
 from core.choices import TariffChoices, VenchiceTypeChoices
 
 
@@ -21,6 +21,17 @@ class TowTruck(models.Model):
         verbose_name="Водитель",
         help_text="Укажите водителя",
         max_length=255,
+    )
+    model_car = models.CharField(
+        verbose_name='Модель и марка эвакуатора',
+        max_length=255
+    )
+    license_plates = models.CharField(
+        verbose_name='Гос. номер',
+        max_length=10,
+        validators=[
+            plate_validator
+        ]
     )
 
     class Meta:
@@ -113,7 +124,10 @@ class Order(models.Model):
         verbose_name="Задержка",
     )
     tow_truck = models.ForeignKey(
-        TowTruck, on_delete=models.CASCADE, verbose_name="Эвакуатор"
+        TowTruck,
+        on_delete=models.CASCADE,
+        verbose_name="Эвакуатор",
+        related_name='orders'
     )
     created = models.DateTimeField("Дата заказа", auto_now_add=True)
 
@@ -151,7 +165,9 @@ class PriceOrder(models.Model):
         validators=[MaxValueValidator(4)],
         default=0,
     )
-    towin = models.BooleanField(verbose_name="Кюветные работы")
+    towin = models.BooleanField(
+        verbose_name="Кюветные работы"
+    )
     order = models.ForeignKey(
         Order,
         on_delete=models.CASCADE,

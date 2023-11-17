@@ -93,7 +93,7 @@ class Command(BaseCommand):
             )
             data = [User(
                 username=row[0],
-                tel=row[1],
+                phone=row[1],
                 email=row[2],
                 first_name=row[3],
                 last_name=row[4],

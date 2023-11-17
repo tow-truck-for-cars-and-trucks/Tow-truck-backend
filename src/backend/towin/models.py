@@ -127,7 +127,8 @@ class Order(models.Model):
         TowTruck,
         on_delete=models.CASCADE,
         verbose_name="Эвакуатор",
-        related_name='orders'
+        related_name='orders',
+        null=True # Временное решение, пока нет алгоритма выбора эвакуатора
     )
     created = models.DateTimeField("Дата заказа", auto_now_add=True)
 

@@ -19,7 +19,7 @@ from api.serializers import (
 )
 
 
-class CustomUserViewset(UserViewSet):
+class CustomUserViewset(DjoserUserViewSet):
     queryset = User.objects.all().order_by("id")
     serializer_class = CustomUserSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
@@ -45,6 +45,7 @@ class OrderViewset(viewsets.ModelViewSet):
             return ReadOrderSerializer
         return CreateOrderSerializer
 
+
     def create(self, request, *args, **kwargs):
         """
         Проверяем пользователя на авторизацию. Если авторизован создаем заказ.
@@ -54,8 +55,7 @@ class OrderViewset(viewsets.ModelViewSet):
             serializer = CreateOrderSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.validated_data['client'] = request.user
-            self.perform_create(serializer)
-
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         request.session['order_data'] = request.data
         return Response(status=status.HTTP_401_UNAUTHORIZED)

@@ -1,8 +1,8 @@
 from django.contrib import admin
-from core.models import MinValidatedInlineMixIn
-from core.models import EmptyFieldModel
-from .models import Order, Feedback, TowTruck, Tariff, PriceOrder, CarType
+
+from core.models import MinValidatedInlineMixIn, EmptyFieldModel
 from core.functions import avg_towtruck_score
+from towin.models import Order, Feedback, TowTruck, Tariff, PriceOrder, CarType
 
 
 class OrderriceTabularInline(admin.TabularInline, MinValidatedInlineMixIn):

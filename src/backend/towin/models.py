@@ -1,10 +1,10 @@
-from django.contrib.auth import get_user_model
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
-from core.validators import plate_validator
 from core.choices import TariffChoices, VenchiceTypeChoices
+from core.validators import plate_validator
 
 
 User = get_user_model()
@@ -80,7 +80,8 @@ class CarType(models.Model):
     """
 
     car_type = models.CharField(
-        "Тип машины", choices=VenchiceTypeChoices.choices
+        "Тип машины",
+        choices=VenchiceTypeChoices.choices
     )
     price = models.PositiveSmallIntegerField(
         verbose_name="Цена за тип авто",
@@ -107,13 +108,18 @@ class Order(models.Model):
     """
 
     client = models.ForeignKey(
-        User, verbose_name="Пользователь", on_delete=models.CASCADE
+        User,
+        verbose_name="Пользователь",
+        on_delete=models.SET_NULL,
+        null=True,
     )
     address_from = models.CharField(
-        verbose_name="Адрес подачи", max_length=200
+        verbose_name="Адрес подачи",
+        max_length=200
     )
     address_to = models.CharField(
-        verbose_name="Адрес прибытия", max_length=200
+        verbose_name="Адрес прибытия",
+        max_length=200
     )
     addition = models.CharField(
         verbose_name="Комментарий",
@@ -126,7 +132,7 @@ class Order(models.Model):
     )
     price = models.ForeignKey(
         "PriceOrder",
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         verbose_name='Цена',
         related_name='order_price',
         null=True
@@ -134,13 +140,15 @@ class Order(models.Model):
     tow_truck = models.ForeignKey(
 
         TowTruck,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         verbose_name="Эвакуатор",
         related_name='orders',
-        null=True # Временное решение, пока нет алгоритма выбора эвакуатора
-
+        null=True,
     )
-    created = models.DateTimeField("Дата заказа", auto_now_add=True)
+    created = models.DateTimeField(
+        "Дата заказа",
+        auto_now_add=True
+    )
 
     class Meta:
         verbose_name = "Заказ"

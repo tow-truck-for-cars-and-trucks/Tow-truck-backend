@@ -1,10 +1,12 @@
 import os
 import csv
+
 import chardet
+from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
+
 from tow_truck.settings import BASE_DIR
 from towin.models import Tariff, CarType, Order, PriceOrder, Feedback, TowTruck
-from django.contrib.auth import get_user_model
 
 User = get_user_model()
 path = os.path.join(BASE_DIR)
@@ -15,8 +17,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         with open(
-            f'{path}/data/tariffs.csv',
-            'rb',
+                f'{path}/data/tariffs.csv',
+                'rb',
         ) as csv_file:
             raw_data = csv_file.read()
             file_encoding = chardet.detect(raw_data)['encoding']
@@ -36,8 +38,8 @@ class Command(BaseCommand):
             Tariff.objects.bulk_create(data)
 
         with open(
-            f'{path}/data/cartypes.csv',
-            'rb',
+                f'{path}/data/cartypes.csv',
+                'rb',
         ) as csv_file:
             raw_data = csv_file.read()
             file_encoding = chardet.detect(raw_data)['encoding']
@@ -56,8 +58,8 @@ class Command(BaseCommand):
             CarType.objects.bulk_create(data)
 
         with open(
-            f'{path}/data/towtrucks.csv',
-            'rb',
+                f'{path}/data/towtrucks.csv',
+                'rb',
         ) as csv_file:
             raw_data = csv_file.read()
             file_encoding = chardet.detect(raw_data)['encoding']
@@ -78,8 +80,8 @@ class Command(BaseCommand):
             TowTruck.objects.bulk_create(data)
 
         with open(
-            f'{path}/data/users.csv',
-            'rb',
+                f'{path}/data/users.csv',
+                'rb',
         ) as csv_file:
             raw_data = csv_file.read()
             file_encoding = chardet.detect(raw_data)['encoding']
@@ -102,8 +104,8 @@ class Command(BaseCommand):
             User.objects.bulk_create(data)
 
         with open(
-            f'{path}/data/orders.csv',
-            'rb',
+                f'{path}/data/orders.csv',
+                'rb',
         ) as csv_file:
             raw_data = csv_file.read()
             file_encoding = chardet.detect(raw_data)['encoding']
@@ -121,13 +123,17 @@ class Command(BaseCommand):
                 address_to=row[2],
                 addition=row[3],
                 delay=row[4],
-                tow_truck=TowTruck.objects.get(pk=row[5]),
+                # price=PriceOrder.objects.get(pk=row[5]) хотел реализовать
+                # так, но без заполненого прайся не будет создаватсья так
+                # же как и без заполненного ордера не будет создаваться прайс.
+                # Пока придется ручками выставлять FK в админке
+                tow_truck=TowTruck.objects.get(pk=row[6]),
             ) for row in rows]
             Order.objects.bulk_create(data)
 
         with open(
-            f'{path}/data/priceorder.csv',
-            'rb',
+                f'{path}/data/priceorder.csv',
+                'rb',
         ) as csv_file:
             raw_data = csv_file.read()
             file_encoding = chardet.detect(raw_data)['encoding']
@@ -153,8 +159,8 @@ class Command(BaseCommand):
                 )
 
         with open(
-            f'{path}/data/feedback.csv',
-            'rb',
+                f'{path}/data/feedback.csv',
+                'rb',
         ) as csv_file:
             raw_data = csv_file.read()
             file_encoding = chardet.detect(raw_data)['encoding']

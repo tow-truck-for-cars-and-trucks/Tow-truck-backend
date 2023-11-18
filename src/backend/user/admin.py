@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
+
 from core.models import EmptyFieldModel
 
 User = get_user_model()

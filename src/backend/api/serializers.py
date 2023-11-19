@@ -2,7 +2,6 @@ from djoser.serializers import UserCreateSerializer, UserSerializer
 from rest_framework import serializers
 
 from core.functions import avg_towtruck_score
-from user.models import User
 from towin.models import (
     TowTruck,
     Tariff,
@@ -85,7 +84,9 @@ class CarTypeSerializer(serializers.ModelSerializer):
 
 
 class ReadOrderSerializer(serializers.ModelSerializer):
-    client = CustomUserSerializer(read_only=True)
+    client = CustomUserSerializer(
+        read_only=True
+    )
     price = PriceOrderSerializer()
     car_type = serializers.StringRelatedField(
         read_only=True,
@@ -125,7 +126,10 @@ class ReadOrderSerializer(serializers.ModelSerializer):
 
 
 class CreateOrderSerializer(serializers.ModelSerializer):
-    client = CustomUserSerializer(read_only=True, required=False)
+    client = CustomUserSerializer(
+        read_only=True,
+        required=False
+    )
     price = PriceOrderSerializer()
     car_type = serializers.PrimaryKeyRelatedField(
         many=True,
@@ -151,6 +155,7 @@ class CreateOrderSerializer(serializers.ModelSerializer):
             'price',
         )
 
+
     def to_representation(self, instance):
         return ReadOrderSerializer(instance, context={
             'request': self.context.get('request')
@@ -165,4 +170,5 @@ class CreateOrderSerializer(serializers.ModelSerializer):
                 order=order_instance, **price_data)
             order_instance.price = price_order_instance
             order_instance.save()
+
         return order_instance

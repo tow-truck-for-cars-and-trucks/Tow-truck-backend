@@ -2,9 +2,10 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.utils import timezone
 
-from core.choices import TariffChoices, VenchiceTypeChoices
 from core.validators import plate_validator
+from core.choices import TariffChoices, VenchiceTypeChoices
 
 
 User = get_user_model()
@@ -143,11 +144,11 @@ class Order(models.Model):
         on_delete=models.SET_NULL,
         verbose_name="Эвакуатор",
         related_name='orders',
-        null=True,
+        null=True  # TODO Временное решение, пока нет алгоритма выбора машины
     )
     created = models.DateTimeField(
         "Дата заказа",
-        auto_now_add=True
+        default=timezone.now
     )
 
     class Meta:

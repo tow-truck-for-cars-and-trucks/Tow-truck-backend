@@ -1,0 +1,76 @@
+[
+    {
+        "model": "user.User",
+        "pk": 1,
+        "fields": {
+            "username": "admin",
+            "tel": 8000000000,
+            "email": "admin@admin.ru",
+            "role": "Admin",
+            "password": "pbkdf2_sha256$600000$ah9NCHuH5QgUrySdD5pZpL$C+u5HJV4ldYqu4QgWvtv/EViV+LSyh762EsisvCdqF0=",
+            "is_superuser": true,
+            "is_staff": true,
+            "is_active": true
+        }
+    },
+    {
+      "model": "user.User",
+      "pk": 2,
+      "fields": {
+        "username": "agent007",
+        "tel": 88005553535,
+        "email": "k7@england.com",
+        "first_name": "James",
+        "last_name": "Bond",
+        "role": "User"
+      }
+    },
+    {
+        "model": "user.User",
+        "pk": 3,
+        "fields": {
+          "username": "baby_fox",
+          "tel": 84484747434,
+          "email": "despasito@xnxx.com",
+          "first_name": "Piere",
+          "last_name": "Woodman",
+          "role": "User"
+        }
+    },
+    {
+        "model": "user.User",
+        "pk": 4,
+        "fields": {
+          "username": "gosling",
+          "tel": 88716541512,
+          "email": "rayangloslingov1983@mail.ru",
+          "first_name": "Ryan",
+          "last_name": "Gosling",
+          "role": "User"
+        }
+    },
+    {
+        "model": "user.User",
+        "pk": 5,
+        "fields": {
+          "username": "uravnitel",
+          "tel": 84648431584,
+          "email": "uravnitel228@mail.ru",
+          "first_name": "Павлик",
+          "last_name": "Морозов",
+          "role": "User"
+        }
+    },
+    {
+        "model": "user.User",
+        "pk": 6,
+        "fields": {
+          "username": "fludd",
+          "tel": 89995546431,
+          "email": "gonefludd@google.com",
+          "first_name": "Александр",
+          "last_name": "Смирнов",
+          "role": "User"
+        }
+    }
+]

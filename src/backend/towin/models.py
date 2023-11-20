@@ -239,3 +239,20 @@ class Feedback(models.Model):
 
     def __str__(self) -> str:
         return str(self.pk)
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    first_name = models.CharField(
+        verbose_name='Имя',
+        max_length=150,
+        blank=True,
+    )
+    last_name = models.CharField(
+        verbose_name='Фамилия',
+        max_length=150,
+        blank=True,
+    )
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} ({self.user.email})"

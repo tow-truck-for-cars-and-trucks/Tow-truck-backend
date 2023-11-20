@@ -4,8 +4,8 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils import timezone
 
-from core.validators import plate_validator
 from core.choices import TariffChoices, VenchiceTypeChoices
+from core.validators import plate_validator
 
 
 User = get_user_model()

@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 from django.utils.safestring import SafeString, mark_safe
+
 from core.models import EmptyFieldModel
 from user.models import Avatar
 

@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     "api.apps.ApiConfig",
     "towin.apps.TowinConfig",
     "user.apps.UserConfig",
-    # "phone_verify",
+    # # "phone_verify",
     'gmailapi_backend',
     'phonenumber_field',
     "rest_framework",

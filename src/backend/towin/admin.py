@@ -1,7 +1,8 @@
 from django.contrib import admin
-from core.models import MinValidatedInlineMixIn
-from core.models import EmptyFieldModel
-from .models import Order, Feedback, TowTruck, Tariff, PriceOrder, CarType
+
+from core.models import MinValidatedInlineMixIn, EmptyFieldModel
+from core.functions import avg_towtruck_score
+from towin.models import Order, Feedback, TowTruck, Tariff, PriceOrder, CarType
 
 
 class OrderriceTabularInline(admin.TabularInline, MinValidatedInlineMixIn):
@@ -37,7 +38,19 @@ class FeedbackAdmin(EmptyFieldModel):
 
 
 class TowTruckAdmin(EmptyFieldModel):
-    list_display = ("id", "is_active", "driver")
+    list_display = (
+        "id",
+        "is_active",
+        "driver",
+        "model_car",
+        "license_plates",
+        'avg_score'
+    )
+
+    def avg_score(self, instance):
+        return avg_towtruck_score(instance)
+
+    avg_score.short_description = 'Средняя оценка'
 
 
 class TariffAdmin(EmptyFieldModel):

@@ -8,6 +8,19 @@ from django.contrib.auth import get_user_model
 from towin.models import TowTruck, Tariff, Order, PriceOrder, Feedback, CarType
 # from user.models import User
 from api.utils.fields import LowercaseEmailField
+from djoser.serializers import UserCreateSerializer, UserSerializer
+from rest_framework import serializers
+
+from core.functions import avg_towtruck_score
+from towin.models import (
+    TowTruck,
+    Tariff,
+    Order,
+    PriceOrder,
+    Feedback,
+    CarType,
+    User
+)
 
 
 User = get_user_model()
@@ -202,9 +215,20 @@ class ResetPasswordSerializer(serializers.Serializer):
 
 
 class TowTruckSerializer(serializers.ModelSerializer):
+    avarage_score = serializers.SerializerMethodField()
+
     class Meta:
         model = TowTruck
-        fields = "__all__"
+        fields = (
+            "is_active",
+            "driver",
+            "model_car",
+            "license_plates",
+            "avarage_score",
+        )
+
+    def get_avarage_score(self, obj):
+        return avg_towtruck_score(obj)
 
 
 class TariffSerializer(serializers.ModelSerializer):
@@ -228,13 +252,18 @@ class FeedbackSerializer(serializers.ModelSerializer):
 class CarTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = CarType
-        fields = "__all__"
+        fields = ('car_type', 'price')
 
 
 class ReadOrderSerializer(serializers.ModelSerializer):
-    car_type = CarTypeSerializer(read_only=True)
-    client = UserSerializer(read_only=True)
-    price = PriceOrderSerializer(read_only=True)
+    client = CustomUserSerializer(
+        read_only=True
+    )
+    price = PriceOrderSerializer()
+    car_type = serializers.StringRelatedField(
+        read_only=True,
+        source='price.car_type'
+    )
     wheel_lock = serializers.IntegerField(
         source='price.wheel_lock',
         read_only=True
@@ -243,7 +272,10 @@ class ReadOrderSerializer(serializers.ModelSerializer):
         source='price.towin',
         read_only=True,
     )
-    tariff = TariffSerializer(read_only=True)
+    tariff = serializers.StringRelatedField(
+        source='price.tariff',
+        read_only=True
+    )
 
     class Meta:
         model = Order
@@ -259,19 +291,27 @@ class ReadOrderSerializer(serializers.ModelSerializer):
             'price',
         )
 
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['price'] = instance.price.total
+        return representation
+
 
 class CreateOrderSerializer(serializers.ModelSerializer):
+    client = CustomUserSerializer(
+        read_only=True,
+        required=False
+    )
+    price = PriceOrderSerializer()
     car_type = serializers.PrimaryKeyRelatedField(
         many=True,
-        queryset=CarType.objects.all()
+        queryset=CarType.objects.all(),
+        source='price.car_type'
     )
-    client = UserSerializer(read_only=True, required=False)
-    price = PriceOrderSerializer(read_only=True)
-    wheel_lock = serializers.IntegerField(source='price.wheel_lock')
-    towin = serializers.BooleanField(source='price.towin')
     tariff = serializers.PrimaryKeyRelatedField(
         many=True,
-        queryset=Tariff.objects.all()
+        queryset=Tariff.objects.all(),
+        source='price.tariff'
     )
 
     class Meta:
@@ -281,10 +321,26 @@ class CreateOrderSerializer(serializers.ModelSerializer):
             'address_from',
             'address_to',
             'car_type',
-            'wheel_lock',
-            'towin',
             'tariff',
             'delay',
             'addition',
             'price',
         )
+
+
+    def to_representation(self, instance):
+        return ReadOrderSerializer(instance, context={
+            'request': self.context.get('request')
+        }).data
+
+    def create(self, validated_data):
+        price_data = validated_data.pop('price')
+        order_instance = Order.objects.create(**validated_data)
+
+        if price_data:
+            price_order_instance = PriceOrder.objects.create(
+                order=order_instance, **price_data)
+            order_instance.price = price_order_instance
+            order_instance.save()
+
+        return order_instance

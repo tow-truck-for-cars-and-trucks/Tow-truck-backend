@@ -4,6 +4,8 @@ from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.hashers import make_password
 from phonenumber_field import modelfields
+# from django.contrib.auth.models import AbstractUser
+# from django.db import models
 
 from core.choices import Roles
 from user.utils import get_avatar_path

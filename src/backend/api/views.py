@@ -1,17 +1,18 @@
+import random
+
 # import requests
 # from django.shortcuts import render
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import get_user_model
 # from djoser import signals
 from djoser.views import UserViewSet as DjoserUserViewSet
-from rest_framework import viewsets, permissions
-# , status, response
+from rest_framework import viewsets, permissions, status, response
 # from rest_framework.decorators import action
 # from django.conf import settings
 # from django.core.mail import send_mail
 
 # from user.models import User
-from towin.models import Order, Feedback
+from towin.models import Order, Feedback, TowTruck
 from api.serializers import (
     # ChangePasswordSerializer, ConfirmationCodeSerializer,
     # ResetPasswordSerializer, SendCodeSerializer, UserMeSerializer,
@@ -254,6 +255,40 @@ class OrderViewset(viewsets.ModelViewSet):
         if self.request.method == 'GET':
             return ReadOrderSerializer
         return CreateOrderSerializer
+
+    def create(self, request, *args, **kwargs):
+        """
+        Проверяем пользователя на авторизацию. Если авторизован создаем заказ.
+        Если нет сохраняем введенные данные в сессию.
+        """
+        if request.user.is_authenticated:
+            order_data = request.data
+            order_data['price']['car_type'] = order_data['car_type'][0]
+            order_data['price']['tariff'] = order_data['tariff'][0]
+            order_data['tow_truck'] = self.get_random_tow_truck()
+
+            serializer = CreateOrderSerializer(data=order_data)
+            serializer.is_valid(raise_exception=True)
+            serializer.validated_data['client'] = request.user
+            serializer.save()
+
+            return response.Response(
+                serializer.data, status=status.HTTP_201_CREATED
+            )
+
+        request.session['order_data'] = request.data
+
+        return response.Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    def get_random_tow_truck(self):
+        """
+        Возвращает случайный свободный эвакуатор
+        """
+        try:
+            tow_trucks = TowTruck.objects.filter(is_active=True)
+            return random.choice(tow_trucks)
+        except TowTruck.DoesNotExist as e:
+            raise e('Все эвакуаторы заняты :(')
 
 
 class FeedbackViewset(viewsets.ModelViewSet):

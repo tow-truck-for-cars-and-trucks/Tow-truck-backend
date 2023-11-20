@@ -5,11 +5,9 @@ from django.contrib.auth import get_user_model
 # from djoser.compat import get_user_email, get_user_email_field_name
 # from djoser.conf import settings
 
-from towin.models import TowTruck, Tariff, Order, PriceOrder, Feedback, CarType
-# from user.models import User
 from api.utils.fields import LowercaseEmailField
-from djoser.serializers import UserCreateSerializer, UserSerializer
-from rest_framework import serializers
+# from djoser.serializers import UserCreateSerializer, UserSerializer
+# from rest_framework import serializers
 
 from core.functions import avg_towtruck_score
 from towin.models import (
@@ -19,7 +17,7 @@ from towin.models import (
     PriceOrder,
     Feedback,
     CarType,
-    User
+    # User
 )
 
 
@@ -256,7 +254,7 @@ class CarTypeSerializer(serializers.ModelSerializer):
 
 
 class ReadOrderSerializer(serializers.ModelSerializer):
-    client = CustomUserSerializer(
+    client = UserSerializer(
         read_only=True
     )
     price = PriceOrderSerializer()
@@ -298,7 +296,7 @@ class ReadOrderSerializer(serializers.ModelSerializer):
 
 
 class CreateOrderSerializer(serializers.ModelSerializer):
-    client = CustomUserSerializer(
+    client = UserSerializer(
         read_only=True,
         required=False
     )
@@ -326,7 +324,6 @@ class CreateOrderSerializer(serializers.ModelSerializer):
             'addition',
             'price',
         )
-
 
     def to_representation(self, instance):
         return ReadOrderSerializer(instance, context={

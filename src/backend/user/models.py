@@ -7,7 +7,6 @@ from phonenumber_field import modelfields
 # from django.contrib.auth.models import AbstractUser
 # from django.db import models
 
-from core.choices import Roles
 from user.utils import get_avatar_path
 
 
@@ -42,8 +41,7 @@ class MyUserManager(BaseUserManager):
         """
         Создает юзера
         """
-        # extra_fields.setdefault('is_staff', False)
-        # extra_fields.setdefault('is_superuser', False)
+
         return self._create_user(
             email,
             password,
@@ -59,19 +57,11 @@ class MyUserManager(BaseUserManager):
         """
         Создает суперюзера
         """
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('is_active', True)
+        user = self._create_user(email, password)
+        user.is_superuser = True
+        user.save()
 
-        if extra_fields.get('is_staff') is not True:
-            raise ValueError('Superuser must have is_staff=True.')
-        if extra_fields.get('is_superuser') is not True:
-            raise ValueError('Superuser must have is_superuser=True.')
-        return self._create_user(
-            email,
-            password,
-            **extra_fields
-        )
+        return user
 
 
 class User(AbstractBaseUser):
@@ -79,13 +69,8 @@ class User(AbstractBaseUser):
     Кастомная модель пользователя.
     """
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ('username', 'phone',)
+    REQUIRED_FIELDS = ('phone', 'first_name')
 
-    # username = models.CharField(
-    #     verbose_name='Имя пользователя',
-    #     max_length=150,
-    #     unique=True,
-    # )
     first_name = models.CharField(
         verbose_name='Имя',
         max_length=150,
@@ -114,12 +99,9 @@ class User(AbstractBaseUser):
         "Подтверждение",
         default=False
     )
-    role = models.CharField(
-        verbose_name='Роль',
-        help_text='Роль пользователя с правами доступа',
-        max_length=30,
-        choices=Roles.choices,
-        default=Roles.USER
+    is_staff = models.BooleanField(
+        'Стафф статус',
+        default=False,
     )
 
     objects = MyUserManager()
@@ -132,10 +114,6 @@ class User(AbstractBaseUser):
 
     def __str__(self) -> str:
         return self.email
-
-    @property
-    def is_admin(self):
-        return self.role == Roles.ADMIN or self.is_superuser
 
     def clean(self) -> None:
         super().clean()

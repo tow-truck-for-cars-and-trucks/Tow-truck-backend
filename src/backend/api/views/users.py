@@ -1,4 +1,3 @@
-import random
 
 # import requests
 # from django.shortcuts import render
@@ -6,28 +5,20 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import get_user_model
 # from djoser import signals
 from djoser.views import UserViewSet as DjoserUserViewSet
-from rest_framework import viewsets, permissions, status, response
 # from rest_framework.decorators import action
 # from django.conf import settings
 # from django.core.mail import send_mail
 
 # from user.models import User
-from towin.models import Order, Feedback, TowTruck
-from api.serializers import (
-    PriceOrderSerializer,
-    FeedbackCreateSerializer,
-    FeedbackReadSerializer,
+from api.serializers.users import (
     # ChangePasswordSerializer, ConfirmationCodeSerializer,
     # ResetPasswordSerializer, SendCodeSerializer, UserMeSerializer,
     UserSerializer,
     # TowTruckSerializer,
     # TariffSerializer,
     # PriceOrderSerializer,
-    FeedbackSerializer,
     # UserSerializer,
     # UserCreateSerializer,
-    ReadOrderSerializer,
-    CreateOrderSerializer,
 )
 # from api.utils.verefications import (
 #     activation_user_service, cache_and_send_confirmation_code,
@@ -45,7 +36,7 @@ class UserViewset(DjoserUserViewSet):
     queryset = User.objects.all().order_by("id")
     serializer_class = UserSerializer
     token_generator = default_token_generator
-    # permission_classes = (permissions.AllowAny, )
+    # permission_classes = (permissions.AllowAny,)
 
     # def get_permissions(self):
     #     """
@@ -249,76 +240,3 @@ class UserViewset(DjoserUserViewSet):
     #         user=user,
     #         request=self.request
     #     )
-
-
-class OrderViewset(viewsets.ModelViewSet):
-    queryset = Order.objects.all()
-
-    def get_serializer_class(self):
-        if self.request.method == 'GET':
-            return ReadOrderSerializer
-        return CreateOrderSerializer
-
-    def create(self, request, *args, **kwargs):
-        """
-        Проверяем пользователя на авторизацию. Если авторизован создаем заказ.
-        Если нет сохраняем введенные данные в сессию.
-        """
-        if request.user.is_authenticated:
-            order_data = request.data
-            order_data['price']['car_type'] = order_data['car_type'][0]
-            order_data['price']['tariff'] = order_data['tariff'][0]
-            order_data['tow_truck'] = self.get_random_tow_truck()
-
-            serializer = CreateOrderSerializer(data=order_data)
-            serializer.is_valid(raise_exception=True)
-            serializer.validated_data['client'] = request.user
-            serializer.save()
-
-            return response.Response(
-                serializer.data, status=status.HTTP_201_CREATED
-            )
-
-        request.session['order_data'] = request.data
-
-        return response.Response(status=status.HTTP_401_UNAUTHORIZED)
-
-    def get_random_tow_truck(self):
-        """
-        Возвращает случайный свободный эвакуатор
-        """
-        try:
-            tow_trucks = TowTruck.objects.filter(is_active=True)
-            return random.choice(tow_trucks)
-        except TowTruck.DoesNotExist as e:
-            raise e('Все эвакуаторы заняты :(')
-
-
-class FeedbackViewset(viewsets.ModelViewSet):
-    queryset = Feedback.objects.all()
-    permission_classes = (permissions.AllowAny,)
-
-    def get_serializer_class(self):
-        if self.request.method == 'GET':
-            return FeedbackReadSerializer
-        return FeedbackCreateSerializer
-
-    def perform_create(self, serializer):
-        return serializer.save(name=self.request.user)
-    
-    def _feedback_post_method(self, request, FeedbackCreateSerializer):
-        data = request.POST.copy()
-        data.update({'name': request.user})
-        serializer = FeedbackCreateSerializer(
-            data=data,
-            context={'request': request}
-        )
-        serializer.is_valid()
-        serializer.save()
-        return responce.Response(serializer.data, status=status.HTTP_201_CREATED)
-
-
-# class CarTypeViewset(viewsets.ModelViewSet):
-#     queryset = CarType.objects.all()
-#     serializer_class = CarTypeSerializer
-

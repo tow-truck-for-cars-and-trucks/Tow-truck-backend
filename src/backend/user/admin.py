@@ -11,10 +11,9 @@ User = get_user_model()
 
 @admin.register(User)
 class UserAdmin(EmptyFieldModel):
-    list_display = ("phone", "first_name", "last_name", 'email', 'role')
+    list_display = ("phone", "first_name", "last_name", 'email')
     search_fields = ("phone", "first_name", "last_name", 'email')
     list_filter = ("phone", 'email')
-    list_editable = ('role',)
 
     def save_model(self, request, obj, form, change):
         """Хэширует пароль и сохраняет его в базе данных"""

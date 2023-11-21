@@ -1,8 +1,9 @@
 # from django.shortcuts import render
 from djoser.views import UserViewSet as DjoserUserViewSet
-from rest_framework import viewsets
+from rest_framework import status, viewsets
 # from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
 
 
 from user.models import User
@@ -11,7 +12,8 @@ from api.serializers import (
     TowTruckSerializer,
     TariffSerializer,
     PriceOrderSerializer,
-    FeedbackSerializer,
+    FeedbackCreateSerializer,
+    FeedbackReadSerializer,
     UserSerializer,
     ReadOrderSerializer,
     CreateOrderSerializer,
@@ -53,5 +55,23 @@ class PriceOrderViewset(viewsets.ModelViewSet):
 
 class FeedbackViewset(viewsets.ModelViewSet):
     queryset = Feedback.objects.all()
-    serializer_class = FeedbackSerializer
     permission_classes = (AllowAny,)
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return FeedbackReadSerializer
+        return FeedbackCreateSerializer
+
+    def perform_create(self, serializer):
+        return serializer.save(name=self.request.user)
+    
+    def _feedback_post_method(self, request, FeedbackCreateSerializer):
+        data = request.POST.copy()
+        data.update({'name': request.user})
+        serializer = FeedbackCreateSerializer(
+            data=data,
+            context={'request': request}
+        )
+        serializer.is_valid()
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)

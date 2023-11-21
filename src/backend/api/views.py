@@ -317,3 +317,8 @@ class FeedbackViewset(viewsets.ModelViewSet):
         serializer.save()
         return responce.Response(serializer.data, status=status.HTTP_201_CREATED)
 
+
+# class CarTypeViewset(viewsets.ModelViewSet):
+#     queryset = CarType.objects.all()
+#     serializer_class = CarTypeSerializer
+

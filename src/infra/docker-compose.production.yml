@@ -1,0 +1,28 @@
+version: '3.8'
+
+volumes:
+  towtruck_pg_data:
+  static:
+
+services:
+  towtruck_db:
+    image: postgres:13
+    env_file: .env
+    volumes:
+      - towtruck_pg_data:/var/lib/postgresql/data
+
+  backend:
+    image: aleksentcev/tte_backend:latest
+    env_file: .env
+    volumes:
+      - static:/backend_static
+    depends_on:
+      - towtruck_db
+
+  nginx:
+    image: aleksentcev/tte_gateway:latest
+    env_file: .env
+    ports:
+      - "8000:80"
+    volumes:
+      - static:/staticfiles/

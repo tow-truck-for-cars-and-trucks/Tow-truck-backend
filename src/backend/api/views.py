@@ -81,6 +81,7 @@ class FeedbackViewset(viewsets.ModelViewSet):
     serializer_class = FeedbackSerializer
     permission_classes = (AllowAny,)
 
+
 # class CarTypeViewset(viewsets.ModelViewSet):
 #     queryset = CarType.objects.all()
 #     serializer_class = CarTypeSerializer

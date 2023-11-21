@@ -14,6 +14,9 @@ from rest_framework import viewsets, permissions, status, response
 # from user.models import User
 from towin.models import Order, Feedback, TowTruck
 from api.serializers import (
+    PriceOrderSerializer,
+    FeedbackCreateSerializer,
+    FeedbackReadSerializer,
     # ChangePasswordSerializer, ConfirmationCodeSerializer,
     # ResetPasswordSerializer, SendCodeSerializer, UserMeSerializer,
     UserSerializer,
@@ -293,5 +296,24 @@ class OrderViewset(viewsets.ModelViewSet):
 
 class FeedbackViewset(viewsets.ModelViewSet):
     queryset = Feedback.objects.all()
-    serializer_class = FeedbackSerializer
     permission_classes = (permissions.AllowAny,)
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return FeedbackReadSerializer
+        return FeedbackCreateSerializer
+
+    def perform_create(self, serializer):
+        return serializer.save(name=self.request.user)
+    
+    def _feedback_post_method(self, request, FeedbackCreateSerializer):
+        data = request.POST.copy()
+        data.update({'name': request.user})
+        serializer = FeedbackCreateSerializer(
+            data=data,
+            context={'request': request}
+        )
+        serializer.is_valid()
+        serializer.save()
+        return responce.Response(serializer.data, status=status.HTTP_201_CREATED)
+

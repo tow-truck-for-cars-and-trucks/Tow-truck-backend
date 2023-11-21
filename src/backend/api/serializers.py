@@ -241,10 +241,25 @@ class PriceOrderSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class FeedbackSerializer(serializers.ModelSerializer):
+class FeedbackCreateSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField()
     class Meta:
         model = Feedback
-        fields = "__all__"
+        fields = ('id', 'score', 'comment', 'order', 'name', 'ontime')
+
+    def get_name(self, obj):
+        request = self.context.get('request')
+        name = request.user.username
+        return name
+    
+
+class FeedbackReadSerializer(serializers.ModelSerializer):
+    name = serializers.ReadOnlyField(source='name.username')
+    class Meta:
+        model = Feedback
+        fields = ('id', 'score', 'comment', 'order', 'name', 'ontime')
+    
+    
 
 
 class CarTypeSerializer(serializers.ModelSerializer):

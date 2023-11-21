@@ -264,6 +264,13 @@ class Feedback(models.Model):
         verbose_name="Заказ",
         related_name="score",
     )
+    name = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name="Автор",
+    )
+    ontime = models.BooleanField(verbose_name="Водитель приехал вовремя")
+
 
     class Meta:
         verbose_name = "Отзыв"

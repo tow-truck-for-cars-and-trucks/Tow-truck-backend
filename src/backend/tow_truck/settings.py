@@ -46,7 +46,9 @@ INSTALLED_APPS = [
     "api.apps.ApiConfig",
     "towin.apps.TowinConfig",
     "user.apps.UserConfig",
-    # "phone_verify",
+    # # "phone_verify",
+    'gmailapi_backend',
+    'phonenumber_field',
     "rest_framework",
     "rest_framework.authtoken",
     "djoser",
@@ -161,34 +163,51 @@ REST_FRAMEWORK = {
     ),
 }
 
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
+
 DJOSER = {
-    "LOGIN_FIELD": "email",
+    # "LOGIN_FIELD": "username",
+    "PASSWORD_RESET_CPNFIRM_RETYPE": True,
+    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
+    'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': '#/auth/verify/{uid}/{token}/',
+    'SEND_ACTIVATION_EMAIL': True,
+    "SET_PASSWORD_RETYPE": True,
     "HIDE_USERS": False,
     "SERIALIZERS": {
-        "user": "api.serializers.CustomUserSerializer",
-        "current_user": "api.serializers.CustomUserSerializer",
-        "user_create": "api.serializers.CustomUserCreateSerializer",
+        "user": "api.serializers.UserSerializer",
+        "current_user": "api.serializers.UserSerializer",
+        "user_create": "api.serializers.UserSerializer",
     },
     "PERMISSIONS": {
         "user": ["djoser.permissions.CurrentUserOrAdminOrReadOnly"],
         "user_list": ["rest_framework.permissions.IsAuthenticatedOrReadOnly"],
     },
+    # "USER_CREATE_PASSWORD_RETYPE": True,
 }
 
-PHONE_VERIFICATION = {
-    "BACKEND": "phone_verify.backends.twilio.TwilioBackend",
-    "OPTIONS": {
-        "SID": "fake",
-        "SECRET": "fake",
-        "FROM": "+14755292729",
-        "SANDBOX_TOKEN": "123456",
-    },
-    "TOKEN_LENGTH": 6,
-    "MESSAGE": "Welcome to {app}! Please use security code {security_code} to proceed.",
-    "APP_NAME": "Phone Verify",
-    "SECURITY_CODE_EXPIRATION_TIME": 3600,  # In seconds only
-    "VERIFY_SECURITY_CODE_ONLY_ONCE": False,  # If False, then a security code can be used multiple times for verification
-}
+TIMEOUT_CACHED_CODE = 10 * 60
+TIMEOUT_CACHED_COUNTER = 24 * 60 * 60
+
+TIME_CHANGE_STATUS = 60 * 10
+LEN_CONFIRMATION_CODE = 6
+
+SITE_URL = os.getenv('SITE_URL')
+LOGO_URL = os.getenv('AWS_S3_ENDPOINT_URL')
+
+EMAIL_BACKEND = 'gmailapi_backend.mail.GmailBackend'
+GMAIL_API_CLIENT_ID = os.getenv('GMAIL_API_CLIENT_ID')
+GMAIL_API_CLIENT_SECRET = os.getenv('GMAIL_API_CLIENT_SECRET')
+GMAIL_API_REFRESH_TOKEN = os.getenv('GMAIL_API_REFRESH_TOKEN')
+
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER')
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_TIMEZONE = 'Europe/Moscow'
+CELERY_TASK_TRACK_STARTED = True
+CELERY_CACHE_BACKEND = 'default'
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 # Using custom user model
 AUTH_USER_MODEL = "user.User"
@@ -198,3 +217,8 @@ AUTH_USER_MODEL = "user.User"
 
 TOWIN_PRICE = 1500
 WHEEL_LOCK_PRICE = 200
+
+# Константы SMS API
+SMS_API_ID = os.getenv("SMS_API_ID")
+SMS_API_URL = os.getenv("SMS_API_URL")
+SMS_API_MSG = "Ваш код: {}"

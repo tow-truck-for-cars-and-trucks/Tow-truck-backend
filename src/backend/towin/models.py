@@ -271,7 +271,6 @@ class Feedback(models.Model):
     )
     ontime = models.BooleanField(verbose_name="Водитель приехал вовремя")
 
-
     class Meta:
         verbose_name = "Отзыв"
         verbose_name_plural = "Отзывы"

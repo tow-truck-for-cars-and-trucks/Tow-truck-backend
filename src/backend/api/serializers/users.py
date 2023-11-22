@@ -1,56 +1,11 @@
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth import get_user_model
-# from djoser.serializers import UserCreateSerializer, UserSerializer
-# from djoser.compat import get_user_email, get_user_email_field_name
-# from djoser.conf import settings
 
 from api.utils.fields import LowercaseEmailField
-# from djoser.serializers import UserCreateSerializer, UserSerializer
-# from rest_framework import serializers
+
 
 User = get_user_model()
-
-
-# class UserSerializer(UserSerializer):
-#     """Сериализатор модели пользователя."""
-
-#     class Meta:
-#         model = User
-#         fields = (
-#             "id",
-#             "email",
-#             "phone",
-#             "username",
-#             "first_name",
-#             "last_name",
-#             "password",
-#         )
-
-#     def update(self, instance, validated_data):
-#         email_field = get_user_email_field_name(User)
-#         instance.email_changed = False
-#         if settings.SEND_ACTIVATION_EMAIL and email_field in validated_data:
-#             instance_email = get_user_email(instance)
-#             if instance_email != validated_data[email_field]:
-#                 instance.is_active = False
-#                 instance.email_changed = True
-#                 instance.save(update_fields=["is_active"])
-#         return super().update(instance, validated_data)
-
-
-# class UserCreateSerializer(UserCreateSerializer):
-#     """Сериализатор создания пользователя."""
-
-#     class Meta:
-#         model = User
-#         fields = (
-#             "id",
-#             "email",
-#             "phone",
-#             "username",
-#             "password",
-#         )
 
 
 class UserSerializer(serializers.ModelSerializer):

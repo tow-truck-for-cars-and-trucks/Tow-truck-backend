@@ -1,6 +1,7 @@
 from typing import Any
 
 from django.db import models
+from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.hashers import make_password
 from phonenumber_field import modelfields
@@ -16,16 +17,13 @@ class MyUserManager(BaseUserManager):
     """
 
     def _create_user(
-        self,
-        email: str,
-        password: str,
-        **extra_fields: Any
+        self, email: str, password: str, **extra_fields: Any
     ) -> AbstractBaseUser:
         """
         Создает и сохраняет юзера с почтой, телефоном, и паролем
         """
         if not email:
-            raise ValueError('Электронная почта обязательна')
+            raise ValueError("Электронная почта обязательна")
         email = self.normalize_email(email).lower()
         user = self.model(email=email, **extra_fields)
         user.password = make_password(password)
@@ -33,38 +31,33 @@ class MyUserManager(BaseUserManager):
         return user
 
     def create_user(
-        self,
-        email: str,
-        password: str,
-        **extra_fields: Any
+        self, email: str, password: str, **extra_fields: Any
     ) -> AbstractBaseUser:
         """
         Создает юзера
         """
-
-        return self._create_user(
-            email,
-            password,
-            **extra_fields
-        )
+        extra_fields.setdefault('is_staff', False)
+        extra_fields.setdefault('is_superuser', False)
+        return self._create_user(email, password, **extra_fields)
 
     def create_superuser(
-        self,
-        email: str,
-        password: str,
-        **extra_fields: Any
+        self, email: str, password: str, **extra_fields: Any
     ) -> AbstractBaseUser:
         """
         Создает суперюзера
         """
-        user = self._create_user(email, password)
-        user.is_superuser = True
-        user.save()
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+        # extra_fields.setdefault("is_active", True)
 
-        return user
+        # if extra_fields.get("is_staff") is not True:
+        #     raise ValueError("Superuser must have is_staff=True.")
+        # if extra_fields.get("is_superuser") is not True:
+        #     raise ValueError("Superuser must have is_superuser=True.")
+        return self._create_user(email, password, **extra_fields)
 
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
     """
     Кастомная модель пользователя.
     """
@@ -95,14 +88,15 @@ class User(AbstractBaseUser):
             'unique': 'Этот адрес электронной почты уже зарегистрован.'
         }
     )
-    is_verified = models.BooleanField(
-        "Подтверждение",
-        default=False
-    )
     is_staff = models.BooleanField(
         'Стафф статус',
         default=False,
     )
+    is_superuser = models.BooleanField(
+        'Super статус',
+        default=False,
+    )
+    is_verified = models.BooleanField("Подтверждение", default=False)
 
     objects = MyUserManager()
 

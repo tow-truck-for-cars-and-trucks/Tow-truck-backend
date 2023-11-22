@@ -25,23 +25,16 @@ class TowTruck(models.Model):
         max_length=255,
     )
     model_car = models.CharField(
-        verbose_name='Модель и марка эвакуатора',
-        max_length=255
+        verbose_name="Модель и марка эвакуатора", max_length=255
     )
     license_plates = models.CharField(
-        verbose_name='Гос. номер',
-        max_length=10,
-        validators=[
-            plate_validator
-        ]
+        verbose_name="Гос. номер", max_length=10, validators=[plate_validator]
     )
 
     class Meta:
         verbose_name = "Эвакуатор"
         verbose_name_plural = "Эвакуаторы"
-        constraints = [
-            models.UniqueConstraint(fields=["driver"], name="unique_driver")
-        ]
+        constraints = [models.UniqueConstraint(fields=["driver"], name="unique_driver")]
 
     def __str__(self) -> str:
         return self.driver
@@ -57,9 +50,7 @@ class Tariff(models.Model):
         max_length=50,
         choices=TariffChoices.choices,
     )
-    description = models.CharField(
-        verbose_name="Описание тарифа", max_length=255
-    )
+    description = models.CharField(verbose_name="Описание тарифа", max_length=255)
     price = models.PositiveSmallIntegerField(
         verbose_name="Цена тарифа", validators=[MinValueValidator(1)]
     )
@@ -80,10 +71,7 @@ class CarType(models.Model):
     Модель типа автомобиля.
     """
 
-    car_type = models.CharField(
-        "Тип машины",
-        choices=VenchiceTypeChoices.choices
-    )
+    car_type = models.CharField("Тип машины", choices=VenchiceTypeChoices.choices)
     price = models.PositiveSmallIntegerField(
         verbose_name="Цена за тип авто",
         validators=[MinValueValidator(1)],
@@ -94,9 +82,7 @@ class CarType(models.Model):
         verbose_name_plural = "Типы авто"
         default_related_name = "car_type"
         constraints = [
-            models.UniqueConstraint(
-                fields=["car_type"], name="unique_car_type"
-            )
+            models.UniqueConstraint(fields=["car_type"], name="unique_car_type")
         ]
 
     def __str__(self):
@@ -114,14 +100,8 @@ class Order(models.Model):
         on_delete=models.SET_NULL,
         null=True,
     )
-    address_from = models.CharField(
-        verbose_name="Адрес подачи",
-        max_length=200
-    )
-    address_to = models.CharField(
-        verbose_name="Адрес прибытия",
-        max_length=200
-    )
+    address_from = models.CharField(verbose_name="Адрес подачи", max_length=200)
+    address_to = models.CharField(verbose_name="Адрес прибытия", max_length=200)
     addition = models.CharField(
         verbose_name="Комментарий",
         max_length=300,
@@ -134,22 +114,18 @@ class Order(models.Model):
     price = models.ForeignKey(
         "PriceOrder",
         on_delete=models.SET_NULL,
-        verbose_name='Цена',
-        related_name='order_price',
-        null=True
+        verbose_name="Цена",
+        related_name="order_price",
+        null=True,
     )
     tow_truck = models.ForeignKey(
-
         TowTruck,
         on_delete=models.SET_NULL,
         verbose_name="Эвакуатор",
-        related_name='orders',
-        null=True  # TODO Временное решение, пока нет алгоритма выбора машины
+        related_name="orders",
+        null=True,  # TODO Временное решение, пока нет алгоритма выбора машины
     )
-    created = models.DateTimeField(
-        "Дата заказа",
-        default=timezone.now
-    )
+    created = models.DateTimeField("Дата заказа", default=timezone.now)
 
     class Meta:
         verbose_name = "Заказ"
@@ -185,15 +161,13 @@ class PriceOrder(models.Model):
         validators=[MaxValueValidator(4)],
         default=0,
     )
-    towin = models.BooleanField(
-        verbose_name="Кюветные работы"
-    )
+    towin = models.BooleanField(verbose_name="Кюветные работы")
     order = models.ForeignKey(
         Order,
         on_delete=models.CASCADE,
         verbose_name="Заказ",
         related_name="price_orders",
-        null=True
+        null=True,
     )
     total = models.PositiveSmallIntegerField(
         verbose_name="Итоговая цена",
@@ -205,9 +179,7 @@ class PriceOrder(models.Model):
         verbose_name = "Заказы и Цены"
         verbose_name_plural = "Заказы и цены"
 
-        constraints = [
-            models.UniqueConstraint(fields=["order"], name="unique_order")
-        ]
+        constraints = [models.UniqueConstraint(fields=["order"], name="unique_order")]
 
     def __str__(self) -> str:
         return str(self.order)
@@ -270,9 +242,7 @@ class Feedback(models.Model):
         verbose_name_plural = "Отзывы"
         ordering = ("order",)
         constraints = [
-            models.UniqueConstraint(
-                fields=["order"], name="unique_order_feedback"
-            )
+            models.UniqueConstraint(fields=["order"], name="unique_order_feedback")
         ]
 
     def __str__(self) -> str:
@@ -282,12 +252,12 @@ class Feedback(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(
-        verbose_name='Имя',
+        verbose_name="Имя",
         max_length=150,
         blank=True,
     )
     last_name = models.CharField(
-        verbose_name='Фамилия',
+        verbose_name="Фамилия",
         max_length=150,
         blank=True,
     )

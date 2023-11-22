@@ -23,14 +23,17 @@ class OdrderAdmin(EmptyFieldModel):
         "tow_truck",
         "total_price",
     )
-    search_fields = ('address_from', 'address_to',)
-    readonly_fields = ('total_price',)
+    search_fields = (
+        "address_from",
+        "address_to",
+    )
+    readonly_fields = ("total_price",)
     inlines = [OrderriceTabularInline]
 
     def total_price(self, instance):
         return PriceOrder.objects.get(order=instance).total
 
-    total_price.short_description = 'Итоговая стоимость'
+    total_price.short_description = "Итоговая стоимость"
 
 
 class FeedbackAdmin(EmptyFieldModel):
@@ -44,13 +47,13 @@ class TowTruckAdmin(EmptyFieldModel):
         "driver",
         "model_car",
         "license_plates",
-        'avg_score'
+        "avg_score",
     )
 
     def avg_score(self, instance):
         return avg_towtruck_score(instance)
 
-    avg_score.short_description = 'Средняя оценка'
+    avg_score.short_description = "Средняя оценка"
 
 
 class TariffAdmin(EmptyFieldModel):

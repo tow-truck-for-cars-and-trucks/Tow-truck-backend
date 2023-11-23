@@ -129,7 +129,9 @@ class Order(models.Model):
     )
     delay = models.BooleanField(
         verbose_name="Задержка",
+        default=False,
     )
+    order_date = models.DateTimeField()
     price = models.ForeignKey(
         "PriceOrder",
         on_delete=models.SET_NULL,
@@ -151,6 +153,7 @@ class Order(models.Model):
     )
 
     class Meta:
+        ordering = ('-order_date',)
         verbose_name = "Заказ"
         verbose_name_plural = "Заказы"
 

@@ -155,7 +155,6 @@ class CreateOrderSerializer(serializers.ModelSerializer):
             'price',
         )
 
-
     def to_representation(self, instance):
         return ReadOrderSerializer(instance, context={
             'request': self.context.get('request')

@@ -274,7 +274,10 @@ class Feedback(models.Model):
         on_delete=models.CASCADE,
         verbose_name="Автор",
     )
-    ontime = models.BooleanField(verbose_name="Водитель приехал вовремя")
+    ontime = models.BooleanField(
+        verbose_name="Водитель приехал вовремя",
+        default=True
+    )
 
     class Meta:
         verbose_name = "Отзыв"

@@ -18,7 +18,13 @@ User = get_user_model()
 
 
 class OrderViewset(viewsets.ModelViewSet):
-    queryset = Order.objects.all()
+
+    def get_queryset(self):
+        status = self.request.query_params.get('status')
+        queryset = Order.objects.filter(
+            client=self.request.user
+        ).filter(status=status)
+        return queryset
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
@@ -48,6 +54,28 @@ class OrderViewset(viewsets.ModelViewSet):
         request.session['order_data'] = request.data
 
         return response.Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    def partial_update(self, request, *args, **kwargs):
+        """
+        Обновление статуса заказа.
+        """
+        instance = self.get_object()
+        serializer = self.get_serializer(
+            instance,
+            data=request.data,
+            partial=True
+        )
+        if serializer.is_valid():
+            if 'status' in request.data:
+                instance.status = request.data['status']
+                instance.save(update_fields=['status'])
+                return response.Response(serializer.data)
+            serializer.save()
+            return response.Response(serializer.data)
+        return response.Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
     def get_random_tow_truck(self):
         """

@@ -4,7 +4,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils import timezone
 
-from core.choices import TariffChoices, VenchiceTypeChoices
+from core.choices import TariffChoices, VenchiceTypeChoices, Statuses
 from core.validators import plate_validator
 
 
@@ -130,6 +130,11 @@ class Order(models.Model):
     )
     delay = models.BooleanField(
         verbose_name="Задержка",
+    )
+    status = models.CharField(
+        "Статус заказа",
+        choices=Statuses.choices,
+        default=Statuses.CREATED
     )
     price = models.ForeignKey(
         "PriceOrder",

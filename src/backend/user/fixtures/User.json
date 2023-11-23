@@ -11,26 +11,6 @@
       }
     },
     {
-      "model": "user.User",
-
-      "pk": 1,
-
-      "fields": {
-        "phone": "+79990009901",
-        "email": "007@england.com",
-        "first_name": "James",
-        "last_name": "Bond",
-        "password": "Password123"
-      }
-
-
-
-
-
-
-    },
-
-    {
 
       "model": "user.User",
 

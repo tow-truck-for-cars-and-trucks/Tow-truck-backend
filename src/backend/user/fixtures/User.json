@@ -1,21 +1,26 @@
 [
 
     {
-
+      "model": "user.User",
+      "pk": 1,
+      "fields": {
+          "phone": "+79990009900",
+          "email": "admin@admin.ru",
+          "password": "admin",
+          "is_superuser": true
+      }
+    },
+    {
       "model": "user.User",
 
       "pk": 1,
 
       "fields": {
-
-          "phone": "+79990009900",
-
-          "email": "admin@admin.ru",
-
-          "password": "admin",
-
-          "is_superuser": true
-
+        "phone": "+79990009901",
+        "email": "007@england.com",
+        "first_name": "James",
+        "last_name": "Bond",
+        "password": "Password123"
       }
 
 
@@ -56,19 +61,13 @@
         "pk": 3,
 
         "fields": {
-
           "phone": "+79990009902",
-
-
-
           "email": "despasito@xnxx.com",
 
           "first_name": "Piere",
 
           "last_name": "Woodman",
-
           "password": "Password123"
-
         }
 
     },
@@ -80,19 +79,13 @@
         "pk": 4,
 
         "fields": {
-
           "phone": "+79990009903",
-
-
-
           "email": "rayangloslingov1983@mail.ru",
 
           "first_name": "Ryan",
 
           "last_name": "Gosling",
-
           "password": "Password123"
-
         }
 
     },
@@ -104,19 +97,13 @@
         "pk": 5,
 
         "fields": {
-
           "phone": "+79990009904",
-
-
-
           "email": "uravniphone228@mail.ru",
 
           "first_name": "Павлик",
 
           "last_name": "Морозов",
-
           "password": "Password123"
-
         }
 
     },
@@ -128,19 +115,13 @@
         "pk": 6,
 
         "fields": {
-
           "phone": "+79990009905",
-
-
-
           "email": "gonefludd@google.com",
 
           "first_name": "Александр",
 
           "last_name": "Смирнов",
-
           "password": "Password123"
-
         }
 
     }

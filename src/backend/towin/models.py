@@ -156,7 +156,7 @@ class Order(models.Model):
     )
 
     class Meta:
-        ordering = ('-order_date',)
+        ordering = ('-created',)
         verbose_name = "Заказ"
         verbose_name_plural = "Заказы"
 

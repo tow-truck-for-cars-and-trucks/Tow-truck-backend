@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     "api.apps.ApiConfig",
     "towin.apps.TowinConfig",
     "user.apps.UserConfig",
-    # # "phone_verify",
     'gmailapi_backend',
     'phonenumber_field',
     "rest_framework",
@@ -183,9 +182,9 @@ DJOSER = {
     "SET_PASSWORD_RETYPE": True,
     "HIDE_USERS": False,
     "SERIALIZERS": {
-        "user": "api.serializers.UserSerializer",
-        "current_user": "api.serializers.UserSerializer",
-        "user_create": "api.serializers.UserSerializer",
+        "user": "api.serializers.users.UserSerializer",
+        "current_user": "api.serializers.users.UserSerializer",
+        "user_create": "api.serializers.users.UserSerializer",
     },
     "PERMISSIONS": {
         "user": ["djoser.permissions.CurrentUserOrAdminOrReadOnly"],

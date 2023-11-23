@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.8'
 
 volumes:
   towtruck_pg_data:
@@ -12,9 +12,7 @@ services:
       - towtruck_pg_data:/var/lib/postgresql/data
 
   backend:
-    build:
-      context: ../backend/
-      dockerfile: Dockerfile
+    image: aleksentcev/tte_backend:latest
     env_file: .env
     volumes:
       - static:/backend_static
@@ -22,10 +20,9 @@ services:
       - towtruck_db
 
   nginx:
-    image: nginx:1.19.3
+    image: aleksentcev/tte_gateway:latest
     env_file: .env
     ports:
       - "8000:80"
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - static:/staticfiles/

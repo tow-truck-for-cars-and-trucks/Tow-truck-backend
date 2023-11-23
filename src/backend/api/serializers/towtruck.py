@@ -1,4 +1,3 @@
-from djoser.serializers import UserCreateSerializer, UserSerializer
 from rest_framework import serializers
 
 from core.functions import avg_towtruck_score
@@ -9,37 +8,8 @@ from towin.models import (
     PriceOrder,
     Feedback,
     CarType,
-    User
 )
-
-
-class CustomUserSerializer(UserSerializer):
-    """Сериализатор модели пользователя как <Наниматель>."""
-
-    class Meta:
-        model = User
-        fields = (
-            "email",
-            "phone",
-            "id",
-            "username",
-            "first_name",
-            "last_name",
-        )
-
-
-class CustomUserCreateSerializer(UserCreateSerializer):
-    class Meta:
-        model = User
-        fields = (
-            "username",
-            "id",
-            "password",
-            "email",
-            "phone",
-            "first_name",
-            "last_name",
-        )
+from api.serializers.users import UserSerializer
 
 
 class TowTruckSerializer(serializers.ModelSerializer):
@@ -71,10 +41,25 @@ class PriceOrderSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class FeedbackSerializer(serializers.ModelSerializer):
+class FeedbackCreateSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField()
+
     class Meta:
         model = Feedback
-        fields = "__all__"
+        fields = ('id', 'score', 'comment', 'order', 'name', 'ontime')
+
+    def get_name(self, obj):
+        request = self.context.get('request')
+        name = request.user.first_name
+        return name
+
+
+class FeedbackReadSerializer(serializers.ModelSerializer):
+    name = serializers.ReadOnlyField(source='name.username')
+
+    class Meta:
+        model = Feedback
+        fields = ('id', 'score', 'comment', 'order', 'name', 'ontime')
 
 
 class CarTypeSerializer(serializers.ModelSerializer):
@@ -84,7 +69,7 @@ class CarTypeSerializer(serializers.ModelSerializer):
 
 
 class ReadOrderSerializer(serializers.ModelSerializer):
-    client = CustomUserSerializer(
+    client = UserSerializer(
         read_only=True
     )
     price = PriceOrderSerializer()
@@ -126,7 +111,7 @@ class ReadOrderSerializer(serializers.ModelSerializer):
 
 
 class CreateOrderSerializer(serializers.ModelSerializer):
-    client = CustomUserSerializer(
+    client = UserSerializer(
         read_only=True,
         required=False
     )

@@ -123,11 +123,7 @@ class Command(BaseCommand):
                 address_to=row[2],
                 addition=row[3],
                 delay=row[4],
-                # price=PriceOrder.objects.get(pk=row[5]) хотел реализовать
-                # так, но без заполненого прайся не будет создаватсья так
-                # же как и без заполненного ордера не будет создаваться прайс.
-                # Пока придется ручками выставлять FK в админке
-                tow_truck=TowTruck.objects.get(pk=row[6]),
+                tow_truck=TowTruck.objects.get(pk=row[5]),
             ) for row in rows]
             Order.objects.bulk_create(data)
 

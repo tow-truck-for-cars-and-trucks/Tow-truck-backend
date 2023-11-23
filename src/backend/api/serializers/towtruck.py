@@ -146,6 +146,10 @@ class CreateOrderSerializer(serializers.ModelSerializer):
         }).data
 
     def create(self, validated_data):
+
+        if validated_data.get('delay', False):
+            validated_data['order_date'] = self.initial_data.get('date', None)
+
         price_data = validated_data.pop('price')
         order_instance = Order.objects.create(**validated_data)
 

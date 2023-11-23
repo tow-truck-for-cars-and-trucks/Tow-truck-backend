@@ -1,7 +1,7 @@
 import random
 
 from django.contrib.auth import get_user_model
-from rest_framework import viewsets, permissions, status, response
+from rest_framework import viewsets, permissions, status, response, mixins
 
 from towin.models import Order, Feedback, TowTruck, CarType, Tariff
 from api.serializers.towtruck import (
@@ -12,6 +12,7 @@ from api.serializers.towtruck import (
     TariffSerializer,
     CarTypeSerializer
 )
+from api.permissions import IsAdminOrReadOnly
 
 User = get_user_model()
 
@@ -85,11 +86,13 @@ class FeedbackViewset(viewsets.ModelViewSet):
         )
 
 
-class CarTypeViewset(viewsets.ModelViewSet):
+class CarTypeViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = CarType.objects.all()
     serializer_class = CarTypeSerializer
+    permission_classes = (IsAdminOrReadOnly,)
 
 
-class TariffViewset(viewsets.ModelViewSet):
+class TariffViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Tariff.objects.all()
     serializer_class = TariffSerializer
+    permission_classes = (IsAdminOrReadOnly,)

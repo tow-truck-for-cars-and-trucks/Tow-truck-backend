@@ -24,6 +24,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'email',
+            'phone',
             'first_name',
             'last_name',
             'password',
@@ -68,7 +69,6 @@ class UserMeSerializer(serializers.ModelSerializer):
             'phone',
             'image',
         )
-        read_only_fields = ('email', 'is_subscribed')
 
 
 class EmailSerializer(serializers.Serializer):

@@ -67,7 +67,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(
         verbose_name='Имя',
         max_length=150,
-        blank=True,
+        blank=False,
     )
     last_name = models.CharField(
         verbose_name='Фамилия',
@@ -78,8 +78,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         'Телефон',
         region='RU',
         unique=True,
-        blank=True,
-        null=True,
     )
     email = models.EmailField(
         'Электронная почта',

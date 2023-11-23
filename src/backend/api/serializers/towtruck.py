@@ -50,7 +50,7 @@ class FeedbackCreateSerializer(serializers.ModelSerializer):
 
     def get_name(self, obj):
         request = self.context.get('request')
-        name = request.user.username
+        name = request.user.first_name
         return name
 
 

@@ -1,82 +1,148 @@
 [
+
     {
-        "model": "user.User",
-        "pk": 1,
-        "fields": {
-            "username": "admin",
-            "phone": 8000000000,
-            "is_verified": true,
-            "email": "admin@admin.ru",
-            "role": "Admin",
-            "password": "pbkdf2_sha256$600000$ah9NCHuH5QgUrySdD5pZpL$C+u5HJV4ldYqu4QgWvtv/EViV+LSyh762EsisvCdqF0=",
-            "is_superuser": true,
-            "is_staff": true,
-            "is_active": true
-        }
-    },
-    {
+
       "model": "user.User",
-      "pk": 2,
+
+      "pk": 1,
+
       "fields": {
-        "username": "agent007",
-        "phone": 88005553535,
-        "is_verified": true,
-        "email": "k7@england.com",
-        "first_name": "James",
-        "last_name": "Bond",
-        "role": "User"
+
+          "phone": "+79990009900",
+
+          "email": "admin@admin.ru",
+
+          "password": "admin",
+
+          "is_superuser": true
+
       }
+
+
+
+
+
+
     },
+
     {
+
+      "model": "user.User",
+
+      "pk": 2,
+
+      "fields": {
+
+        "phone": "+79990009901",
+
+        "email": "007@england.com",
+
+
+
+        "first_name": "James",
+
+        "last_name": "Bond",
+
+        "password": "Password123"
+
+      }
+
+    },
+
+    {
+
         "model": "user.User",
+
         "pk": 3,
+
         "fields": {
-          "username": "baby_fox",
-          "phone": 84484747434,
-          "is_verified": false,
+
+          "phone": "+79990009902",
+
+
+
           "email": "despasito@xnxx.com",
+
           "first_name": "Piere",
+
           "last_name": "Woodman",
-          "role": "User"
+
+          "password": "Password123"
+
         }
+
     },
+
     {
+
         "model": "user.User",
+
         "pk": 4,
+
         "fields": {
-          "username": "gosling",
-          "phone": 88716541512,
-          "is_verified": true,
+
+          "phone": "+79990009903",
+
+
+
           "email": "rayangloslingov1983@mail.ru",
+
           "first_name": "Ryan",
+
           "last_name": "Gosling",
-          "role": "User"
+
+          "password": "Password123"
+
         }
+
     },
+
     {
+
         "model": "user.User",
+
         "pk": 5,
+
         "fields": {
-          "username": "uravniphone",
-          "phone": 84648431584,
-          "is_verified": true,
+
+          "phone": "+79990009904",
+
+
+
           "email": "uravniphone228@mail.ru",
+
           "first_name": "Павлик",
+
           "last_name": "Морозов",
-          "role": "User"
+
+          "password": "Password123"
+
         }
+
     },
+
     {
+
         "model": "user.User",
+
         "pk": 6,
+
         "fields": {
-          "username": "fludd",
-          "phone": 89995546431,
-          "is_verified": false,
+
+          "phone": "+79990009905",
+
+
+
           "email": "gonefludd@google.com",
+
           "first_name": "Александр",
+
           "last_name": "Смирнов",
-          "role": "User"
+
+          "password": "Password123"
+
         }
+
     }
+
 ]

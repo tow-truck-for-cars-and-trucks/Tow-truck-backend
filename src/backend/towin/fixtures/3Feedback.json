@@ -5,7 +5,8 @@
       "fields": {
         "score": 5,
         "comment": "Водитель оказался вылитый я, пригласили его на роль каскадера, спасибо ТТ ЭКСПРЕС!!!",
-        "order": 1
+        "order": 1,
+        "name": 1
       }
     },
     {
@@ -14,7 +15,8 @@
       "fields": {
         "score": 4,
         "comment": "Приехали не так быстро, как хотелось",
-        "order": 2
+        "order": 2,
+        "name": 2
       }
     },
     {
@@ -23,7 +25,8 @@
         "fields": {
           "score": 2,
           "comment": "Menya nikto ne spas - pomogite!!!!!",
-          "order": 3
+          "order": 3,
+          "name": 3
         }
     }
   ]

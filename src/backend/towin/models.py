@@ -130,6 +130,11 @@ class Order(models.Model):
     )
     delay = models.BooleanField(
         verbose_name="Задержка",
+        default=False,
+    )
+    order_date = models.DateTimeField(
+        blank=True,
+        null=True
     )
     price = models.ForeignKey(
         "PriceOrder",
@@ -139,12 +144,11 @@ class Order(models.Model):
         null=True
     )
     tow_truck = models.ForeignKey(
-
         TowTruck,
         on_delete=models.SET_NULL,
         verbose_name="Эвакуатор",
         related_name='orders',
-        null=True  # TODO Временное решение, пока нет алгоритма выбора машины
+        null=True
     )
     created = models.DateTimeField(
         "Дата заказа",
@@ -152,6 +156,7 @@ class Order(models.Model):
     )
 
     class Meta:
+        ordering = ('-created',)
         verbose_name = "Заказ"
         verbose_name_plural = "Заказы"
 
@@ -269,7 +274,10 @@ class Feedback(models.Model):
         on_delete=models.CASCADE,
         verbose_name="Автор",
     )
-    ontime = models.BooleanField(verbose_name="Водитель приехал вовремя")
+    ontime = models.BooleanField(
+        verbose_name="Водитель приехал вовремя",
+        default=True
+    )
 
     class Meta:
         verbose_name = "Отзыв"
@@ -286,7 +294,10 @@ class Feedback(models.Model):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE
+    )
     first_name = models.CharField(
         verbose_name='Имя',
         max_length=150,

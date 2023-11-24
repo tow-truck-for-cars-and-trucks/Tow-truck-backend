@@ -46,12 +46,11 @@ INSTALLED_APPS = [
     "api.apps.ApiConfig",
     "towin.apps.TowinConfig",
     "user.apps.UserConfig",
-    'phonenumber_field',
-    "rest_framework",
-    "rest_framework.authtoken",
-    "djoser",
-    "django_filters",
-    "drf_yasg",
+    "rest_framework",  # isort:ignore
+    "rest_framework.authtoken",  # isort:ignore
+    "djoser",  # isort:ignore
+    "django_filters",  # isort:ignore
+    "drf_yasg",  # isort:ignore
 ]
 
 MIDDLEWARE = [
@@ -140,12 +139,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-CORS_ORIGIN_ALLOW_ALL = True
-
-CSRF_TRUSTED_ORIGINS = (
-    "http://localhost",
-    "https://" + os.getenv("ALLOWED_HOSTS", "host")
-)
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -167,36 +160,20 @@ REST_FRAMEWORK = {
     ),
 }
 
-SIMPLE_JWT = {
-    'AUTH_HEADER_TYPES': ('Bearer',),
-}
-
 DJOSER = {
-    # "LOGIN_FIELD": "username",
-    "PASSWORD_RESET_CPNFIRM_RETYPE": True,
-    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
-    'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
-    'ACTIVATION_URL': '#/auth/verify/{uid}/{token}/',
-    'SEND_ACTIVATION_EMAIL': True,
-    "SET_PASSWORD_RETYPE": True,
-    "HIDE_USERS": False,
+    "LOGIN_FIELD": "email",
+    # "SEND_ACTIVATION_EMAIL": False,
+    # "HIDE_USERS": False,
+    # "PERMISSIONS": {
+    #     "user": ["djoser.permissions.CurrentUserOrAdminOrReadOnly"],
+    #     "user_list": ["rest_framework.permissions.AllowAny"],
+    # },
     "SERIALIZERS": {
-        "user": "api.serializers.users.UserSerializer",
-        "current_user": "api.serializers.users.UserSerializer",
-        "user_create": "api.serializers.users.UserSerializer",
+        "user": "api.serializers.UserSerializer",
+        "current_user": "api.serializers.UserSerializer",
+        "user_create": "djoser.serializers.UserCreateSerializer",
     },
-    "PERMISSIONS": {
-        "user": ["djoser.permissions.CurrentUserOrAdminOrReadOnly"],
-        "user_list": ["rest_framework.permissions.IsAuthenticatedOrReadOnly"],
-    },
-    # "USER_CREATE_PASSWORD_RETYPE": True,
 }
 
 # Using custom user model
 AUTH_USER_MODEL = "user.User"
-
-
-# Custom variables
-
-TOWIN_PRICE = 1500
-WHEEL_LOCK_PRICE = 200

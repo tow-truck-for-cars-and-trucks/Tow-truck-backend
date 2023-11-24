@@ -1,0 +1,29 @@
+[
+    {
+      "model": "towin.tariff",
+      "pk": 1,
+      "fields": {
+        "name": "Эконом",
+        "description": "Стандартный тариф.",
+        "price": 1000
+      }
+    },
+    {
+        "model": "towin.tariff",
+        "pk": 2,
+        "fields": {
+          "name": "Экспресс",
+          "description": "Если помощь нужна срочно.",
+          "price": 1300
+        }
+    },
+    {
+        "model": "towin.tariff",
+        "pk": 3,
+        "fields": {
+          "name": "Манипулятор",
+          "description": "Эвакуатор с манипулятором.",
+          "price": 1400
+        }
+    }
+  ]

@@ -100,17 +100,11 @@
 ---
 3. *Наполните базу данными*:
 
-    Команды для выгрузки данных из csv-файлов:
+    Команда для загрузки данных в бд:
 
     ```sh
-    python src/backend/manage.py importtd
+    python manage.py loaddata */fixtures/*.json
     ```
-
-    -    > Для удаления данных из базы есть(будет наверное) доп. опция `--delete`:
-
-            ```sh
-            python src/backend/manage.py <команда> --delete
-            ```
 ---
 4. *Соберите статику*:
     ```sh

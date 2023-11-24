@@ -101,6 +101,7 @@ class ReadOrderSerializer(serializers.ModelSerializer):
             'towin',
             'addition',
             'tariff',
+            'order_date',
             'status',
             'price',
         )
@@ -137,6 +138,7 @@ class CreateOrderSerializer(serializers.ModelSerializer):
             'car_type',
             'tariff',
             'delay',
+            'order_date',
             'status',
             'addition',
             'price',
@@ -150,7 +152,9 @@ class CreateOrderSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
 
         if validated_data.get('delay', False):
-            validated_data['order_date'] = self.initial_data.get('date', None)
+            validated_data['order_date'] = self.initial_data.get(
+                'order_date', None
+            )
 
         price_data = validated_data.pop('price')
         order_instance = Order.objects.create(**validated_data)

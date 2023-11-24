@@ -10,6 +10,17 @@ class Roles(models.TextChoices):
     ADMIN = 'Admin', 'Администратор'
 
 
+class Statuses(models.TextChoices):
+    """
+    Типы статуса заказа.
+    """
+
+    CREATED = 'Созданный', 'Созданный'
+    ACTIVE = 'Активный', 'Активный'
+    COMPLETED = 'Завершенный', 'Завершенный'
+    CANCELED = 'Отмененный', 'Отмененный'
+
+
 class TariffChoices(models.TextChoices):
     """
     Класс выбора тарифа.

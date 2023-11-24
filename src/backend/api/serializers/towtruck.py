@@ -55,7 +55,7 @@ class FeedbackCreateSerializer(serializers.ModelSerializer):
 
 
 class FeedbackReadSerializer(serializers.ModelSerializer):
-    name = serializers.ReadOnlyField(source='name.username')
+    name = serializers.ReadOnlyField(source='name.first_name')
 
     class Meta:
         model = Feedback
@@ -101,7 +101,7 @@ class ReadOrderSerializer(serializers.ModelSerializer):
             'towin',
             'addition',
             'tariff',
-            'order_date'
+            'order_date',
             'status',
             'price',
         )

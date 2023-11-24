@@ -20,8 +20,7 @@ User = get_user_model()
 class OrderViewset(viewsets.ModelViewSet):
 
     def get_queryset(self):
-        status = self.request.query_params.get('status', 'Созданный')  # Добавил значение по умолсанию. При GET запросе приходит None и выдает пустой список. При определении default значения при GET запросе выдает список с статусоь "Созданный"
-        queryset = Order.objects.filter(
+        status = self.request.query_params.get('status', 'Созданный')
             client=self.request.user
         ).filter(status=status)
         return queryset

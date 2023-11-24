@@ -102,6 +102,7 @@ class ReadOrderSerializer(serializers.ModelSerializer):
             'addition',
             'tariff',
             'order_date'
+            'status',
             'price',
         )
 
@@ -137,7 +138,8 @@ class CreateOrderSerializer(serializers.ModelSerializer):
             'car_type',
             'tariff',
             'delay',
-            'order_date'
+            'order_date',
+            'status',
             'addition',
             'price',
         )

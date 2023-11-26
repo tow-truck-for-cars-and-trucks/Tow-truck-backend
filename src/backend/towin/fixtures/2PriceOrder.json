@@ -7,7 +7,8 @@
         "car_type": 2,
         "wheel_lock": 0,
         "towin": false,
-        "order": 1
+        "order": 1,
+        "total": 1234
       }
     },
     {
@@ -18,7 +19,8 @@
         "car_type": 2,
         "wheel_lock": 1,
         "towin": true,
-        "order": 2
+        "order": 2,
+        "total": 3214
       }
     },
     {
@@ -29,7 +31,8 @@
           "car_type": 4,
           "wheel_lock": 0,
           "towin": false,
-          "order": 3
+          "order": 3,
+          "total": 2314
         }
     }
   ]

@@ -34,5 +34,44 @@
       "delay": false,
       "tow_truck": 1
     }
+  },
+  {
+    "model": "towin.order",
+    "pk": 4,
+    "fields": {
+      "client": 2,
+      "address_from": "Королев",
+      "address_to": "Москва, Аэропорт Шереметьево",
+      "addition": "Быстрее",
+      "status": 2,
+      "delay": false,
+      "tow_truck": 1
+    }
+  },
+  {
+    "model": "towin.order",
+    "pk": 5,
+    "fields": {
+      "client": 2,
+      "address_from": "СПб",
+      "address_to": "Москва",
+      "addition": "Уже не надо",
+      "status": 4,
+      "delay": false,
+      "tow_truck": 1
+    }
+  },
+  {
+    "model": "towin.order",
+    "pk": 5,
+    "fields": {
+      "client": 2,
+      "address_from": "Валентиновка",
+      "address_to": "Яуза",
+      "addition": "Отлично",
+      "status": 3,
+      "delay": false,
+      "tow_truck": 2
+    }
   }
   ]

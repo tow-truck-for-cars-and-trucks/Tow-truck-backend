@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     "api.apps.ApiConfig",
     "towin.apps.TowinConfig",
     "user.apps.UserConfig",
-    'phonenumber_field',
+    "phonenumber_field",
     "rest_framework",
     "rest_framework.authtoken",
     "djoser",
@@ -168,16 +168,12 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'AUTH_HEADER_TYPES': ('Bearer',),
+    "AUTH_HEADER_TYPES": ("Bearer",),
 }
 
 DJOSER = {
-    # "LOGIN_FIELD": "username",
-    "PASSWORD_RESET_CPNFIRM_RETYPE": True,
-    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
-    'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
-    'ACTIVATION_URL': '#/auth/verify/{uid}/{token}/',
-    'SEND_ACTIVATION_EMAIL': True,
+    "LOGIN_FIELD": "email",
+    "SEND_ACTIVATION_EMAIL": False,
     "SET_PASSWORD_RETYPE": True,
     "HIDE_USERS": False,
     "SERIALIZERS": {
@@ -189,7 +185,6 @@ DJOSER = {
         "user": ["djoser.permissions.CurrentUserOrAdminOrReadOnly"],
         "user_list": ["rest_framework.permissions.IsAuthenticatedOrReadOnly"],
     },
-    # "USER_CREATE_PASSWORD_RETYPE": True,
 }
 
 # Using custom user model

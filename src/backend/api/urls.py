@@ -1,11 +1,11 @@
-from django.urls import include, re_path
+from django.urls import include, re_path, path
 from rest_framework.routers import DefaultRouter
 
 from api.views.towtruck import (
     OrderViewset,
     FeedbackViewset,
     TariffViewset,
-    CarTypeViewset
+    CarTypeViewset,
 )
 from api.views.users import UserViewset
 
@@ -21,4 +21,7 @@ router.register("cartype", CarTypeViewset, basename="cartype")
 
 urlpatterns = [
     re_path(r"^", include(router.urls)),
+    path("auth/", include("djoser.urls")),
+    re_path(r"auth/", include("djoser.urls.authtoken")),
+    re_path(r"auth/", include("djoser.urls.jwt")),
 ]

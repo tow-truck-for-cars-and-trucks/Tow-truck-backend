@@ -5,6 +5,7 @@ from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.hashers import make_password
 from phonenumber_field import modelfields
+
 # from django.contrib.auth.models import AbstractUser
 # from django.db import models
 
@@ -36,8 +37,8 @@ class MyUserManager(BaseUserManager):
         """
         Создает юзера
         """
-        extra_fields.setdefault('is_staff', False)
-        extra_fields.setdefault('is_superuser', False)
+        extra_fields.setdefault("is_staff", False)
+        extra_fields.setdefault("is_superuser", False)
         return self._create_user(email, password, **extra_fields)
 
     def create_superuser(
@@ -61,37 +62,38 @@ class User(AbstractBaseUser, PermissionsMixin):
     """
     Кастомная модель пользователя.
     """
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ('phone', 'first_name')
+
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ("phone", "first_name")
 
     first_name = models.CharField(
-        verbose_name='Имя',
+        verbose_name="Имя",
         max_length=150,
         blank=False,
     )
     last_name = models.CharField(
-        verbose_name='Фамилия',
+        verbose_name="Фамилия",
         max_length=150,
         blank=True,
     )
     phone = modelfields.PhoneNumberField(
-        'Телефон',
-        region='RU',
+        "Телефон",
+        region="RU",
         unique=True,
     )
     email = models.EmailField(
-        'Электронная почта',
+        "Электронная почта",
         unique=True,
         error_messages={
-            'unique': 'Этот адрес электронной почты уже зарегистрован.'
-        }
+            "unique": "Этот адрес электронной почты уже зарегистрован."
+        },
     )
     is_staff = models.BooleanField(
-        'Стафф статус',
+        "Стафф статус",
         default=False,
     )
     is_superuser = models.BooleanField(
-        'Super статус',
+        "Super статус",
         default=False,
     )
     is_verified = models.BooleanField("Подтверждение", default=False)
@@ -99,10 +101,16 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = MyUserManager()
 
     class Meta:
-        ordering = ("email", "phone",)
-        unique_together = ("email", "phone",)
-        verbose_name = 'Пользователь'
-        verbose_name_plural = 'Пользователи'
+        ordering = (
+            "email",
+            "phone",
+        )
+        unique_together = (
+            "email",
+            "phone",
+        )
+        verbose_name = "Пользователь"
+        verbose_name_plural = "Пользователи"
 
     def __str__(self) -> str:
         return self.email
@@ -115,20 +123,20 @@ class User(AbstractBaseUser, PermissionsMixin):
 class Avatar(models.Model):
     user = models.OneToOneField(
         User,
-        related_name='avatar',
+        related_name="avatar",
         on_delete=models.CASCADE,
     )
     image = models.ImageField(
-        'Аватар',
+        "Аватар",
         blank=True,
         null=True,
         upload_to=get_avatar_path,
     )
 
     class Meta:
-        verbose_name = 'Аватар'
-        verbose_name_plural = 'Аватарки'
-        ordering = ('user',)
+        verbose_name = "Аватар"
+        verbose_name_plural = "Аватарки"
+        ordering = ("user",)
 
     def __str__(self) -> str:
         return self.user.first_name

@@ -11,9 +11,9 @@ User = get_user_model()
 
 @admin.register(User)
 class UserAdmin(EmptyFieldModel):
-    list_display = ("phone", "first_name", "last_name", 'email')
-    search_fields = ("phone", "first_name", "last_name", 'email')
-    list_filter = ("phone", 'email')
+    list_display = ("phone", "first_name", "last_name", "email")
+    search_fields = ("phone", "first_name", "last_name", "email")
+    list_filter = ("phone", "email")
 
     def save_model(self, request, obj, form, change):
         """Хэширует пароль и сохраняет его в базе данных"""
@@ -23,8 +23,8 @@ class UserAdmin(EmptyFieldModel):
 
 @admin.register(Avatar)
 class AvatarAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'preview')
-    readonly_fields = ('preview', )
+    list_display = ("id", "user", "preview")
+    readonly_fields = ("preview",)
     list_per_page = 15
     list_max_show_all = 30
 
@@ -33,4 +33,4 @@ class AvatarAdmin(admin.ModelAdmin):
             return mark_safe(
                 f'<img src="{obj.image.url}" style="max-height: 300px;">'
             )
-        return ''
+        return ""

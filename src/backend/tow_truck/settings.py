@@ -33,7 +33,7 @@ DEBUG = os.getenv("DEBUG", "False") in ("True", "true", "t", 1)
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1").split()
 
-CSRF_TRUSTED_ORIGINS = os.getenv("CSRF", "*").split()
+CSRF_TRUSTED_ORIGINS = os.getenv("CSRF", "http://127.0.0.1:8000").split()
 
 CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "").split()
 

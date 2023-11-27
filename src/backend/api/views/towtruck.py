@@ -1,9 +1,11 @@
 import random
 
 from django.contrib.auth import get_user_model
+from django.conf import settings
 from rest_framework import viewsets, permissions, status, response, mixins
+from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny
 
-from towin.models import Order, Feedback, TowTruck, CarType, Tariff
 from api.serializers.towtruck import (
     FeedbackCreateSerializer,
     FeedbackReadSerializer,
@@ -13,6 +15,7 @@ from api.serializers.towtruck import (
     CarTypeSerializer
 )
 from api.permissions import IsAdminOrReadOnly
+from towin.models import Order, Feedback, TowTruck, CarType, Tariff
 
 User = get_user_model()
 
@@ -28,6 +31,23 @@ class OrderViewset(viewsets.ModelViewSet):
         if self.request.method == 'GET':
             return ReadOrderSerializer
         return CreateOrderSerializer
+
+    @action(methods=("POST",),
+            permission_classes=(AllowAny,),
+            detail=False)
+    def total_price(self, request, **kwargs):
+        order_data = request.data
+        car_tape = CarType.objects.get(id=order_data['car_type'][0]).price
+        tariff_id = Tariff.objects.get(id=order_data['tariff'][0]).price
+        wheel_lock = (order_data['price']['wheel_lock'] *
+                      settings.WHEEL_LOCK_PRICE)
+        towin_price = (settings.TOWIN_PRICE if order_data['price']['towin']
+                       else False)
+        total = sum([car_tape, tariff_id, wheel_lock, towin_price])
+        context = {
+            "price": total
+        }
+        return response.Response(context, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
         """
@@ -49,7 +69,7 @@ class OrderViewset(viewsets.ModelViewSet):
                 serializer.data, status=status.HTTP_201_CREATED
             )
 
-        request.session['order_data'] = request.data
+        # request.session['order_data'] = request.data
 
         return response.Response(status=status.HTTP_401_UNAUTHORIZED)
 

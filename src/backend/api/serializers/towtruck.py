@@ -73,11 +73,11 @@ class ReadOrderSerializer(serializers.ModelSerializer):
         read_only=True
     )
     price = PriceOrderSerializer()
-    car_type = serializers.StringRelatedField(
+    car_type = serializers.PrimaryKeyRelatedField(
         read_only=True,
         source='price.car_type'
     )
-    wheel_lock = serializers.IntegerField(
+    wheel_lock = serializers.PrimaryKeyRelatedField(
         source='price.wheel_lock',
         read_only=True
     )
@@ -85,7 +85,7 @@ class ReadOrderSerializer(serializers.ModelSerializer):
         source='price.towin',
         read_only=True,
     )
-    tariff = serializers.StringRelatedField(
+    tariff = serializers.PrimaryKeyRelatedField(
         source='price.tariff',
         read_only=True
     )

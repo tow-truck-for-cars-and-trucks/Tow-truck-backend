@@ -88,6 +88,7 @@ class ReadOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = (
+            "id",
             "client",
             "address_from",
             "address_to",

@@ -1,19 +1,41 @@
 from django.contrib import admin
-from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 from django.utils.safestring import SafeString, mark_safe
 
 from core.models import EmptyFieldModel
-from user.models import Avatar
-
-User = get_user_model()
+from user.models import Avatar, User
 
 
 @admin.register(User)
 class UserAdmin(EmptyFieldModel):
     list_display = ("phone", "first_name", "last_name", "email")
-    search_fields = ("phone", "first_name", "last_name", "email")
     list_filter = ("phone", "email")
+    fieldsets = (
+        (None, {"fields": ("email", "password")}),
+        ("Permissions", {"fields": ("is_staff", "is_active")}),
+    )
+    add_fieldsets = (
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": (
+                    "email",
+                    "password1",
+                    "password2",
+                    "is_staff",
+                    "is_active",
+                ),
+            },
+        ),
+    )
+    search_fields = (
+        "phone",
+        "email",
+        "first_name",
+        "last_name",
+    )
+    ordering = ("email",)
 
     def save_model(self, request, obj, form, change):
         """Хэширует пароль и сохраняет его в базе данных"""

@@ -6,9 +6,6 @@ from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.hashers import make_password
 from phonenumber_field import modelfields
 
-# from django.contrib.auth.models import AbstractUser
-# from django.db import models
-
 from user.utils import get_avatar_path
 
 
@@ -49,12 +46,12 @@ class MyUserManager(BaseUserManager):
         """
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
-        # extra_fields.setdefault("is_active", True)
+        extra_fields.setdefault("is_active", True)
 
-        # if extra_fields.get("is_staff") is not True:
-        #     raise ValueError("Superuser must have is_staff=True.")
-        # if extra_fields.get("is_superuser") is not True:
-        #     raise ValueError("Superuser must have is_superuser=True.")
+        if extra_fields.get("is_staff") is not True:
+            raise ValueError("Superuser must have is_staff=True.")
+        if extra_fields.get("is_superuser") is not True:
+            raise ValueError("Superuser must have is_superuser=True.")
         return self._create_user(email, password, **extra_fields)
 
 
@@ -64,7 +61,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     """
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ("phone", "first_name")
+    REQUIRED_FIELDS = (
+        "phone",
+        "first_name",
+    )
 
     first_name = models.CharField(
         verbose_name="Имя",

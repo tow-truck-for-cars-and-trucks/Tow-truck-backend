@@ -2,7 +2,13 @@ import random
 
 from django.contrib.auth import get_user_model
 from django.conf import settings
-from rest_framework import viewsets, permissions, status, response, mixins
+from rest_framework import (
+    viewsets,
+    permissions,
+    status,
+    response,
+    mixins,
+)
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 

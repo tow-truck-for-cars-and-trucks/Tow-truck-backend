@@ -86,7 +86,6 @@ class CarType(models.Model):
     class Meta:
         verbose_name = "Тип авто"
         verbose_name_plural = "Типы авто"
-        default_related_name = "car_type"
         constraints = [
             models.UniqueConstraint(
                 fields=["car_type"], name="unique_car_type"
@@ -129,17 +128,12 @@ class Order(models.Model):
         "Статус заказа", choices=Statuses.choices, default=Statuses.CREATED
     )
     price = models.ForeignKey(
-        "PriceOrder",
-        on_delete=models.SET_NULL,
-        verbose_name="Цена",
-        related_name="order_price",
-        null=True,
+        "PriceOrder", on_delete=models.SET_NULL, verbose_name="Цена", null=True
     )
     tow_truck = models.ForeignKey(
         TowTruck,
         on_delete=models.SET_NULL,
         verbose_name="Эвакуатор",
-        related_name="orders",
         null=True,
     )
     created = models.DateTimeField("Дата заказа", default=timezone.now)
@@ -148,6 +142,7 @@ class Order(models.Model):
         ordering = ("-created",)
         verbose_name = "Заказ"
         verbose_name_plural = "Заказы"
+        default_related_name = "orders"
 
     def __str__(self) -> str:
         return str(self.pk)
@@ -181,11 +176,7 @@ class PriceOrder(models.Model):
     )
     towin = models.BooleanField(verbose_name="Кюветные работы")
     order = models.ForeignKey(
-        Order,
-        on_delete=models.CASCADE,
-        verbose_name="Заказ",
-        related_name="price_orders",
-        null=True,
+        Order, on_delete=models.CASCADE, verbose_name="Заказ", null=True
     )
     total = models.PositiveSmallIntegerField(
         verbose_name="Итоговая цена",
@@ -196,7 +187,7 @@ class PriceOrder(models.Model):
         ordering = ("pk",)
         verbose_name = "Заказы и Цены"
         verbose_name_plural = "Заказы и цены"
-
+        default_related_name = "price_orders"
         constraints = [
             models.UniqueConstraint(fields=["order"], name="unique_order")
         ]
@@ -254,7 +245,6 @@ class Feedback(models.Model):
         Order,
         on_delete=models.CASCADE,
         verbose_name="Заказ",
-        related_name="score",
     )
     name = models.ForeignKey(
         User,
@@ -266,9 +256,10 @@ class Feedback(models.Model):
     )
 
     class Meta:
+        ordering = ("order",)
         verbose_name = "Отзыв"
         verbose_name_plural = "Отзывы"
-        ordering = ("order",)
+        default_related_name = "feedbacks"
         constraints = [
             models.UniqueConstraint(
                 fields=["order"], name="unique_order_feedback"
@@ -277,20 +268,3 @@ class Feedback(models.Model):
 
     def __str__(self) -> str:
         return str(self.pk)
-
-
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    first_name = models.CharField(
-        verbose_name="Имя",
-        max_length=150,
-        blank=True,
-    )
-    last_name = models.CharField(
-        verbose_name="Фамилия",
-        max_length=150,
-        blank=True,
-    )
-
-    def __str__(self):
-        return f"{self.first_name} {self.last_name} ({self.user.email})"

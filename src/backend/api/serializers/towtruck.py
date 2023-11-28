@@ -139,7 +139,6 @@ class CreateOrderSerializer(serializers.ModelSerializer):
         ).data
 
     def create(self, validated_data):
-
         if validated_data.get("delay", False):
             validated_data["order_date"] = self.initial_data.get(
                 "order_date", None

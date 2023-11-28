@@ -13,7 +13,7 @@ def plate_validator(value):
     """
 
     reg = re.compile(
-        "^[АВЕКМНОРСТУХ]{1}(?!0{3})\d{3}[АВЕКМНОРСТУХ]{2}\d{2,3}$"  # noqa
+        r"^[АВЕКМНОРСТУХ]{1}(?!0{3})\d{3}[АВЕКМНОРСТУХ]{2}\d{2,3}$"
     )
     if not reg.match(value):
         raise ValidationError(

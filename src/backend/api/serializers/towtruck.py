@@ -46,122 +46,110 @@ class FeedbackCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Feedback
-        fields = ('id', 'score', 'comment', 'order', 'name', 'ontime')
+        fields = ("id", "score", "comment", "order", "name", "ontime")
 
     def get_name(self, obj):
-        request = self.context.get('request')
+        request = self.context.get("request")
         name = request.user.first_name
         return name
 
 
 class FeedbackReadSerializer(serializers.ModelSerializer):
-    name = serializers.ReadOnlyField(source='name.first_name')
+    name = serializers.ReadOnlyField(source="name.first_name")
 
     class Meta:
         model = Feedback
-        fields = ('id', 'score', 'comment', 'order', 'name', 'ontime')
+        fields = ("id", "score", "comment", "order", "name", "ontime")
 
 
 class CarTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = CarType
-        fields = ('car_type', 'price')
+        fields = ("car_type", "price")
 
 
 class ReadOrderSerializer(serializers.ModelSerializer):
-    client = UserSerializer(
-        read_only=True
-    )
+    client = UserSerializer(read_only=True)
     price = PriceOrderSerializer()
     car_type = serializers.StringRelatedField(
-        read_only=True,
-        source='price.car_type'
+        read_only=True, source="price.car_type"
     )
     wheel_lock = serializers.IntegerField(
-        source='price.wheel_lock',
-        read_only=True
+        source="price.wheel_lock", read_only=True
     )
     towin = serializers.BooleanField(
-        source='price.towin',
+        source="price.towin",
         read_only=True,
     )
     tariff = serializers.StringRelatedField(
-        source='price.tariff',
-        read_only=True
+        source="price.tariff", read_only=True
     )
 
     class Meta:
         model = Order
         fields = (
-            'client',
-            'address_from',
-            'address_to',
-            'car_type',
-            'wheel_lock',
-            'towin',
-            'addition',
-            'tariff',
-            'order_date',
-            'status',
-            'price',
+            "client",
+            "address_from",
+            "address_to",
+            "car_type",
+            "wheel_lock",
+            "towin",
+            "addition",
+            "tariff",
+            "order_date",
+            "status",
+            "price",
         )
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['price'] = instance.price.total
+        representation["price"] = instance.price.total
         return representation
 
 
 class CreateOrderSerializer(serializers.ModelSerializer):
-    client = UserSerializer(
-        read_only=True,
-        required=False
-    )
+    client = UserSerializer(read_only=True, required=False)
     price = PriceOrderSerializer()
     car_type = serializers.PrimaryKeyRelatedField(
-        many=True,
-        queryset=CarType.objects.all(),
-        source='price.car_type'
+        many=True, queryset=CarType.objects.all(), source="price.car_type"
     )
     tariff = serializers.PrimaryKeyRelatedField(
-        many=True,
-        queryset=Tariff.objects.all(),
-        source='price.tariff'
+        many=True, queryset=Tariff.objects.all(), source="price.tariff"
     )
 
     class Meta:
         model = Order
         fields = (
-            'client',
-            'address_from',
-            'address_to',
-            'car_type',
-            'tariff',
-            'delay',
-            'order_date',
-            'status',
-            'addition',
-            'price',
+            "client",
+            "address_from",
+            "address_to",
+            "car_type",
+            "tariff",
+            "delay",
+            "order_date",
+            "status",
+            "addition",
+            "price",
         )
 
     def to_representation(self, instance):
-        return ReadOrderSerializer(instance, context={
-            'request': self.context.get('request')
-        }).data
+        return ReadOrderSerializer(
+            instance, context={"request": self.context.get("request")}
+        ).data
 
     def create(self, validated_data):
-
-        if validated_data.get('delay', False):
-            validated_data['order_date'] = self.initial_data.get(
-                'order_date', None
+        if validated_data.get("delay", False):
+            validated_data["order_date"] = self.initial_data.get(
+                "order_date", None
             )
 
-        price_data = validated_data.pop('price')
+        price_data = validated_data.pop("price")
         order_instance = Order.objects.create(**validated_data)
 
         if price_data:
             price_order_instance = PriceOrder.objects.create(
-                order=order_instance, **price_data)
+                order=order_instance, **price_data
+            )
             order_instance.price = price_order_instance
             order_instance.save()
 

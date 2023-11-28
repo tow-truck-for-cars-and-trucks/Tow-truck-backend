@@ -125,13 +125,17 @@ class FeedbackViewset(viewsets.ModelViewSet):
         )
 
 
-class CarTypeViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
+class CarTypeViewset(
+    mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet
+):
     queryset = CarType.objects.all()
     serializer_class = CarTypeSerializer
     permission_classes = (IsAdminOrReadOnly,)
 
 
-class TariffViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
+class TariffViewset(
+    mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet
+):
     queryset = Tariff.objects.all()
     serializer_class = TariffSerializer
     permission_classes = (IsAdminOrReadOnly,)

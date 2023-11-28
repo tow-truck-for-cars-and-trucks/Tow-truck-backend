@@ -3,7 +3,7 @@ from djoser.views import UserViewSet as DjoserUserViewSet
 
 from api.serializers.users import UserSerializer
 
-from backend.user.models import User
+from user.models import User
 
 
 class UserViewset(DjoserUserViewSet):

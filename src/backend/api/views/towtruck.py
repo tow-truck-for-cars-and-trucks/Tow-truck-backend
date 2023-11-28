@@ -34,8 +34,8 @@ class OrderViewset(viewsets.ModelViewSet):
     @action(methods=("POST",), permission_classes=(AllowAny,), detail=False)
     def total_price(self, request, **kwargs):
         order_data = request.data
-        car_tape = CarType.objects.get(id=order_data["car_type"][0]).price
-        tariff_id = Tariff.objects.get(id=order_data["tariff"][0]).price
+        car_tape = CarType.objects.get(id=order_data["car_type"]).price
+        tariff_id = Tariff.objects.get(id=order_data["tariff"]).price
         wheel_lock = (
             order_data["price"]["wheel_lock"] * settings.WHEEL_LOCK_PRICE
         )
@@ -53,8 +53,8 @@ class OrderViewset(viewsets.ModelViewSet):
         """
         if request.user.is_authenticated:
             order_data = request.data
-            order_data["price"]["car_type"] = order_data["car_type"][0]
-            order_data["price"]["tariff"] = order_data["tariff"][0]
+            order_data["price"]["car_type"] = order_data["car_type"]
+            order_data["price"]["tariff"] = order_data["tariff"]
             order_data["tow_truck"] = self.get_random_tow_truck()
 
             serializer = CreateOrderSerializer(data=order_data)
@@ -125,13 +125,17 @@ class FeedbackViewset(viewsets.ModelViewSet):
         )
 
 
-class CarTypeViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
+class CarTypeViewset(
+    mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet
+):
     queryset = CarType.objects.all()
     serializer_class = CarTypeSerializer
     permission_classes = (IsAdminOrReadOnly,)
 
 
-class TariffViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
+class TariffViewset(
+    mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet
+):
     queryset = Tariff.objects.all()
     serializer_class = TariffSerializer
     permission_classes = (IsAdminOrReadOnly,)

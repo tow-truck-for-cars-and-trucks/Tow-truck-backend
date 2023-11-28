@@ -65,7 +65,7 @@ class FeedbackReadSerializer(serializers.ModelSerializer):
 class CarTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = CarType
-        fields = ("car_type", "price")
+        fields = ("id", "car_type", "price")
 
 
 class ReadOrderSerializer(serializers.ModelSerializer):
@@ -88,6 +88,7 @@ class ReadOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = (
+            "id",
             "client",
             "address_from",
             "address_to",
@@ -111,10 +112,10 @@ class CreateOrderSerializer(serializers.ModelSerializer):
     client = UserSerializer(read_only=True, required=False)
     price = PriceOrderSerializer()
     car_type = serializers.PrimaryKeyRelatedField(
-        many=True, queryset=CarType.objects.all(), source="price.car_type"
+        source="price.car_type", queryset=CarType.objects.all(), many=False
     )
     tariff = serializers.PrimaryKeyRelatedField(
-        many=True, queryset=Tariff.objects.all(), source="price.tariff"
+        source="price.tariff", queryset=Tariff.objects.all(), many=False
     )
 
     class Meta:

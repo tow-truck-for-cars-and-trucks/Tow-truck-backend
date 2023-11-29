@@ -26,12 +26,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY", default=get_random_secret_key())
+SECRET_KEY = os.getenv("SECRET_KEY", get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", default=True)
+DEBUG = os.getenv("DEBUG", "False") in ("True", "true", "t", 1)
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", default="127.0.0.1").split(" ")
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1").split()
+
+CSRF_TRUSTED_ORIGINS = os.getenv("CSRF", "http://").split()
+# может default указать http:// вместо * что бы локально работало
+
+CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "").split()
 
 
 # Application definition
@@ -46,14 +51,25 @@ INSTALLED_APPS = [
     "api.apps.ApiConfig",
     "towin.apps.TowinConfig",
     "user.apps.UserConfig",
+<<<<<<< HEAD
     "rest_framework",  # isort:ignore
     "rest_framework.authtoken",  # isort:ignore
     "djoser",  # isort:ignore
     "django_filters",  # isort:ignore
     "drf_yasg",  # isort:ignore
+=======
+    "phonenumber_field",
+    "rest_framework",
+    "rest_framework.authtoken",
+    "djoser",
+    "corsheaders",
+    "django_filters",
+    "drf_yasg",
+>>>>>>> develop
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -160,6 +176,7 @@ REST_FRAMEWORK = {
     ),
 }
 
+<<<<<<< HEAD
 DJOSER = {
     "LOGIN_FIELD": "email",
     # "SEND_ACTIVATION_EMAIL": False,
@@ -168,11 +185,29 @@ DJOSER = {
     #     "user": ["djoser.permissions.CurrentUserOrAdminOrReadOnly"],
     #     "user_list": ["rest_framework.permissions.AllowAny"],
     # },
+=======
+SIMPLE_JWT = {
+    "AUTH_HEADER_TYPES": ("Bearer",),
+}
+
+DJOSER = {
+    "LOGIN_FIELD": "email",
+    "SEND_ACTIVATION_EMAIL": False,
+    "SET_PASSWORD_RETYPE": True,
+    "HIDE_USERS": False,
+>>>>>>> develop
     "SERIALIZERS": {
         "user": "api.serializers.UserSerializer",
         "current_user": "api.serializers.UserSerializer",
         "user_create": "djoser.serializers.UserCreateSerializer",
     },
+<<<<<<< HEAD
+=======
+    "PERMISSIONS": {
+        "user": ["djoser.permissions.CurrentUserOrAdminOrReadOnly"],
+        "user_list": ["rest_framework.permissions.IsAuthenticatedOrReadOnly"],
+    },
+>>>>>>> develop
 }
 
 # Using custom user model

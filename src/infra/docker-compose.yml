@@ -20,6 +20,13 @@ services:
       - static:/backend_static
     depends_on:
       - towtruck_db
+  
+  frontend:
+    image: aleksentcev/tte_frontend:latest
+    env_file: .env
+    command: cp -r /app/build/. /frontend_static/ 
+    volumes:
+      - static:/frontend_static 
 
   nginx:
     image: nginx:1.19.3

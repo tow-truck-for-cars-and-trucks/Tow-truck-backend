@@ -1,0 +1,38 @@
+[
+    {
+      "model": "towin.priceorder",
+      "pk": 1,
+      "fields": {
+        "tariff": 2,
+        "car_type": 2,
+        "wheel_lock": 0,
+        "towin": false,
+        "order": 1,
+        "total": 1234
+      }
+    },
+    {
+      "model": "towin.priceorder",
+      "pk": 2,
+      "fields": {
+        "tariff": 3,
+        "car_type": 2,
+        "wheel_lock": 1,
+        "towin": true,
+        "order": 2,
+        "total": 3214
+      }
+    },
+    {
+        "model": "towin.priceorder",
+        "pk": 3,
+        "fields": {
+          "tariff": 1,
+          "car_type": 4,
+          "wheel_lock": 0,
+          "towin": false,
+          "order": 3,
+          "total": 2314
+        }
+    }
+  ]

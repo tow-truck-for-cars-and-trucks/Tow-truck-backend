@@ -20,15 +20,46 @@ class OdrderAdmin(EmptyFieldModel):
         "delay",
         "tow_truck",
     )
+<<<<<<< HEAD
     inlines = [OrderriceTabularInline]
 
+=======
+    search_fields = (
+        "address_from",
+        "address_to",
+    )
+    readonly_fields = ("total_price",)
+    inlines = [OrderriceTabularInline]
+
+    def total_price(self, instance):
+        return PriceOrder.objects.get(order=instance).total
+
+    total_price.short_description = "Итоговая стоимость"
+
+>>>>>>> develop
 
 class FeedbackAdmin(EmptyFieldModel):
     list_display = ("score", "comment", "order")
 
 
 class TowTruckAdmin(EmptyFieldModel):
+<<<<<<< HEAD
     list_display = ("is_active", "driver")
+=======
+    list_display = (
+        "id",
+        "is_active",
+        "driver",
+        "model_car",
+        "license_plates",
+        "avg_score",
+    )
+
+    def avg_score(self, instance):
+        return avg_towtruck_score(instance)
+
+    avg_score.short_description = "Средняя оценка"
+>>>>>>> develop
 
 
 class TariffAdmin(EmptyFieldModel):

@@ -1,0 +1,32 @@
+[
+    {
+      "model": "towin.towtruck",
+      "pk": 1,
+      "fields": {
+        "is_active": true,
+        "driver": "Бабажук Игорь Васильевич",
+        "model_car": "КамАЗ Компас-9",
+        "license_plates": "У122УХ52"
+      }
+    },
+    {
+        "model": "towin.towtruck",
+        "pk": 2,
+        "fields": {
+          "is_active": false,
+          "driver": "Жмышенко Олег Витальевич",
+          "model_car": "Hyundai HD78",
+          "license_plates": "Т808ВВ27"
+        }
+    },
+    {
+        "model": "towin.towtruck",
+        "pk": 3,
+        "fields": {
+          "is_active": true,
+          "driver": "Гослингов Раян Драйвович",
+          "model_car": "JAC N90",
+          "license_plates": "О775ТО159"
+        }
+    }
+  ]

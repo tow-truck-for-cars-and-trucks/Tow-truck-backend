@@ -19,6 +19,15 @@ class TowTruck(models.Model):
         help_text="Укажите водителя",
         max_length=255,
     )
+<<<<<<< HEAD
+=======
+    model_car = models.CharField(
+        verbose_name="Модель и марка эвакуатора", max_length=255
+    )
+    license_plates = models.CharField(
+        verbose_name="Гос. номер", max_length=10, validators=[plate_validator]
+    )
+>>>>>>> develop
 
     class Meta:
         verbose_name = "Эвакуатор"
@@ -65,7 +74,15 @@ class CarType(models.Model):
     class Meta:
         verbose_name = "Тип авто"
         verbose_name_plural = "Типы авто"
+<<<<<<< HEAD
         default_related_name = "car_type"
+=======
+        constraints = [
+            models.UniqueConstraint(
+                fields=["car_type"], name="unique_car_type"
+            )
+        ]
+>>>>>>> develop
 
     def __str__(self):
         return self.car_type
@@ -84,17 +101,50 @@ class Order(models.Model):
     )
     address_to = models.CharField(
         verbose_name="Адрес прибытия", max_length=200
+<<<<<<< HEAD
+=======
+    )
+    addition = models.CharField(
+        verbose_name="Комментарий",
+        max_length=300,
+        null=True,
+        blank=True,
+    )
+    delay = models.BooleanField(
+        verbose_name="Задержка",
+        default=False,
+    )
+    order_date = models.DateTimeField(blank=True, null=True)
+    status = models.CharField(
+        "Статус заказа", choices=Statuses.choices, default=Statuses.CREATED
+    )
+    price = models.ForeignKey(
+        "PriceOrder", on_delete=models.SET_NULL, verbose_name="Цена", null=True
+>>>>>>> develop
     )
     addition = models.CharField(verbose_name="Комментарий", max_length=300)
     delay = models.BooleanField(verbose_name="Задержка")
     tow_truck = models.ForeignKey(
+<<<<<<< HEAD
         TowTruck, on_delete=models.CASCADE, verbose_name="Эвакуатор"
     )
     created = models.DateTimeField("Дата заказа", auto_now_add=True)
 
     class Meta:
+=======
+        TowTruck,
+        on_delete=models.SET_NULL,
+        verbose_name="Эвакуатор",
+        null=True,
+    )
+    created = models.DateTimeField("Дата заказа", default=timezone.now)
+
+    class Meta:
+        ordering = ("-created",)
+>>>>>>> develop
         verbose_name = "Заказ"
         verbose_name_plural = "Заказы"
+        default_related_name = "orders"
 
     def __str__(self) -> str:
         return str(self.pk)
@@ -127,16 +177,24 @@ class PriceOrder(models.Model):
     )
     towin = models.BooleanField(verbose_name="Кюветные работы")
     order = models.ForeignKey(
+<<<<<<< HEAD
         Order,
         on_delete=models.CASCADE,
         verbose_name="Заказ",
+=======
+        Order, on_delete=models.CASCADE, verbose_name="Заказ", null=True
+    )
+    total = models.PositiveSmallIntegerField(
+        verbose_name="Итоговая цена",
+        default=0,
+>>>>>>> develop
     )
 
     class Meta:
         ordering = ("order",)
         verbose_name = "Заказы и Цены"
         verbose_name_plural = "Заказы и цены"
-
+        default_related_name = "price_orders"
         constraints = [
             models.UniqueConstraint(fields=["order"], name="unique_order")
         ]
@@ -159,12 +217,35 @@ class Feedback(models.Model):
         Order,
         on_delete=models.CASCADE,
         verbose_name="Заказ",
-        related_name="score",
     )
+<<<<<<< HEAD
+=======
+    name = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name="Автор",
+    )
+    ontime = models.BooleanField(
+        verbose_name="Водитель приехал вовремя", default=True
+    )
+>>>>>>> develop
 
     class Meta:
+        ordering = ("order",)
         verbose_name = "Отзыв"
         verbose_name_plural = "Отзывы"
+<<<<<<< HEAD
 
     def __str__(self) -> str:
         return self.order
+=======
+        default_related_name = "feedbacks"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["order"], name="unique_order_feedback"
+            )
+        ]
+
+    def __str__(self) -> str:
+        return str(self.pk)
+>>>>>>> develop

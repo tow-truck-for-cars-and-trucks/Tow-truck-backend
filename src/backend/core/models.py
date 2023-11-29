@@ -4,10 +4,8 @@ from django.contrib import admin
 
 class CreatedModel(models.Model):
     """Абстрактная модель. Добавляет дату создания."""
-    created = models.DateTimeField(
-        'Дата публикации',
-        auto_now_add=True
-    )
+
+    created = models.DateTimeField("Дата публикации", auto_now_add=True)
 
     class Meta:
         # Это абстрактная модель:
@@ -18,7 +16,8 @@ class EmptyFieldModel(admin.ModelAdmin):
     """
     Абстрактная модель. Добавляет красивое пустое поле.
     """
-    empty_value_display = '-пусто-'
+
+    empty_value_display = "-пусто-"
 
     class Meta:
         abstract = True
@@ -30,6 +29,7 @@ class MinValidatedInlineMixIn:
     Для прохождении валидации необходимо указать как минимум
     1 связанную запись с основной моделью.
     """
+
     validate_min = True
 
     def get_formset(self, *args, **kwargs):

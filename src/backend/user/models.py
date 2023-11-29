@@ -96,6 +96,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         "Super статус",
         default=False,
     )
+    is_active = models.BooleanField(
+        "Активный пользователь",
+        default=False,
+    )
     is_verified = models.BooleanField("Подтверждение", default=False)
 
     objects = MyUserManager()

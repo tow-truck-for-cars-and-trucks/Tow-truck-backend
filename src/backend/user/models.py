@@ -88,6 +88,10 @@ class User(AbstractBaseUser, PermissionsMixin):
             "unique": "Этот адрес электронной почты уже зарегистрован."
         },
     )
+    is_active = models.BooleanField(
+        "Активный пользователь",
+        default=False,
+    )
     is_staff = models.BooleanField(
         "Стафф статус",
         default=False,

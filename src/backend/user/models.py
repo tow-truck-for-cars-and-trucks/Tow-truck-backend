@@ -81,6 +81,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         "Телефон",
         region="RU",
         unique=True,
+        error_messages={
+            "unique": "Пользователь с этим телефоном уже существует."
+        },
     )
     email = models.EmailField(
         "Электронная почта",

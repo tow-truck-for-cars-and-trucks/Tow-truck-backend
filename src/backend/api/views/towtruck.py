@@ -19,6 +19,7 @@ from api.serializers.towtruck import (
     CreateOrderSerializer,
     TariffSerializer,
     CarTypeSerializer,
+    TowTruckSerializer,
 )
 from api.permissions import IsAdminOrReadOnly
 from towin.models import Order, Feedback, TowTruck, CarType, Tariff
@@ -53,10 +54,6 @@ class OrderViewset(viewsets.ModelViewSet):
         return response.Response(context, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
-        """
-        Проверяем пользователя на авторизацию. Если авторизован создаем заказ.
-        Если нет сохраняем введенные данные в сессию.
-        """
         if request.user.is_authenticated:
             order_data = request.data
             order_data["price"]["car_type"] = order_data["car_type"]
@@ -71,9 +68,6 @@ class OrderViewset(viewsets.ModelViewSet):
             return response.Response(
                 serializer.data, status=status.HTTP_201_CREATED
             )
-
-        # request.session['order_data'] = request.data
-
         return response.Response(status=status.HTTP_401_UNAUTHORIZED)
 
     def partial_update(self, request, *args, **kwargs):
@@ -144,4 +138,10 @@ class TariffViewset(
 ):
     queryset = Tariff.objects.all()
     serializer_class = TariffSerializer
+    permission_classes = (IsAdminOrReadOnly,)
+
+
+class TowTruckViewset(viewsets.ModelViewSet):
+    queryset = TowTruck.objects.all()
+    serializer_class = TowTruckSerializer
     permission_classes = (IsAdminOrReadOnly,)

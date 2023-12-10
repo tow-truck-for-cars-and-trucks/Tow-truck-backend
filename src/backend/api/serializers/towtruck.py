@@ -18,6 +18,7 @@ class TowTruckSerializer(serializers.ModelSerializer):
     class Meta:
         model = TowTruck
         fields = (
+            "id",
             "is_active",
             "driver",
             "model_car",
@@ -84,6 +85,7 @@ class ReadOrderSerializer(serializers.ModelSerializer):
     tariff = serializers.PrimaryKeyRelatedField(
         source="price.tariff", read_only=True
     )
+    tow_truck = TowTruckSerializer(read_only=True)
 
     class Meta:
         model = Order
@@ -132,6 +134,7 @@ class CreateOrderSerializer(serializers.ModelSerializer):
             "status",
             "addition",
             "price",
+            "tow_truck",
         )
 
     def to_representation(self, instance):

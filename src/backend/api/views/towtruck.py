@@ -81,7 +81,10 @@ class OrderViewset(viewsets.ModelViewSet):
         if serializer.is_valid():
             if "status" in request.data:
                 instance.status = request.data["status"]
-                instance.save(update_fields=["status"])
+                instance.tow_truck.is_active = False
+                if instance.status == "Активный":
+                    instance.tow_truck.is_active = True
+                instance.save(update_fields=["status", "tow_truck"])
                 return response.Response(serializer.data)
             serializer.save()
             return response.Response(serializer.data)

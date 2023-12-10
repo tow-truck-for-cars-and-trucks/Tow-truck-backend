@@ -263,6 +263,9 @@ class Feedback(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=["order"], name="unique_order_feedback"
+            ),
+            models.UniqueConstraint(
+                fields=["name"], name="unique_user_feedback"
             )
         ]
 

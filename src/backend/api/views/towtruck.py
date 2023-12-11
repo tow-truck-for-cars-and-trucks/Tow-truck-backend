@@ -12,6 +12,8 @@ from rest_framework import (
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 
+from api.filters import OrderFilter
+
 from api.serializers.towtruck import (
     FeedbackCreateSerializer,
     FeedbackReadSerializer,
@@ -28,10 +30,10 @@ User = get_user_model()
 
 
 class OrderViewset(viewsets.ModelViewSet):
+    filterset_class = OrderFilter
     def get_queryset(self):
-        status = self.request.query_params.get("status", "Созданный")
-        client = self.request.user
-        return Order.objects.filter(client=client).filter(status=status)
+        client = self.request.user.id
+        return Order.objects.filter(client=client)
 
     def get_serializer_class(self):
         if self.request.method == "GET":

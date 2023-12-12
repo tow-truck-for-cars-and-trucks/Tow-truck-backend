@@ -103,6 +103,7 @@ class ReadOrderSerializer(serializers.ModelSerializer):
             "status",
             "price",
             "tow_truck",
+            "delivery_time",
         )
 
     def to_representation(self, instance):

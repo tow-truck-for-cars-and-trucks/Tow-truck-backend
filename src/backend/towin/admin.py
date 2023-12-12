@@ -57,7 +57,12 @@ class TowTruckAdmin(EmptyFieldModel):
 
 
 class TariffAdmin(EmptyFieldModel):
-    list_display = ("name", "description", "price")
+    list_display = (
+        "name",
+        "description",
+        "price",
+        "delivery_time"
+    )
 
 
 class CarTypeAdmin(EmptyFieldModel):

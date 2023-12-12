@@ -134,7 +134,6 @@ class CreateOrderSerializer(serializers.ModelSerializer):
             "status",
             "addition",
             "price",
-            "tow_truck",
         )
 
     def to_representation(self, instance):

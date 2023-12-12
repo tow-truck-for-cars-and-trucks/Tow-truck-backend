@@ -3,10 +3,12 @@ from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils import timezone
+from django.core.exceptions import ValidationError
+
+from datetime import timedelta
 
 from core.choices import TariffChoices, VenchiceTypeChoices, Statuses
 from core.validators import plate_validator
-
 
 User = get_user_model()
 
@@ -25,10 +27,13 @@ class TowTruck(models.Model):
         max_length=255,
     )
     model_car = models.CharField(
-        verbose_name="Модель и марка эвакуатора", max_length=255
+        verbose_name="Модель и марка эвакуатора",
+        max_length=255
     )
     license_plates = models.CharField(
-        verbose_name="Гос. номер", max_length=10, validators=[plate_validator]
+        verbose_name="Гос. номер",
+        max_length=10,
+        validators=[plate_validator]
     )
 
     class Meta:
@@ -53,10 +58,16 @@ class Tariff(models.Model):
         choices=TariffChoices.choices,
     )
     description = models.CharField(
-        verbose_name="Описание тарифа", max_length=255
+        verbose_name="Описание тарифа",
+        max_length=255
     )
     price = models.PositiveSmallIntegerField(
-        verbose_name="Цена тарифа", validators=[MinValueValidator(1)]
+        verbose_name="Цена тарифа",
+        validators=[MinValueValidator(1)]
+    )
+    delivery_time = models.TimeField(
+        'Время подачи',
+        null=True
     )
 
     class Meta:
@@ -76,7 +87,8 @@ class CarType(models.Model):
     """
 
     car_type = models.CharField(
-        "Тип машины", choices=VenchiceTypeChoices.choices
+        "Тип машины",
+        choices=VenchiceTypeChoices.choices
     )
     price = models.PositiveSmallIntegerField(
         verbose_name="Цена за тип авто",
@@ -108,10 +120,12 @@ class Order(models.Model):
         null=True,
     )
     address_from = models.CharField(
-        verbose_name="Адрес подачи", max_length=200
+        verbose_name="Адрес подачи",
+        max_length=200
     )
     address_to = models.CharField(
-        verbose_name="Адрес прибытия", max_length=200
+        verbose_name="Адрес прибытия",
+        max_length=200
     )
     addition = models.CharField(
         verbose_name="Комментарий",
@@ -123,12 +137,16 @@ class Order(models.Model):
         verbose_name="Задержка",
         default=False,
     )
-    order_date = models.DateTimeField(blank=True, null=True)
     status = models.CharField(
-        "Статус заказа", choices=Statuses.choices, default=Statuses.CREATED
+        "Статус заказа",
+        choices=Statuses.choices,
+        default=Statuses.CREATED
     )
     price = models.ForeignKey(
-        "PriceOrder", on_delete=models.SET_NULL, verbose_name="Цена", null=True
+        "PriceOrder",
+        on_delete=models.SET_NULL,
+        verbose_name="Цена",
+        null=True
     )
     tow_truck = models.ForeignKey(
         TowTruck,
@@ -136,7 +154,18 @@ class Order(models.Model):
         verbose_name="Эвакуатор",
         null=True,
     )
-    created = models.DateTimeField("Дата заказа", default=timezone.now)
+    created = models.DateTimeField(
+        "Дата заказа",
+        default=timezone.now
+    )
+    delivery_time = models.DateTimeField(
+        'Время подачи',
+        help_text=(
+            'В случае если заказ "Отложенный",'
+            ' укажите здесь дату и время подачи.'
+        ),
+        default=timezone.now
+    )
 
     class Meta:
         ordering = ("-created",)
@@ -146,6 +175,40 @@ class Order(models.Model):
 
     def __str__(self) -> str:
         return str(self.pk)
+
+    def get_delivery_time(self):
+        """
+        На основе тарифа определяет время подачи машины.
+        """
+        tariff_time = self.price.tariff
+        value = self.delivery_time + timedelta(
+            hours=int(tariff_time.delivery_time.hour)
+        )
+        return value
+
+    get_delivery_time.short_description = "Время подачи эвакуатора"
+
+    def save(self, *args, **kwargs):
+        """
+        Переопределение метода необходимо
+        для того, чтобы строка delivery_time
+        принимала значение из функции
+        калькуляции стоимости заказа.
+        """
+
+        self.delivery_time = self.get_delivery_time()
+        super(Order, self).save(*args, **kwargs)
+
+    def clean(self) -> None:
+        """
+        Валидация значения времени подачи эвакуатора и создания заказа.
+        Если значение указано в прошлом, то выбрасывает ошибку.
+        """
+        if self.created < timezone.now():
+            raise ValidationError("Заказ не может быть создан в прошлом.")
+
+        if self.delivery_time < timezone.now():
+            raise ValidationError("Время/дата подачи не может быть в прошлом!")
 
 
 class PriceOrder(models.Model):
@@ -174,9 +237,14 @@ class PriceOrder(models.Model):
         validators=[MaxValueValidator(4)],
         default=0,
     )
-    towin = models.BooleanField(verbose_name="Кюветные работы")
+    towin = models.BooleanField(
+        verbose_name="Кюветные работы"
+    )
     order = models.ForeignKey(
-        Order, on_delete=models.CASCADE, verbose_name="Заказ", null=True
+        Order,
+        on_delete=models.CASCADE,
+        verbose_name="Заказ",
+        null=True,
     )
     total = models.PositiveSmallIntegerField(
         verbose_name="Итоговая цена",
@@ -218,7 +286,7 @@ class PriceOrder(models.Model):
         """
         Переопределение метода необходимо
         для того, чтобы строка total
-        принимало значение из функции
+        принимала значение из функции
         калькуляции стоимости заказа.
         """
 

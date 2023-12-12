@@ -5,7 +5,8 @@
       "fields": {
         "name": "Эконом",
         "description": "Стандартный тариф",
-        "price": 1000
+        "price": 1000,
+        "delivery_time": "3:00:00"
       }
     },
     {
@@ -14,7 +15,8 @@
         "fields": {
           "name": "Экспресс",
           "description": "Самый быстрый",
-          "price": 1300
+          "price": 1300,
+          "delivery_time": "1:00:00"
         }
     },
     {
@@ -23,7 +25,8 @@
         "fields": {
           "name": "Манипулятор",
           "description": "Манипулятор",
-          "price": 1400
+          "price": 1400,
+          "delivery_time": "1:30:00"
         }
     }
   ]

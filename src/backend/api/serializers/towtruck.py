@@ -99,7 +99,6 @@ class ReadOrderSerializer(serializers.ModelSerializer):
             "towin",
             "addition",
             "tariff",
-            "order_date",
             "status",
             "price",
             "tow_truck",
@@ -131,10 +130,10 @@ class CreateOrderSerializer(serializers.ModelSerializer):
             "car_type",
             "tariff",
             "delay",
-            "order_date",
             "status",
             "addition",
             "price",
+            "delivery_time",
         )
 
     def to_representation(self, instance):
@@ -144,8 +143,8 @@ class CreateOrderSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         if validated_data.get("delay", False):
-            validated_data["order_date"] = self.initial_data.get(
-                "order_date", None
+            validated_data["delivery_time"] = self.initial_data.get(
+                "delivery_time", None
             )
 
         price_data = validated_data.pop("price")

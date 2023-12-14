@@ -99,6 +99,7 @@ class ReadOrderSerializer(serializers.ModelSerializer):
             "towin",
             "addition",
             "tariff",
+            "delay",
             "status",
             "price",
             "tow_truck",

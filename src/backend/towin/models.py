@@ -4,6 +4,8 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+from django.core.exceptions import ObjectDoesNotExist
+
 
 from datetime import timedelta
 
@@ -137,6 +139,10 @@ class Order(models.Model):
         verbose_name="Задержка",
         default=False,
     )
+    order_date = models.DateTimeField(
+        blank=True,
+        null=True
+    )
     status = models.CharField(
         "Статус заказа",
         choices=Statuses.choices,
@@ -176,13 +182,15 @@ class Order(models.Model):
     def __str__(self) -> str:
         return str(self.pk)
 
-    def get_delivery_time(self):
+    def get_delivery_time(self, tariff_id):
         """
         На основе тарифа определяет время подачи машины.
         """
-        tariff_time = self.price.tariff
-        value = self.delivery_time + timedelta(
-            hours=int(tariff_time.delivery_time.hour)
+        tariff_time = Tariff.objects.get(pk=tariff_id)
+        value = timezone.now() + timedelta(
+            hours=int(tariff_time.delivery_time.hour),
+            minutes=int(tariff_time.delivery_time.minute),
+            seconds=int(tariff_time.delivery_time.second)
         )
         return value
 
@@ -196,7 +204,11 @@ class Order(models.Model):
         калькуляции стоимости заказа.
         """
 
-        self.delivery_time = self.get_delivery_time()
+        try:
+            self.delivery_time = self.get_delivery_time(self.price.tariff.id)
+        except ObjectDoesNotExist:
+            pass
+
         super(Order, self).save(*args, **kwargs)
 
     def clean(self) -> None:
@@ -204,10 +216,13 @@ class Order(models.Model):
         Валидация значения времени подачи эвакуатора и создания заказа.
         Если значение указано в прошлом, то выбрасывает ошибку.
         """
-        if self.created < timezone.now():
+
+        time = self.created + timedelta(minutes=10)
+
+        if time < timezone.now():
             raise ValidationError("Заказ не может быть создан в прошлом.")
 
-        if self.delivery_time < timezone.now():
+        if time < timezone.now():
             raise ValidationError("Время/дата подачи не может быть в прошлом!")
 
 

@@ -26,6 +26,7 @@ from api.serializers.towtruck import (
 from api.permissions import IsAdminOrReadOnly
 from towin.models import Order, Feedback, TowTruck, CarType, Tariff
 
+
 User = get_user_model()
 
 
@@ -62,6 +63,10 @@ class OrderViewset(viewsets.ModelViewSet):
             order_data["price"]["car_type"] = order_data["car_type"]
             order_data["price"]["tariff"] = order_data["tariff"]
             order_data["tow_truck"] = self.get_random_tow_truck()
+            order_data["delivery_time"] = Order.get_delivery_time(
+                self,
+                tariff_id=order_data["tariff"]
+            )
 
             serializer = CreateOrderSerializer(data=order_data)
             serializer.is_valid(raise_exception=True)
@@ -101,7 +106,7 @@ class OrderViewset(viewsets.ModelViewSet):
         """
         try:
             tow_trucks = TowTruck.objects.filter(is_active=True)
-            return random.choice(tow_trucks)
+            return random.choice(tow_trucks).id
         except TowTruck.DoesNotExist as e:
             raise e("Все эвакуаторы заняты :(")
 

@@ -151,8 +151,7 @@ class CreateOrderSerializer(serializers.ModelSerializer):
 
         price_data = validated_data.pop("price")
         order_instance = Order.objects.create(
-            **validated_data,
-            delivery_time=self.initial_data.get('delivery_time')
+            **validated_data
         )
 
         if price_data:

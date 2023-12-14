@@ -205,6 +205,7 @@ class Order(models.Model):
         """
 
         try:
+            Order.objects.get(pk=self.id)
             self.delivery_time = self.get_delivery_time(self.price.tariff.id)
         except ObjectDoesNotExist:
             pass

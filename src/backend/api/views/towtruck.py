@@ -62,10 +62,8 @@ class OrderViewset(viewsets.ModelViewSet):
             order_data = request.data
             order_data["price"]["car_type"] = order_data["car_type"]
             order_data["price"]["tariff"] = order_data["tariff"]
-            order_data["tow_truck"] = self.get_random_tow_truck()
             order_data["delivery_time"] = Order.get_delivery_time(
-                self,
-                tariff_id=order_data["tariff"]
+                self, tariff_id=order_data["tariff"]
             )
 
             serializer = CreateOrderSerializer(data=order_data)
@@ -89,9 +87,11 @@ class OrderViewset(viewsets.ModelViewSet):
         if serializer.is_valid():
             if "status" in request.data:
                 instance.status = request.data["status"]
-                instance.tow_truck.is_active = False
                 if instance.status == "Активный":
+                    instance.tow_truck = self.get_random_tow_truck()
                     instance.tow_truck.is_active = True
+                else:
+                    instance.tow_truck.is_active = False
                 instance.save(update_fields=["status", "tow_truck"])
                 return response.Response(serializer.data)
             serializer.save()
@@ -105,8 +105,8 @@ class OrderViewset(viewsets.ModelViewSet):
         Возвращает случайный свободный эвакуатор
         """
         try:
-            tow_trucks = TowTruck.objects.filter(is_active=True)
-            return random.choice(tow_trucks).id
+            tow_trucks = TowTruck.objects.filter(is_active=False)
+            return random.choice(tow_trucks)
         except TowTruck.DoesNotExist as e:
             raise e("Все эвакуаторы заняты :(")
 

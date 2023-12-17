@@ -85,6 +85,7 @@ class ReadOrderSerializer(serializers.ModelSerializer):
     tariff = serializers.PrimaryKeyRelatedField(
         source="price.tariff", read_only=True
     )
+    is_having_feedback = serializers.SerializerMethodField()
     tow_truck = TowTruckSerializer(read_only=True)
 
     class Meta:
@@ -102,9 +103,18 @@ class ReadOrderSerializer(serializers.ModelSerializer):
             "delay",
             "status",
             "price",
+            "is_having_feedback",
             "tow_truck",
             "delivery_time",
         )
+
+    def get_is_having_feedback(self, obj):
+        request = self.context.get("request")
+        if request.user:
+            return Feedback.objects.filter(
+                name=request.user, order=obj
+            ).exists()
+        return False
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)

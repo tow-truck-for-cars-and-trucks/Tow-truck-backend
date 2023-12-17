@@ -84,6 +84,7 @@ class ReadOrderSerializer(serializers.ModelSerializer):
     tariff = serializers.PrimaryKeyRelatedField(
         source="price.tariff", read_only=True
     )
+    is_having_feedback = serializers.SerializerMethodField()
 
     class Meta:
         model = Order
@@ -100,7 +101,16 @@ class ReadOrderSerializer(serializers.ModelSerializer):
             "order_date",
             "status",
             "price",
+            "is_having_feedback",
         )
+
+    def get_is_having_feedback(self, obj):
+        request = self.context.get("request")
+        if request.user:
+            return Feedback.objects.filter(
+                name=request.user, order=obj
+            ).exists()
+        return False
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)

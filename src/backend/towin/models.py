@@ -29,13 +29,10 @@ class TowTruck(models.Model):
         max_length=255,
     )
     model_car = models.CharField(
-        verbose_name="Модель и марка эвакуатора",
-        max_length=255
+        verbose_name="Модель и марка эвакуатора", max_length=255
     )
     license_plates = models.CharField(
-        verbose_name="Гос. номер",
-        max_length=10,
-        validators=[plate_validator]
+        verbose_name="Гос. номер", max_length=10, validators=[plate_validator]
     )
 
     class Meta:
@@ -60,17 +57,12 @@ class Tariff(models.Model):
         choices=TariffChoices.choices,
     )
     description = models.CharField(
-        verbose_name="Описание тарифа",
-        max_length=255
+        verbose_name="Описание тарифа", max_length=255
     )
     price = models.PositiveSmallIntegerField(
-        verbose_name="Цена тарифа",
-        validators=[MinValueValidator(1)]
+        verbose_name="Цена тарифа", validators=[MinValueValidator(1)]
     )
-    delivery_time = models.TimeField(
-        'Время подачи',
-        null=True
-    )
+    delivery_time = models.TimeField("Время подачи", null=True)
 
     class Meta:
         verbose_name = "Тариф"
@@ -89,8 +81,7 @@ class CarType(models.Model):
     """
 
     car_type = models.CharField(
-        "Тип машины",
-        choices=VenchiceTypeChoices.choices
+        "Тип машины", choices=VenchiceTypeChoices.choices
     )
     price = models.PositiveSmallIntegerField(
         verbose_name="Цена за тип авто",
@@ -122,12 +113,10 @@ class Order(models.Model):
         null=True,
     )
     address_from = models.CharField(
-        verbose_name="Адрес подачи",
-        max_length=200
+        verbose_name="Адрес подачи", max_length=200
     )
     address_to = models.CharField(
-        verbose_name="Адрес прибытия",
-        max_length=200
+        verbose_name="Адрес прибытия", max_length=200
     )
     addition = models.CharField(
         verbose_name="Комментарий",
@@ -139,20 +128,12 @@ class Order(models.Model):
         verbose_name="Задержка",
         default=False,
     )
-    order_date = models.DateTimeField(
-        blank=True,
-        null=True
-    )
+    order_date = models.DateTimeField(blank=True, null=True)
     status = models.CharField(
-        "Статус заказа",
-        choices=Statuses.choices,
-        default=Statuses.CREATED
+        "Статус заказа", choices=Statuses.choices, default=Statuses.CREATED
     )
     price = models.ForeignKey(
-        "PriceOrder",
-        on_delete=models.SET_NULL,
-        verbose_name="Цена",
-        null=True
+        "PriceOrder", on_delete=models.SET_NULL, verbose_name="Цена", null=True
     )
     tow_truck = models.ForeignKey(
         TowTruck,
@@ -160,17 +141,14 @@ class Order(models.Model):
         verbose_name="Эвакуатор",
         null=True,
     )
-    created = models.DateTimeField(
-        "Дата заказа",
-        default=timezone.now
-    )
+    created = models.DateTimeField("Дата заказа", default=timezone.now)
     delivery_time = models.DateTimeField(
-        'Время подачи',
+        "Время подачи",
         help_text=(
             'В случае если заказ "Отложенный",'
-            ' укажите здесь дату и время подачи.'
+            " укажите здесь дату и время подачи."
         ),
-        default=timezone.now
+        default=timezone.now,
     )
 
     class Meta:
@@ -190,7 +168,7 @@ class Order(models.Model):
         value = timezone.now() + timedelta(
             hours=int(tariff_time.delivery_time.hour),
             minutes=int(tariff_time.delivery_time.minute),
-            seconds=int(tariff_time.delivery_time.second)
+            seconds=int(tariff_time.delivery_time.second),
         )
         return value
 
@@ -253,9 +231,7 @@ class PriceOrder(models.Model):
         validators=[MaxValueValidator(4)],
         default=0,
     )
-    towin = models.BooleanField(
-        verbose_name="Кюветные работы"
-    )
+    towin = models.BooleanField(verbose_name="Кюветные работы")
     order = models.ForeignKey(
         Order,
         on_delete=models.CASCADE,
@@ -338,9 +314,12 @@ class Feedback(models.Model):
     ontime = models.BooleanField(
         verbose_name="Водитель приехал вовремя", default=True
     )
+    pub_date = models.DateTimeField(
+        verbose_name="Дата публикации отзыва", default=timezone.now
+    )
 
     class Meta:
-        ordering = ("order",)
+        ordering = ("-pub_date",)
         verbose_name = "Отзыв"
         verbose_name_plural = "Отзывы"
         default_related_name = "feedbacks"
@@ -350,7 +329,7 @@ class Feedback(models.Model):
             ),
             models.UniqueConstraint(
                 fields=["name"], name="unique_user_feedback"
-            )
+            ),
         ]
 
     def __str__(self) -> str:

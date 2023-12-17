@@ -113,16 +113,13 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-    },
-    {
         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "OPTIONS": {
+            "min_length": 8,
+        },
     },
     {
         "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -173,7 +170,7 @@ SIMPLE_JWT = {
 }
 
 DJOSER = {
-    "LOGIN_FIELD": "email",
+    "LOGIN_FIELD": "phone",
     "SEND_ACTIVATION_EMAIL": False,
     "SET_PASSWORD_RETYPE": True,
     "HIDE_USERS": False,

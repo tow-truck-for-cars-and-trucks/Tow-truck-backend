@@ -1,32 +1,322 @@
 [
-    {
-      "model": "towin.towtruck",
-      "pk": 1,
-      "fields": {
-        "is_active": true,
-        "driver": "Бабажук Игорь Васильевич",
-        "model_car": "КамАЗ Компас-9",
-        "license_plates": "У122УХ52"
-      }
-    },
-    {
-        "model": "towin.towtruck",
-        "pk": 2,
-        "fields": {
-          "is_active": false,
-          "driver": "Жмышенко Олег Витальевич",
-          "model_car": "Hyundai HD78",
-          "license_plates": "Т808ВВ27"
-        }
-    },
-    {
-        "model": "towin.towtruck",
-        "pk": 3,
-        "fields": {
-          "is_active": true,
-          "driver": "Гослингов Раян Драйвович",
-          "model_car": "JAC N90",
-          "license_plates": "О775ТО159"
-        }
+  {
+    "model": "towin.towtruck",
+    "pk": 1,
+    "fields": {
+      "is_active": false,
+      "driver": "Бабажук Игорь Васильевич",
+      "model_car": "КамАЗ Компас-9",
+      "license_plates": "У122УХ52"
     }
-  ]
+  },
+  {
+    "model": "towin.towtruck",
+    "pk": 2,
+    "fields": {
+      "is_active": false,
+      "driver": "Жмышенко Олег Витальевич",
+      "model_car": "Hyundai HD78",
+      "license_plates": "Т808ВВ27"
+    }
+  },
+  {
+    "model": "towin.towtruck",
+    "pk": 3,
+    "fields": {
+      "is_active": false,
+      "driver": "Гослингов Раян Драйвович",
+      "model_car": "JAC N90",
+      "license_plates": "О775ТО159"
+    }
+  },
+  {
+    "model": "towin.towtruck",
+    "pk": 4,
+    "fields": {
+      "is_active": false,
+      "driver": "Бабич Лёня Васильевич",
+      "model_car": "БелАЗ Компас-9",
+      "license_plates": "И122ТД52"
+    }
+  },
+  {
+    "model": "towin.towtruck",
+    "pk": 5,
+    "fields": {
+      "is_active": false,
+      "driver": "Дядев Петев Голошевич",
+      "model_car": "Lifan f3",
+      "license_plates": "Т324ТТ55"
+    }
+  },
+  {
+    "model": "towin.towtruck",
+    "pk": 6,
+    "fields": {
+      "is_active": false,
+      "driver": "Попов Петр Петрович",
+      "model_car": "Биби 36",
+      "license_plates": "О999ОО33"
+    }
+  },
+  {
+    "model": "towin.towtruck",
+    "pk": 7,
+    "fields": {
+      "is_active": false,
+      "driver": "Иванов Иван Иванович",
+      "model_car": "Газ 5445",
+      "license_plates": "А000МР777"
+    }
+  },
+  {
+    "model": "towin.towtruck",
+    "pk": 8,
+    "fields": {
+      "is_active": false,
+      "driver": "Говоров Говрилий Говрилович",
+      "model_car": "Уаз 333",
+      "license_plates": "Г000ВН54"
+    }
+  },
+  {
+    "model": "towin.towtruck",
+    "pk": 9,
+    "fields": {
+      "is_active": false,
+      "driver": "Бабажук Игорь Петрович",
+      "model_car": "КамАЗ Компас-10",
+      "license_plates": "У322УХ52"
+    }
+  },
+  {
+    "model": "towin.towtruck",
+    "pk": 10,
+    "fields": {
+      "is_active": false,
+      "driver": "Жмышенко Петр Витальевич",
+      "model_car": "Hyundai HD",
+      "license_plates": "Т818ВВ27"
+    }
+  },
+  {
+    "model": "towin.towtruck",
+    "pk": 11,
+    "fields": {
+      "is_active": false,
+      "driver": "Гослингов Илья Драйвович",
+      "model_car": "JAC N900",
+      "license_plates": "О776ТО159"
+    }
+  },
+  {
+    "model": "towin.towtruck",
+    "pk": 12,
+    "fields": {
+      "is_active": false,
+      "driver": "Бобич Лёня Васильевич",
+      "model_car": "БелАЗ Компас-11",
+      "license_plates": "И132ТД52"
+    }
+  },
+  {
+    "model": "towin.towtruck",
+    "pk": 13,
+    "fields": {
+      "is_active": false,
+      "driver": "Дядев Петев Семенович",
+      "model_car": "Lifan f32",
+      "license_plates": "Т324БТ55"
+    }
+  },
+  {
+    "model": "towin.towtruck",
+    "pk": 14,
+    "fields": {
+      "is_active": false,
+      "driver": "Попов Иван Петрович",
+      "model_car": "Биби 361",
+      "license_plates": "О989ОО33"
+    }
+  },
+  {
+    "model": "towin.towtruck",
+    "pk": 15,
+    "fields": {
+      "is_active": false,
+      "driver": "Иванов Петр Иванович",
+      "model_car": "Газ 545",
+      "license_plates": "А010МР777"
+    }
+  },
+  {
+    "model": "towin.towtruck",
+    "pk": 16,
+    "fields": {
+      "is_active": false,
+      "driver": "Говоров Говрилий Молчанович",
+      "model_car": "Уаз 3133",
+      "license_plates": "Г100ВН54"
+    }
+  },
+  {
+    "model": "towin.towtruck",
+    "pk": 17,
+    "fields": {
+      "is_active": false,
+      "driver": "Бабажук Игорь Валентинович",
+      "model_car": "КамАЗ Компас-19",
+      "license_plates": "У123УХ52"
+    }
+  },
+  {
+    "model": "towin.towtruck",
+    "pk": 18,
+    "fields": {
+      "is_active": false,
+      "driver": "Пупыркин Олег Витальевич",
+      "model_car": "Hyundai HD71",
+      "license_plates": "Т828ВВ27"
+    }
+  },
+  {
+    "model": "towin.towtruck",
+    "pk": 19,
+    "fields": {
+      "is_active": true,
+      "driver": "Юпитер Раян Драйвович",
+      "model_car": "JAC N930",
+      "license_plates": "О771ТО159"
+    }
+  },
+  {
+    "model": "towin.towtruck",
+    "pk": 20,
+    "fields": {
+      "is_active": false,
+      "driver": "Бабич Гога Васильевич",
+      "model_car": "БелАЗ Компас-Север",
+      "license_plates": "И223ТД52"
+    }
+  },
+  {
+    "model": "towin.towtruck",
+    "pk": 21,
+    "fields": {
+      "is_active": false,
+      "driver": "Шутов Петев Голошевич",
+      "model_car": "Lifan f321",
+      "license_plates": "Т333ТТ55"
+    }
+  },
+  {
+    "model": "towin.towtruck",
+    "pk": 22,
+    "fields": {
+      "is_active": false,
+      "driver": "Попов Эльдар Петрович",
+      "model_car": "Биби 363",
+      "license_plates": "О922ОО33"
+    }
+  },
+  {
+    "model": "towin.towtruck",
+    "pk": 23,
+    "fields": {
+      "is_active": false,
+      "driver": "Иванов Рустам Иванович",
+      "model_car": "Газ 545",
+      "license_plates": "А011МР777"
+    }
+  },
+  {
+    "model": "towin.towtruck",
+    "pk": 24,
+    "fields": {
+      "is_active": false,
+      "driver": "Жмык Говрилий Говрилович",
+      "model_car": "Уаз 3313",
+      "license_plates": "Г123ВН54"
+    }
+  },
+  {
+    "model": "towin.towtruck",
+    "pk": 25,
+    "fields": {
+      "is_active": false,
+      "driver": "Эвакуатор Игорь Васильевич",
+      "model_car": "КамАЗ Компас-92",
+      "license_plates": "У555УХ52"
+    }
+  },
+  {
+    "model": "towin.towtruck",
+    "pk": 26,
+    "fields": {
+      "is_active": false,
+      "driver": "Прыжков Олег Витальевич",
+      "model_car": "Hyundai HD7899",
+      "license_plates": "Т322ВВ27"
+    }
+  },
+  {
+    "model": "towin.towtruck",
+    "pk": 27,
+    "fields": {
+      "is_active": true,
+      "driver": "Гослингов Раян Дайвингович",
+      "model_car": "JAC N9011",
+      "license_plates": "О733ТО159"
+    }
+  },
+  {
+    "model": "towin.towtruck",
+    "pk": 28,
+    "fields": {
+      "is_active": false,
+      "driver": "Тетич Лёня Васильевич",
+      "model_car": "БелАЗ Компас-19",
+      "license_plates": "И123ТД52"
+    }
+  },
+  {
+    "model": "towin.towtruck",
+    "pk": 29,
+    "fields": {
+      "is_active": false,
+      "driver": "Дядев Петев Топорович",
+      "model_car": "Lifan f3",
+      "license_plates": "Т312НТ55"
+    }
+  },
+  {
+    "model": "towin.towtruck",
+    "pk": 30,
+    "fields": {
+      "is_active": false,
+      "driver": "Крутой Игорь Петрович",
+      "model_car": "Биби 36",
+      "license_plates": "О111ОО33"
+    }
+  },
+  {
+    "model": "towin.towtruck",
+    "pk": 31,
+    "fields": {
+      "is_active": false,
+      "driver": "Иванов Магамед Иванович",
+      "model_car": "Газ 525",
+      "license_plates": "А555МР777"
+    }
+  },
+  {
+    "model": "towin.towtruck",
+    "pk": 32,
+    "fields": {
+      "is_active": false,
+      "driver": "Последнев Говрилий Говрилович",
+      "model_car": "Уаз 333",
+      "license_plates": "Г022ВН54"
+    }
+  }
+]

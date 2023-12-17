@@ -3,10 +3,14 @@ from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils import timezone
+from django.core.exceptions import ValidationError
+from django.core.exceptions import ObjectDoesNotExist
+
+
+from datetime import timedelta
 
 from core.choices import TariffChoices, VenchiceTypeChoices, Statuses
 from core.validators import plate_validator
-
 
 User = get_user_model()
 
@@ -58,6 +62,7 @@ class Tariff(models.Model):
     price = models.PositiveSmallIntegerField(
         verbose_name="Цена тарифа", validators=[MinValueValidator(1)]
     )
+    delivery_time = models.TimeField("Время подачи", null=True)
 
     class Meta:
         verbose_name = "Тариф"
@@ -137,6 +142,14 @@ class Order(models.Model):
         null=True,
     )
     created = models.DateTimeField("Дата заказа", default=timezone.now)
+    delivery_time = models.DateTimeField(
+        "Время подачи",
+        help_text=(
+            'В случае если заказ "Отложенный",'
+            " укажите здесь дату и время подачи."
+        ),
+        default=timezone.now,
+    )
 
     class Meta:
         ordering = ("-created",)
@@ -146,6 +159,50 @@ class Order(models.Model):
 
     def __str__(self) -> str:
         return str(self.pk)
+
+    def get_delivery_time(self, tariff_id):
+        """
+        На основе тарифа определяет время подачи машины.
+        """
+        tariff_time = Tariff.objects.get(pk=tariff_id)
+        value = timezone.now() + timedelta(
+            hours=int(tariff_time.delivery_time.hour),
+            minutes=int(tariff_time.delivery_time.minute),
+            seconds=int(tariff_time.delivery_time.second),
+        )
+        return value
+
+    get_delivery_time.short_description = "Время подачи эвакуатора"
+
+    def save(self, *args, **kwargs):
+        """
+        Переопределение метода необходимо
+        для того, чтобы строка delivery_time
+        принимала значение из функции
+        калькуляции стоимости заказа.
+        """
+
+        try:
+            Order.objects.get(pk=self.id)
+            self.delivery_time = self.get_delivery_time(self.price.tariff.id)
+        except ObjectDoesNotExist:
+            pass
+
+        super(Order, self).save(*args, **kwargs)
+
+    def clean(self) -> None:
+        """
+        Валидация значения времени подачи эвакуатора и создания заказа.
+        Если значение указано в прошлом, то выбрасывает ошибку.
+        """
+
+        time = self.created + timedelta(minutes=10)
+
+        if time < timezone.now():
+            raise ValidationError("Заказ не может быть создан в прошлом.")
+
+        if time < timezone.now():
+            raise ValidationError("Время/дата подачи не может быть в прошлом!")
 
 
 class PriceOrder(models.Model):
@@ -176,7 +233,10 @@ class PriceOrder(models.Model):
     )
     towin = models.BooleanField(verbose_name="Кюветные работы")
     order = models.ForeignKey(
-        Order, on_delete=models.CASCADE, verbose_name="Заказ", null=True
+        Order,
+        on_delete=models.CASCADE,
+        verbose_name="Заказ",
+        null=True,
     )
     total = models.PositiveSmallIntegerField(
         verbose_name="Итоговая цена",
@@ -218,7 +278,7 @@ class PriceOrder(models.Model):
         """
         Переопределение метода необходимо
         для того, чтобы строка total
-        принимало значение из функции
+        принимала значение из функции
         калькуляции стоимости заказа.
         """
 
@@ -254,9 +314,12 @@ class Feedback(models.Model):
     ontime = models.BooleanField(
         verbose_name="Водитель приехал вовремя", default=True
     )
+    pub_date = models.DateTimeField(
+        verbose_name="Дата публикации отзыва", default=timezone.now
+    )
 
     class Meta:
-        ordering = ("order",)
+        ordering = ("-pub_date",)
         verbose_name = "Отзыв"
         verbose_name_plural = "Отзывы"
         default_related_name = "feedbacks"
@@ -266,7 +329,7 @@ class Feedback(models.Model):
             ),
             models.UniqueConstraint(
                 fields=["name"], name="unique_user_feedback"
-            )
+            ),
         ]
 
     def __str__(self) -> str:

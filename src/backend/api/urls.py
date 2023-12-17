@@ -6,6 +6,7 @@ from api.views.towtruck import (
     FeedbackViewset,
     TariffViewset,
     CarTypeViewset,
+    TowTruckViewset,
 )
 from api.views.users import UserViewset
 
@@ -18,6 +19,7 @@ router.register("order", OrderViewset, basename="order")
 router.register("feedback", FeedbackViewset, basename="feedback")
 router.register("tariff", TariffViewset, basename="tariff")
 router.register("cartype", CarTypeViewset, basename="cartype")
+router.register("towtruck", TowTruckViewset, basename="towtruck")
 
 urlpatterns = [
     re_path(r"^", include(router.urls)),

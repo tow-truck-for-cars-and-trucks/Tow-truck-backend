@@ -18,6 +18,7 @@ class TowTruckSerializer(serializers.ModelSerializer):
     class Meta:
         model = TowTruck
         fields = (
+            "id",
             "is_active",
             "driver",
             "model_car",
@@ -85,6 +86,7 @@ class ReadOrderSerializer(serializers.ModelSerializer):
         source="price.tariff", read_only=True
     )
     is_having_feedback = serializers.SerializerMethodField()
+    tow_truck = TowTruckSerializer(read_only=True)
 
     class Meta:
         model = Order
@@ -98,10 +100,12 @@ class ReadOrderSerializer(serializers.ModelSerializer):
             "towin",
             "addition",
             "tariff",
-            "order_date",
+            "delay",
             "status",
             "price",
             "is_having_feedback",
+            "tow_truck",
+            "delivery_time",
         )
 
     def get_is_having_feedback(self, obj):
@@ -137,10 +141,10 @@ class CreateOrderSerializer(serializers.ModelSerializer):
             "car_type",
             "tariff",
             "delay",
-            "order_date",
             "status",
             "addition",
             "price",
+            "delivery_time",
         )
 
     def to_representation(self, instance):
@@ -150,12 +154,14 @@ class CreateOrderSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         if validated_data.get("delay", False):
-            validated_data["order_date"] = self.initial_data.get(
-                "order_date", None
+            validated_data["delivery_time"] = self.initial_data.get(
+                "delivery_time", None
             )
 
         price_data = validated_data.pop("price")
-        order_instance = Order.objects.create(**validated_data)
+        order_instance = Order.objects.create(
+            **validated_data
+        )
 
         if price_data:
             price_order_instance = PriceOrder.objects.create(

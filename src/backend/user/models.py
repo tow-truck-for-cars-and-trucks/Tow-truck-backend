@@ -15,21 +15,21 @@ class MyUserManager(BaseUserManager):
     """
 
     def _create_user(
-        self, email: str, password: str, **extra_fields: Any
+        self, phone: str, password: str, **extra_fields: Any
     ) -> AbstractBaseUser:
         """
         Создает и сохраняет юзера с почтой, телефоном, и паролем
         """
-        if not email:
-            raise ValueError("Электронная почта обязательна")
-        email = self.normalize_email(email).lower()
-        user = self.model(email=email, **extra_fields)
+        # if not email:
+        #     raise ValueError("Электронная почта обязательна")
+        # email = self.normalize_email(email).lower()
+        user = self.model(phone=phone, **extra_fields)
         user.password = make_password(password)
         user.save(using=self._db)
         return user
 
     def create_user(
-        self, email: str, password: str, **extra_fields: Any
+        self, phone: str, password: str, **extra_fields: Any
     ) -> AbstractBaseUser:
         """
         Создает юзера
@@ -37,10 +37,10 @@ class MyUserManager(BaseUserManager):
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
         extra_fields.setdefault("is_active", True)
-        return self._create_user(email, password, **extra_fields)
+        return self._create_user(phone, password, **extra_fields)
 
     def create_superuser(
-        self, email: str, password: str, **extra_fields: Any
+        self, phone: str, password: str, **extra_fields: Any
     ) -> AbstractBaseUser:
         """
         Создает суперюзера
@@ -53,7 +53,7 @@ class MyUserManager(BaseUserManager):
             raise ValueError("Superuser must have is_staff=True.")
         if extra_fields.get("is_superuser") is not True:
             raise ValueError("Superuser must have is_superuser=True.")
-        return self._create_user(email, password, **extra_fields)
+        return self._create_user(phone, password, **extra_fields)
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -61,11 +61,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     Кастомная модель пользователя.
     """
 
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = (
-        "phone",
-        "first_name",
-    )
+    USERNAME_FIELD = "phone"
+    REQUIRED_FIELDS = ("first_name",)
 
     first_name = models.CharField(
         verbose_name="Имя",
@@ -87,7 +84,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     email = models.EmailField(
         "Электронная почта",
-        unique=True,
+        # unique=True,
         error_messages={
             "unique": "Этот адрес электронной почты уже зарегистрован."
         },
@@ -113,19 +110,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = MyUserManager()
 
     class Meta:
-        ordering = (
-            "email",
-            "phone",
-        )
-        unique_together = (
-            "email",
-            "phone",
-        )
+        ordering = ("phone",)
+        unique_together = ("phone",)
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
 
     def __str__(self) -> str:
-        return self.email
+        return f"{self.phone} {self.first_name}"
 
     def clean(self) -> None:
         super().clean()

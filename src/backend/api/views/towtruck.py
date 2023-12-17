@@ -12,6 +12,8 @@ from rest_framework import (
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 
+from api.filters import OrderFilter
+
 from api.serializers.towtruck import (
     FeedbackCreateSerializer,
     FeedbackReadSerializer,
@@ -19,18 +21,21 @@ from api.serializers.towtruck import (
     CreateOrderSerializer,
     TariffSerializer,
     CarTypeSerializer,
+    TowTruckSerializer,
 )
 from api.permissions import IsAdminOrReadOnly
 from towin.models import Order, Feedback, TowTruck, CarType, Tariff
+
 
 User = get_user_model()
 
 
 class OrderViewset(viewsets.ModelViewSet):
+    filterset_class = OrderFilter
+
     def get_queryset(self):
-        status = self.request.query_params.get("status", "Созданный")
-        client = self.request.user
-        return Order.objects.filter(client=client).filter(status=status)
+        client = self.request.user.id
+        return Order.objects.filter(client=client)
 
     def get_serializer_class(self):
         if self.request.method == "GET":
@@ -53,15 +58,13 @@ class OrderViewset(viewsets.ModelViewSet):
         return response.Response(context, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
-        """
-        Проверяем пользователя на авторизацию. Если авторизован создаем заказ.
-        Если нет сохраняем введенные данные в сессию.
-        """
         if request.user.is_authenticated:
             order_data = request.data
             order_data["price"]["car_type"] = order_data["car_type"]
             order_data["price"]["tariff"] = order_data["tariff"]
-            order_data["tow_truck"] = self.get_random_tow_truck()
+            order_data["delivery_time"] = Order.get_delivery_time(
+                self, tariff_id=order_data["tariff"]
+            )
 
             serializer = CreateOrderSerializer(data=order_data)
             serializer.is_valid(raise_exception=True)
@@ -71,9 +74,6 @@ class OrderViewset(viewsets.ModelViewSet):
             return response.Response(
                 serializer.data, status=status.HTTP_201_CREATED
             )
-
-        # request.session['order_data'] = request.data
-
         return response.Response(status=status.HTTP_401_UNAUTHORIZED)
 
     def partial_update(self, request, *args, **kwargs):
@@ -87,7 +87,12 @@ class OrderViewset(viewsets.ModelViewSet):
         if serializer.is_valid():
             if "status" in request.data:
                 instance.status = request.data["status"]
-                instance.save(update_fields=["status"])
+                if instance.status == "Активный":
+                    instance.tow_truck = self.get_random_tow_truck()
+                    instance.tow_truck.is_active = True
+                else:
+                    instance.tow_truck.is_active = False
+                instance.save(update_fields=["status", "tow_truck"])
                 return response.Response(serializer.data)
             serializer.save()
             return response.Response(serializer.data)
@@ -100,7 +105,7 @@ class OrderViewset(viewsets.ModelViewSet):
         Возвращает случайный свободный эвакуатор
         """
         try:
-            tow_trucks = TowTruck.objects.filter(is_active=True)
+            tow_trucks = TowTruck.objects.filter(is_active=False)
             return random.choice(tow_trucks)
         except TowTruck.DoesNotExist as e:
             raise e("Все эвакуаторы заняты :(")
@@ -144,4 +149,10 @@ class TariffViewset(
 ):
     queryset = Tariff.objects.all()
     serializer_class = TariffSerializer
+    permission_classes = (IsAdminOrReadOnly,)
+
+
+class TowTruckViewset(viewsets.ModelViewSet):
+    queryset = TowTruck.objects.all()
+    serializer_class = TowTruckSerializer
     permission_classes = (IsAdminOrReadOnly,)

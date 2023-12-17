@@ -51,13 +51,6 @@ INSTALLED_APPS = [
     "api.apps.ApiConfig",
     "towin.apps.TowinConfig",
     "user.apps.UserConfig",
-<<<<<<< HEAD
-    "rest_framework",  # isort:ignore
-    "rest_framework.authtoken",  # isort:ignore
-    "djoser",  # isort:ignore
-    "django_filters",  # isort:ignore
-    "drf_yasg",  # isort:ignore
-=======
     "phonenumber_field",
     "rest_framework",
     "rest_framework.authtoken",
@@ -65,7 +58,6 @@ INSTALLED_APPS = [
     "corsheaders",
     "django_filters",
     "drf_yasg",
->>>>>>> develop
 ]
 
 MIDDLEWARE = [
@@ -121,16 +113,13 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-    },
-    {
         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "OPTIONS": {
+            "min_length": 8,
+        },
     },
     {
         "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -176,16 +165,6 @@ REST_FRAMEWORK = {
     ),
 }
 
-<<<<<<< HEAD
-DJOSER = {
-    "LOGIN_FIELD": "email",
-    # "SEND_ACTIVATION_EMAIL": False,
-    # "HIDE_USERS": False,
-    # "PERMISSIONS": {
-    #     "user": ["djoser.permissions.CurrentUserOrAdminOrReadOnly"],
-    #     "user_list": ["rest_framework.permissions.AllowAny"],
-    # },
-=======
 SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
@@ -195,19 +174,15 @@ DJOSER = {
     "SEND_ACTIVATION_EMAIL": False,
     "SET_PASSWORD_RETYPE": True,
     "HIDE_USERS": False,
->>>>>>> develop
     "SERIALIZERS": {
         "user": "api.serializers.UserSerializer",
         "current_user": "api.serializers.UserSerializer",
         "user_create": "djoser.serializers.UserCreateSerializer",
     },
-<<<<<<< HEAD
-=======
     "PERMISSIONS": {
         "user": ["djoser.permissions.CurrentUserOrAdminOrReadOnly"],
         "user_list": ["rest_framework.permissions.IsAuthenticatedOrReadOnly"],
     },
->>>>>>> develop
 }
 
 # Using custom user model

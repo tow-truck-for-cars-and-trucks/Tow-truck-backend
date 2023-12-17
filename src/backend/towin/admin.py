@@ -1,6 +1,6 @@
 from django.contrib import admin
-from core.models import MinValidatedInlineMixIn
-from core.models import EmptyFieldModel
+from core.models import MinValidatedInlineMixIn, EmptyFieldModel
+from core.functions import avg_towtruck_score
 from .models import Order, Feedback, TowTruck, Tariff, PriceOrder, CarType
 
 
@@ -20,10 +20,6 @@ class OdrderAdmin(EmptyFieldModel):
         "delay",
         "tow_truck",
     )
-<<<<<<< HEAD
-    inlines = [OrderriceTabularInline]
-
-=======
     search_fields = (
         "address_from",
         "address_to",
@@ -36,16 +32,12 @@ class OdrderAdmin(EmptyFieldModel):
 
     total_price.short_description = "Итоговая стоимость"
 
->>>>>>> develop
 
 class FeedbackAdmin(EmptyFieldModel):
     list_display = ("score", "comment", "order")
 
 
 class TowTruckAdmin(EmptyFieldModel):
-<<<<<<< HEAD
-    list_display = ("is_active", "driver")
-=======
     list_display = (
         "id",
         "is_active",
@@ -59,11 +51,10 @@ class TowTruckAdmin(EmptyFieldModel):
         return avg_towtruck_score(instance)
 
     avg_score.short_description = "Средняя оценка"
->>>>>>> develop
 
 
 class TariffAdmin(EmptyFieldModel):
-    list_display = ("name", "description", "price")
+    list_display = ("name", "description", "price", "delivery_time")
 
 
 class CarTypeAdmin(EmptyFieldModel):

@@ -36,6 +36,7 @@ class MyUserManager(BaseUserManager):
         """
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
+        extra_fields.setdefault("is_active", True)
         return self._create_user(email, password, **extra_fields)
 
     def create_superuser(
@@ -80,6 +81,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         "Телефон",
         region="RU",
         unique=True,
+        error_messages={
+            "unique": "Пользователь с этим телефоном уже существует."
+        },
     )
     email = models.EmailField(
         "Электронная почта",
@@ -87,6 +91,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         error_messages={
             "unique": "Этот адрес электронной почты уже зарегистрован."
         },
+    )
+    is_active = models.BooleanField(
+        "Активный пользователь",
+        default=False,
     )
     is_staff = models.BooleanField(
         "Стафф статус",

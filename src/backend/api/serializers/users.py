@@ -18,17 +18,15 @@ class UserSerializer(serializers.ModelSerializer):
     re_password = serializers.CharField(write_only=True, max_length=128)
     default_error_messages = {
         "password_mismatch": "Пароли не совпадают",
-        "re_password": "Отсутствует поле re_password в теле запроса."
+        "re_password": "Отсутствует поле re_password в теле запроса.",
     }
 
     class Meta:
         model = User
         fields = (
             "id",
-            "email",
-            "phone",
             "first_name",
-            "last_name",
+            "phone",
             "password",
             "re_password",
         )
@@ -43,7 +41,7 @@ class UserSerializer(serializers.ModelSerializer):
             re_password = attrs.pop("re_password")
             password = attrs["password"]
         except KeyError:
-            return self.fail('re_password')
+            return self.fail("re_password")
         if re_password == password:
             user = User(**attrs)
             validate_password(password, user)
@@ -69,9 +67,7 @@ class UserMeSerializer(serializers.ModelSerializer):
         model = User
         fields = (
             "id",
-            "email",
             "first_name",
-            "last_name",
             "phone",
             "image",
         )

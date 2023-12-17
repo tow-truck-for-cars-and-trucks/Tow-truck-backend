@@ -84,7 +84,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     email = models.EmailField(
         "Электронная почта",
-        unique=True,
+        # unique=True,
         error_messages={
             "unique": "Этот адрес электронной почты уже зарегистрован."
         },

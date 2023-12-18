@@ -18,25 +18,25 @@ class MyUserManager(BaseUserManager):
         self, phone: str, password: str, **extra_fields: Any
     ) -> AbstractBaseUser:
         """
-        Создает и сохраняет юзера с почтой, телефоном, и паролем
+        Создает и сохраняет юзера c телефоном, и паролем
         """
-        # if not email:
-        #     raise ValueError("Электронная почта обязательна")
-        # email = self.normalize_email(email).lower()
         user = self.model(phone=phone, **extra_fields)
         user.password = make_password(password)
         user.save(using=self._db)
         return user
 
     def create_user(
-        self, phone: str, password: str, **extra_fields: Any
+        self, phone: str, password: str, consent, **extra_fields: Any
     ) -> AbstractBaseUser:
         """
         Создает юзера
         """
+        if not consent:
+            raise ValueError("Я не вижу согласия!")
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
         extra_fields.setdefault("is_active", True)
+        extra_fields.setdefault("consent", consent)
         return self._create_user(phone, password, **extra_fields)
 
     def create_superuser(
@@ -82,12 +82,9 @@ class User(AbstractBaseUser, PermissionsMixin):
             "unique": "Пользователь с этим телефоном уже существует."
         },
     )
-    email = models.EmailField(
-        "Электронная почта",
-        # unique=True,
-        error_messages={
-            "unique": "Этот адрес электронной почты уже зарегистрован."
-        },
+    consent = models.BooleanField(
+        "Согласие на обработку данных и с политикой конфиденциальности",
+        default=False,
     )
     is_active = models.BooleanField(
         "Активный пользователь",
@@ -117,10 +114,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self) -> str:
         return f"{self.phone} {self.first_name}"
-
-    def clean(self) -> None:
-        super().clean()
-        self.email = self.__class__.objects.normalize_email(self.email)
 
 
 class Avatar(models.Model):

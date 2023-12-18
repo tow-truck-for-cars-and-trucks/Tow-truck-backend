@@ -110,7 +110,7 @@ class ReadOrderSerializer(serializers.ModelSerializer):
 
     def get_is_having_feedback(self, obj):
         request = self.context.get("request")
-        if request.user:
+        if hasattr(request, "user") and request.user:
             return Feedback.objects.filter(
                 name=request.user, order=obj
             ).exists()
@@ -159,9 +159,7 @@ class CreateOrderSerializer(serializers.ModelSerializer):
             )
 
         price_data = validated_data.pop("price")
-        order_instance = Order.objects.create(
-            **validated_data
-        )
+        order_instance = Order.objects.create(**validated_data)
 
         if price_data:
             price_order_instance = PriceOrder.objects.create(

@@ -327,9 +327,6 @@ class Feedback(models.Model):
             models.UniqueConstraint(
                 fields=["order"], name="unique_order_feedback"
             ),
-            models.UniqueConstraint(
-                fields=["name"], name="unique_user_feedback"
-            ),
         ]
 
     def __str__(self) -> str:

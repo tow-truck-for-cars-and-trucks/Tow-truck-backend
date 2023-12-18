@@ -8,10 +8,10 @@ from user.models import Avatar, User
 
 @admin.register(User)
 class UserAdmin(EmptyFieldModel):
-    list_display = ("phone", "first_name", "last_name", "email")
-    list_filter = ("phone", "email")
+    list_display = ("phone", "first_name", "last_name")
+    list_filter = ("phone",)
     fieldsets = (
-        (None, {"fields": ("email", "password")}),
+        (None, {"fields": ("phone", "password")}),
         ("Permissions", {"fields": ("is_staff", "is_active")}),
     )
     add_fieldsets = (
@@ -20,7 +20,7 @@ class UserAdmin(EmptyFieldModel):
             {
                 "classes": ("wide",),
                 "fields": (
-                    "email",
+                    "phone",
                     "password1",
                     "password2",
                     "is_staff",
@@ -31,11 +31,10 @@ class UserAdmin(EmptyFieldModel):
     )
     search_fields = (
         "phone",
-        "email",
         "first_name",
         "last_name",
     )
-    ordering = ("email",)
+    ordering = ("phone",)
 
     def save_model(self, request, obj, form, change):
         """Хэширует пароль и сохраняет его в базе данных"""

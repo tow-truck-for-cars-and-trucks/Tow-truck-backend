@@ -165,13 +165,8 @@ REST_FRAMEWORK = {
     ),
 }
 
-SIMPLE_JWT = {
-    "AUTH_HEADER_TYPES": ("Bearer",),
-}
-
 DJOSER = {
     "LOGIN_FIELD": "phone",
-    "SEND_ACTIVATION_EMAIL": False,
     "SET_PASSWORD_RETYPE": True,
     "HIDE_USERS": False,
     "SERIALIZERS": {

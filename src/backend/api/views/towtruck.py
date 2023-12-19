@@ -112,8 +112,12 @@ class OrderViewset(viewsets.ModelViewSet):
 
 
 class FeedbackViewset(viewsets.ModelViewSet):
-    queryset = Feedback.objects.all()
     permission_classes = (permissions.AllowAny,)
+
+    def get_queryset(self):
+        if self.action == "list":
+            return Feedback.objects.exclude(comment__isnull=True)
+        return Feedback.objects.all()
 
     def get_serializer_class(self):
         if self.request.method == "GET":

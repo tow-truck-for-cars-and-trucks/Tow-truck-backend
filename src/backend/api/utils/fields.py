@@ -4,16 +4,6 @@ from django.core.files.base import ContentFile
 from rest_framework import serializers
 
 
-class LowercaseEmailField(serializers.EmailField):
-    """
-    Приводит email к нижнему регистру.
-    """
-
-    def to_internal_value(self, data):
-        result = super().to_internal_value(data)
-        return result.lower()
-
-
 class Base64ImageField(serializers.ImageField):
     """
     Сохраняет изображение в base64.

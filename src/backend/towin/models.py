@@ -32,7 +32,7 @@ class TowTruck(models.Model):
         verbose_name="Модель и марка эвакуатора", max_length=255
     )
     license_plates = models.CharField(
-        verbose_name="Гос. номер", max_length=10, validators=[plate_validator]
+        verbose_name="Гос. номер", max_length=13, validators=[plate_validator]
     )
 
     class Meta:

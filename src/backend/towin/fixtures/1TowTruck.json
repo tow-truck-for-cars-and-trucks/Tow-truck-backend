@@ -6,7 +6,7 @@
       "is_active": false,
       "driver": "Бабажук Игорь Васильевич",
       "model_car": "КамАЗ Компас-9",
-      "license_plates": "У122УХ52"
+      "license_plates": "У 122 УХ 52"
     }
   },
   {
@@ -16,7 +16,7 @@
       "is_active": false,
       "driver": "Жмышенко Олег Витальевич",
       "model_car": "Hyundai HD78",
-      "license_plates": "Т808ВВ27"
+      "license_plates": "Т 808 ВВ 27"
     }
   },
   {
@@ -26,7 +26,7 @@
       "is_active": false,
       "driver": "Гослингов Раян Драйвович",
       "model_car": "JAC N90",
-      "license_plates": "О775ТО159"
+      "license_plates": "О 775 ТО 159"
     }
   },
   {
@@ -36,7 +36,7 @@
       "is_active": false,
       "driver": "Бабич Лёня Васильевич",
       "model_car": "БелАЗ Компас-9",
-      "license_plates": "И122ТД52"
+      "license_plates": "И 122 ТД 52"
     }
   },
   {
@@ -46,7 +46,7 @@
       "is_active": false,
       "driver": "Дядев Петев Голошевич",
       "model_car": "Lifan f3",
-      "license_plates": "Т324ТТ55"
+      "license_plates": "Т 324 ТТ 55"
     }
   },
   {
@@ -56,7 +56,7 @@
       "is_active": false,
       "driver": "Попов Петр Петрович",
       "model_car": "Биби 36",
-      "license_plates": "О999ОО33"
+      "license_plates": "О 999 ОО 33"
     }
   },
   {
@@ -66,7 +66,7 @@
       "is_active": false,
       "driver": "Иванов Иван Иванович",
       "model_car": "Газ 5445",
-      "license_plates": "А000МР777"
+      "license_plates": "А 000 МР 777"
     }
   },
   {
@@ -76,7 +76,7 @@
       "is_active": false,
       "driver": "Говоров Говрилий Говрилович",
       "model_car": "Уаз 333",
-      "license_plates": "Г000ВН54"
+      "license_plates": "Г 000 ВН 54"
     }
   },
   {
@@ -86,7 +86,7 @@
       "is_active": false,
       "driver": "Бабажук Игорь Петрович",
       "model_car": "КамАЗ Компас-10",
-      "license_plates": "У322УХ52"
+      "license_plates": "У 322 УХ 52"
     }
   },
   {
@@ -96,7 +96,7 @@
       "is_active": false,
       "driver": "Жмышенко Петр Витальевич",
       "model_car": "Hyundai HD",
-      "license_plates": "Т818ВВ27"
+      "license_plates": "Т 818 ВВ 27"
     }
   },
   {
@@ -106,7 +106,7 @@
       "is_active": false,
       "driver": "Гослингов Илья Драйвович",
       "model_car": "JAC N900",
-      "license_plates": "О776ТО159"
+      "license_plates": "О 776 ТО 159"
     }
   },
   {
@@ -116,7 +116,7 @@
       "is_active": false,
       "driver": "Бобич Лёня Васильевич",
       "model_car": "БелАЗ Компас-11",
-      "license_plates": "И132ТД52"
+      "license_plates": "И 132 ТД 52"
     }
   },
   {
@@ -126,7 +126,7 @@
       "is_active": false,
       "driver": "Дядев Петев Семенович",
       "model_car": "Lifan f32",
-      "license_plates": "Т324БТ55"
+      "license_plates": "Т 324 БТ 55"
     }
   },
   {
@@ -136,7 +136,7 @@
       "is_active": false,
       "driver": "Попов Иван Петрович",
       "model_car": "Биби 361",
-      "license_plates": "О989ОО33"
+      "license_plates": "О 989 ОО 33"
     }
   },
   {
@@ -146,7 +146,7 @@
       "is_active": false,
       "driver": "Иванов Петр Иванович",
       "model_car": "Газ 545",
-      "license_plates": "А010МР777"
+      "license_plates": "А 010 МР 777"
     }
   },
   {
@@ -156,7 +156,7 @@
       "is_active": false,
       "driver": "Говоров Говрилий Молчанович",
       "model_car": "Уаз 3133",
-      "license_plates": "Г100ВН54"
+      "license_plates": "Г 100 ВН 54"
     }
   },
   {
@@ -166,7 +166,7 @@
       "is_active": false,
       "driver": "Бабажук Игорь Валентинович",
       "model_car": "КамАЗ Компас-19",
-      "license_plates": "У123УХ52"
+      "license_plates": "У 123 УХ 52"
     }
   },
   {
@@ -176,7 +176,7 @@
       "is_active": false,
       "driver": "Пупыркин Олег Витальевич",
       "model_car": "Hyundai HD71",
-      "license_plates": "Т828ВВ27"
+      "license_plates": "Т 828 ВВ 27"
     }
   },
   {
@@ -186,7 +186,7 @@
       "is_active": true,
       "driver": "Юпитер Раян Драйвович",
       "model_car": "JAC N930",
-      "license_plates": "О771ТО159"
+      "license_plates": "О 771 ТО 159"
     }
   },
   {
@@ -196,7 +196,7 @@
       "is_active": false,
       "driver": "Бабич Гога Васильевич",
       "model_car": "БелАЗ Компас-Север",
-      "license_plates": "И223ТД52"
+      "license_plates": "И 223 ТД 52"
     }
   },
   {
@@ -206,7 +206,7 @@
       "is_active": false,
       "driver": "Шутов Петев Голошевич",
       "model_car": "Lifan f321",
-      "license_plates": "Т333ТТ55"
+      "license_plates": "Т 333 ТТ 55"
     }
   },
   {
@@ -216,7 +216,7 @@
       "is_active": false,
       "driver": "Попов Эльдар Петрович",
       "model_car": "Биби 363",
-      "license_plates": "О922ОО33"
+      "license_plates": "О 922 ОО 33"
     }
   },
   {
@@ -226,7 +226,7 @@
       "is_active": false,
       "driver": "Иванов Рустам Иванович",
       "model_car": "Газ 545",
-      "license_plates": "А011МР777"
+      "license_plates": "А 011 МР 777"
     }
   },
   {
@@ -236,7 +236,7 @@
       "is_active": false,
       "driver": "Жмык Говрилий Говрилович",
       "model_car": "Уаз 3313",
-      "license_plates": "Г123ВН54"
+      "license_plates": "Г 123 ВН 54"
     }
   },
   {
@@ -246,7 +246,7 @@
       "is_active": false,
       "driver": "Эвакуатор Игорь Васильевич",
       "model_car": "КамАЗ Компас-92",
-      "license_plates": "У555УХ52"
+      "license_plates": "У 555 УХ 52"
     }
   },
   {
@@ -256,7 +256,7 @@
       "is_active": false,
       "driver": "Прыжков Олег Витальевич",
       "model_car": "Hyundai HD7899",
-      "license_plates": "Т322ВВ27"
+      "license_plates": "Т 322 ВВ 27"
     }
   },
   {
@@ -266,7 +266,7 @@
       "is_active": true,
       "driver": "Гослингов Раян Дайвингович",
       "model_car": "JAC N9011",
-      "license_plates": "О733ТО159"
+      "license_plates": "О 733 ТО 159"
     }
   },
   {
@@ -276,7 +276,7 @@
       "is_active": false,
       "driver": "Тетич Лёня Васильевич",
       "model_car": "БелАЗ Компас-19",
-      "license_plates": "И123ТД52"
+      "license_plates": "И 123 ТД 52"
     }
   },
   {
@@ -286,7 +286,7 @@
       "is_active": false,
       "driver": "Дядев Петев Топорович",
       "model_car": "Lifan f3",
-      "license_plates": "Т312НТ55"
+      "license_plates": "Т 312 НТ 55"
     }
   },
   {
@@ -296,7 +296,7 @@
       "is_active": false,
       "driver": "Крутой Игорь Петрович",
       "model_car": "Биби 36",
-      "license_plates": "О111ОО33"
+      "license_plates": "О 111 ОО 33"
     }
   },
   {
@@ -306,7 +306,7 @@
       "is_active": false,
       "driver": "Иванов Магамед Иванович",
       "model_car": "Газ 525",
-      "license_plates": "А555МР777"
+      "license_plates": "А 555 МР 777"
     }
   },
   {
@@ -316,7 +316,7 @@
       "is_active": false,
       "driver": "Последнев Говрилий Говрилович",
       "model_car": "Уаз 333",
-      "license_plates": "Г022ВН54"
+      "license_plates": "Г 022 ВН 54"
     }
   }
 ]

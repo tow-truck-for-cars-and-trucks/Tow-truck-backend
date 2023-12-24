@@ -63,6 +63,11 @@ class Tariff(models.Model):
         verbose_name="Цена тарифа", validators=[MinValueValidator(1)]
     )
     delivery_time = models.TimeField("Время подачи", null=True)
+    info = models.TextField(
+        verbose_name="Расширенная информация о тарифе", 
+        max_length=255,
+        default=''
+    )
 
     class Meta:
         verbose_name = "Тариф"

@@ -1,4 +1,5 @@
 import random
+import requests
 
 from django.contrib.auth import get_user_model
 from django.conf import settings
@@ -6,9 +7,9 @@ from rest_framework import (
     viewsets,
     permissions,
     status,
-    response,
     mixins,
 )
+from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 
@@ -55,7 +56,7 @@ class OrderViewset(viewsets.ModelViewSet):
         )
         total = sum([car_tape, tariff_id, wheel_lock, towin_price])
         context = {"price": total}
-        return response.Response(context, status=status.HTTP_200_OK)
+        return Response(context, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
         if request.user.is_authenticated:
@@ -71,10 +72,8 @@ class OrderViewset(viewsets.ModelViewSet):
             serializer.validated_data["client"] = request.user
             serializer.save()
 
-            return response.Response(
-                serializer.data, status=status.HTTP_201_CREATED
-            )
-        return response.Response(status=status.HTTP_401_UNAUTHORIZED)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
 
     def partial_update(self, request, *args, **kwargs):
         """
@@ -93,12 +92,10 @@ class OrderViewset(viewsets.ModelViewSet):
                 else:
                     instance.tow_truck.is_active = False
                 instance.save(update_fields=["status", "tow_truck"])
-                return response.Response(serializer.data)
+                return Response(serializer.data)
             serializer.save()
-            return response.Response(serializer.data)
-        return response.Response(
-            serializer.errors, status=status.HTTP_400_BAD_REQUEST
-        )
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get_random_tow_truck(self):
         """
@@ -133,9 +130,7 @@ class FeedbackViewset(viewsets.ModelViewSet):
         )
         serializer.is_valid()
         serializer.save()
-        return response.Response(
-            serializer.data, status=status.HTTP_201_CREATED
-        )
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class CarTypeViewset(
@@ -158,3 +153,21 @@ class TowTruckViewset(viewsets.ModelViewSet):
     queryset = TowTruck.objects.all()
     serializer_class = TowTruckSerializer
     permission_classes = (IsAdminOrReadOnly,)
+
+
+class AddressHintsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    def list(self, request):
+        params = {
+            "apikey": settings.YANDEX_API_KEY,
+            "text": request.GET.get("text"),
+            "org_address_kind": "house",
+        }
+        response = requests.get(settings.YANDEX_URL, params=params)
+        if response.status_code == 200:
+            data = response.json()
+            return Response(data["results"])
+        else:
+            return Response(
+                {"error": "Я не знаю такой адрес! Вводи сам."},
+                status=response.status_code,
+            )

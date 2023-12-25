@@ -180,6 +180,8 @@ DJOSER = {
 # Using custom user model
 AUTH_USER_MODEL = "user.User"
 
+YANDEX_API_KEY = os.getenv("YANDEX_API_KEY", "api_key")
+YANDEX_URL = "https://suggest-maps.yandex.ru/v1/suggest?"
 
 # Custom variables
 

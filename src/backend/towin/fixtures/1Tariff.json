@@ -1,32 +1,32 @@
 [
-    {
-      "model": "towin.tariff",
-      "pk": 1,
-      "fields": {
-        "name": "Эконом",
-        "description": "Стандартный тариф",
-        "price": 1000,
-        "delivery_time": "3:00:00"
-      }
-    },
-    {
-        "model": "towin.tariff",
-        "pk": 2,
-        "fields": {
-          "name": "Экспресс",
-          "description": "Самый быстрый",
-          "price": 1300,
-          "delivery_time": "1:00:00"
-        }
-    },
-    {
-        "model": "towin.tariff",
-        "pk": 3,
-        "fields": {
-          "name": "Манипулятор",
-          "description": "Манипулятор",
-          "price": 1400,
-          "delivery_time": "1:30:00"
-        }
+  {
+    "model": "towin.tariff",
+    "pk": 1,
+    "fields": {
+      "name": "Эконом",
+      "description": "Стандартный тариф",
+      "price": 1000,
+      "delivery_time": "3:00:00"
     }
-  ]
+  },
+  {
+    "model": "towin.tariff",
+    "pk": 2,
+    "fields": {
+      "name": "Экспресс",
+      "description": "Самый быстрый",
+      "price": 1300,
+      "delivery_time": "1:00:00"
+    }
+  },
+  {
+    "model": "towin.tariff",
+    "pk": 3,
+    "fields": {
+      "name": "Манипулятор",
+      "description": "Манипулятор",
+      "price": 1400,
+      "delivery_time": "1:30:00"
+    }
+  }
+]

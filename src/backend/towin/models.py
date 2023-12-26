@@ -6,7 +6,6 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.core.exceptions import ObjectDoesNotExist
 
-
 from datetime import timedelta
 
 from core.choices import TariffChoices, VenchiceTypeChoices, Statuses
@@ -32,7 +31,7 @@ class TowTruck(models.Model):
         verbose_name="Модель и марка эвакуатора", max_length=255
     )
     license_plates = models.CharField(
-        verbose_name="Гос. номер", max_length=13, validators=[plate_validator]
+        verbose_name="Гос. номер", max_length=15, validators=[plate_validator]
     )
 
     class Meta:

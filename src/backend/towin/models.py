@@ -63,7 +63,7 @@ class Tariff(models.Model):
     )
     delivery_time = models.TimeField("Время подачи", null=True)
     info = models.CharField(
-        verbose_name="Расширенная информация о тарифе", 
+        verbose_name="Расширенная информация о тарифе",
         max_length=255,
         default=''
     )

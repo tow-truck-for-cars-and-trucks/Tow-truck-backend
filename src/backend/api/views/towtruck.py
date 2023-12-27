@@ -63,9 +63,14 @@ class OrderViewset(viewsets.ModelViewSet):
             order_data = request.data
             order_data["price"]["car_type"] = order_data["car_type"]
             order_data["price"]["tariff"] = order_data["tariff"]
-            order_data["delivery_time"] = Order.get_delivery_time(
-                self, tariff_id=order_data["tariff"]
-            )
+
+            try:
+                if not order_data["delivery_time"]:
+                    order_data["delivery_time"] = Order.get_delivery_time(
+                        self, tariff_id=order_data["tariff"]
+                    )
+            except KeyError:
+                pass
 
             serializer = CreateOrderSerializer(data=order_data)
             serializer.is_valid(raise_exception=True)

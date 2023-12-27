@@ -186,11 +186,14 @@ class Order(models.Model):
         калькуляции стоимости заказа.
         """
 
-        try:
-            Order.objects.get(pk=self.id)
-            self.delivery_time = self.get_delivery_time(self.price.tariff.id)
-        except ObjectDoesNotExist:
-            pass
+        if self.delay is False:
+            try:
+                Order.objects.get(pk=self.id)
+                self.delivery_time = self.get_delivery_time(
+                    self.price.tariff.id
+                )
+            except ObjectDoesNotExist:
+                pass
 
         super(Order, self).save(*args, **kwargs)
 

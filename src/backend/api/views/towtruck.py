@@ -166,11 +166,13 @@ class AddressHintsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
             "apikey": settings.YANDEX_API_KEY,
             "text": request.GET.get("text"),
             "org_address_kind": "house",
+            "results": "10",
         }
         response = requests.get(settings.YANDEX_URL, params=params)
         if response.status_code == 200:
             data = response.json()
-            return Response(data["results"])
+            titles = [item["title"] for item in data["results"]]
+            return Response(titles)
         else:
             return Response(
                 {"error": "Я не знаю такой адрес! Вводи сам."},

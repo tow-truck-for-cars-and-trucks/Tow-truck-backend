@@ -180,9 +180,16 @@ DJOSER = {
 # Using custom user model
 AUTH_USER_MODEL = "user.User"
 
+# Yandex map
 YANDEX_API_KEY = os.getenv("YANDEX_API_KEY", "api_key")
 YANDEX_URL = "https://suggest-maps.yandex.ru/v1/suggest?"
-
+ORG_ADDRESS_KIND = "house"
+NUM_OF_RESULTS = 10
+MSC_LON = 55.76
+MSC_LAT = 37.62
+SPN_LON = 0.7
+SPN_LAT = 0.7
+STRICT = 1
 # Custom variables
 
 TOWIN_PRICE = 1500

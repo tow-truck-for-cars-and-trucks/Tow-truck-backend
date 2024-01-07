@@ -165,8 +165,11 @@ class AddressHintsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         params = {
             "apikey": settings.YANDEX_API_KEY,
             "text": request.GET.get("text"),
-            "org_address_kind": "house",
-            "results": "10",
+            "org_address_kind": settings.ORG_ADDRESS_KIND,
+            "results": settings.NUM_OF_RESULTS,
+            "ll": f"{settings.MSC_LON},{settings.MSC_LAT}",
+            "spn": f"{settings.SPN_LON},{settings.SPN_LAT}",
+            "strict_bound": settings.STRICT,
         }
         response = requests.get(settings.YANDEX_URL, params=params)
         if response.status_code == 200:

@@ -130,4 +130,5 @@
 - Черный Владимир
 - Чежин Руслан
 - Алексенцев Михаил (тимлид)
+
 [![Telegram](https://img.shields.io/badge/aleksentcev-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white&link=https://t.me/aleksentcev)](https://t.me/aleksentcev)

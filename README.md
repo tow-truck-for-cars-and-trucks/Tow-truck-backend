@@ -6,7 +6,7 @@
 # Проект TTExpress - эвакуатор для легковых и грузовых авто
 
 ## Описание проекта
-Приложение-сервис для легковых, грузовых - машин, спецтехники и мотоциклов.
+Приложение-сервис по вызову эвакуаторов для легковых, грузовых - машин, спецтехники и мотоциклов. Автоматический расчет стоимости эвакуатора, рейтинг водителей на основе отзывов, подсказки при вводе адресов на основе Яндекс карт.
 
 ## Стек технологий
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
@@ -89,14 +89,6 @@
     ```sh
     python src/backend/manage.py createsuperuser
     ```
-
-    > Для примера, данные суперюзера:
-
-        username: admin
-        mail: admin@admin.ru
-        password: admin
-        password (again): admin
-
 ---
 3. *Наполните базу данными*:
 
@@ -136,5 +128,6 @@
 - Варачев Андрей
 - Оскалов Лев
 - Черный Владимир
-- Алексенцев Михаил
 - Чежин Руслан
+- Алексенцев Михаил (тимлид)
+[![Telegram](https://img.shields.io/badge/aleksentcev-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white&link=https://t.me/aleksentcev)](https://t.me/aleksentcev)
